@@ -1,0 +1,323 @@
+{% extends 'site_base.html' %}
+{% load static %}
+
+{% block mystyle %}
+
+
+<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+ 
+<script src="https://code.jquery.com/ui/1.11.1/jquery-ui.min.js"></script>
+
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css" />
+
+
+<style>
+  .ui-widget-header,.ui-state-default, ui-button {
+     background:#b9cd6d;
+     border: 1px solid #b9cd6d;
+     color: #FFFFFF;
+     font-weight: bold;
+  }
+</style>
+<style>
+
+      
+.calendar {
+  width: 98%;
+  margin: auto;
+  font-size: 13px;
+}
+
+.calendar tr, .calendar td {
+  border: 1px solid black;
+}
+
+.calendar th {
+  padding: 10px;
+  text-align: center;
+  font-size: 18px;
+}
+
+.calendar td {
+  width: 200px;
+  height: 110px;
+  padding: 20px 0px 0px 5px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.month {
+  font-size: 25px;
+}
+
+.date {
+  font-size: 16px;
+}
+
+ul {
+  height: 100%;
+  padding: 0px 5px 0px 20px;
+}
+
+a {
+  color: #17a2b8;
+}
+
+.left {
+  float: left;
+}
+
+.right {
+  float: right;
+}
+
+.btn {
+  outline: none;
+  color: white;
+  background-color: transparent;
+  box-shadow: 0 0 0 0;
+}
+
+.clearfix {
+  margin: 15px;
+}
+
+.close-icon {
+  cursor: pointer;
+}
+
+</style>
+{% endblock %}  
+
+{% block content %}
+    <div id="cal_box" class="card mx-auto" style="width: 640px;margin-top: 20px;margin-bottom: 50px;box-shadow: -15px 15px 1px rgb(176,142,50);border-radius: 0px;">
+        <div id="popbox" class="card-body" style="width: 640px;height: 770px;background: #ffffff;">
+            <div id="calendar"  style="min-width:320px;height:480px;">
+                <div class="clearfix">
+                    <a class="btn btn-info left" style="background: rgb(244,122,98);" href="/tutorCalendar?{{ prev_month }}&othertutor_id={{othertutor_id}}"> Previous Month </a>
+                    <a class="btn btn-info right" style="background: rgb(244,122,98);" href="/tutorCalendar?{{ next_month }}&othertutor_id={{othertutor_id}}"> Next Month </a>
+                </div>
+                
+                {{ calendar }}
+            </div>
+ 
+        </div>
+        <div  style="font-family: Barlow, sans-serif;margin-top: 10px;margin-left: 10px;margin-right: 10px;margin-bottom: 10px;">
+            <button onClick = "window.history.back();" class="btn btn-primary btn-block" style="font-family: Barlow, sans-serif;background: rgb(244,122,98);border-radius: 10px;font-weight: bold; ">Done </button>
+
+        </div>
+    </div>
+
+    <div id = "popupSelection" title = "Select A slot">
+            <h5 id="slots_title" class="d-xl-flex mx-auto justify-content-xl-center" style="font-family: Barlow, sans-serif;font-weight: bold;text-align: center;letter-spacing: 1px;line-height: 57px;margin-top: 15px;color: rgb(234,121,97);font-size: 17px;">Jan 18,2021</h5>
+            <div  id="slots" style="font-family: Barlow, sans-serif;margin-top: 10px;margin-left: 10px;margin-right: 10px;margin-bottom: 10px;">
+            </div>
+    </div>
+
+    <div id = "popupEvent" title = "Your session request">
+      <div  id="formplace" style="font-family: Barlow, sans-serif;">
+
+        <form class="mx-auto" method="post" >
+          {% csrf_token %}
+          <h6 id='tutor_name'class="d-xl-flex mx-auto justify-content-xl-center" style="font-family: Barlow, sans-serif;font-weight: bold;text-align: center;letter-spacing: 1px;line-height: 57px;margin-top: 15px;color: rgb(234,121,97);font-size: 17px;"></h6>
+          <div id='sessiondate' class="d-xl-flex mx-auto justify-content-xl-center" style="font-family: Barlow, sans-serif;text-align: center;letter-spacing: 1px;margin-top: 0px;color: rgb(234,121,97);font-size: 17px;"></div>
+          <div id='sessiontime' class="justify-content-xl-center" style="font-family: Barlow, sans-serif;text-align: center;letter-spacing: 1px;margin-top: 0px;color: rgb(234,121,97);font-size: 17px;"></div>
+          <div id='even_accepted' class="col" style="padding-left: 0px;">
+          </div>
+          <textarea id="description" name="description" rows="4" cols="27" placeholder="Your requests to Tutor..."  style="font-family: Barlow, sans-serif;color: rgb(14,193,103);border-bottom-width: 3px;border-bottom-color: rgb(14,193,103);margin-bottom: 15px;margin-top: 15px;c"></textarea>
+          <input id='event_id' type="hidden" name="event_id" value=""></input>
+          <input id='slot_str' type="hidden" name="slot_str" ></input>
+          <input id='othertutor_id' type="hidden" name="othertutor_id" ></input>
+          <div class="form-group" style="font-family: Barlow, sans-serif;">
+              <button class="btn btn-primary btn-block" type="submit" style="font-family: Barlow, sans-serif;background: rgb(244,122,98);border-radius: 0px;font-weight: bold;margin-top: 20px;">Submit</button>
+              <button id = "withdraw" onClick="withdrawevent(); return false;" class="btn btn-primary btn-block" style="font-family: Barlow, sans-serif;background: rgb(244,122,98);border-radius: 0px;font-weight: bold;margin-top: 20px;">Withdraw</button>
+          </div>
+
+      </form>
+      
+
+      </div>
+    </div>   
+{% endblock %}
+
+{% block myscript %}
+
+{% csrf_token %}
+
+<script type="text/javascript">
+
+$(function() {
+            $( "#popupSelection" ).dialog({
+                autoOpen: false,
+                modal: true,
+            });
+            $( "#popupEvent" ).dialog({
+                autoOpen: false,
+                modal: true,
+            });
+         });
+
+function withdrawevent() {
+  if ($('#event_id').val().length ==0)
+  {
+    $('#popupEvent').dialog( "close" );
+    //just close window
+  }
+  else
+  {
+    //cancel the event
+  //Prepare csrf token
+    var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+    //This is the Ajax post.Observe carefully. It is nothing but details of where_to_post,what_to_post
+    //Send data  
+
+    $.ajax({
+        url : "cancelSlots", // the endpoint,commonly same url
+        type : "POST", // http method
+        data : { csrfmiddlewaretoken : csrftoken, 
+        "event_id" : $('#event_id').val(),
+    }, // data sent with the post request
+
+    // handle a successful response
+    success : function(json) {
+        console.log(json); // another sanity check
+
+        location.reload();
+        //close pop up
+        //On success show the data posted to server as a message
+    },
+
+
+    });
+
+
+  }
+
+}
+
+
+function reserveTime(year, month, day, hour,minute) {
+  
+  $('#slot_str').val(year+"-"+month+"-"+day+"-"+hour+"-"+minute);
+  
+  $('#othertutor_id').val("{{othertutor_id}}");
+  
+  openTuteeEventWindow("",year+"-"+zeropad(month)+"-"+zeropad(day),zeropad(hour)+":"+zeropad(minute),"30","{{othertutor_name}}","","False",null)
+
+  $('#popupSelection').dialog( "close" );
+
+  // //Prepare csrf token
+  // var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+
+  // //Collect data from fields
+  // var clientmsg = "tutor_id={{tutor.id}}&slot="+year+"-"+month+"-"+day+"-"+hour+"-"+minute;
+
+  // //This is the Ajax post.Observe carefully. It is nothing but details of where_to_post,what_to_post
+  // //Send data  
+
+  // $.ajax({
+  //     url : "bookOpenSlots", // the endpoint,commonly same url
+  //     type : "POST", // http method
+  //     data : { csrfmiddlewaretoken : csrftoken, 
+  //     "othertutor_id" : "{{othertutor_id}}",
+  //     "slot":year+"-"+month+"-"+day+"-"+hour+"-"+minute,
+  // }, // data sent with the post request
+
+  // // handle a successful response
+  // success : function(json) {
+  //     console.log(json); // another sanity check
+
+  //     location.reload();
+  //     //close pop up
+  //     //On success show the data posted to server as a message
+  // },
+
+
+  // });
+
+  return false;
+}
+// function get event to show
+function openTuteeEventWindow(event_id,date_str,time_str,evn_duration_str,tutor_firstname,evn_description,evn_accepted,event){
+    if(event)
+      event.stopPropagation();
+
+    document.getElementById('even_accepted').innerHTML='';
+
+    $('#tutor_name').text("Session Request With: "+tutor_firstname);
+    $('#sessiondate').text(date_str);
+    $('#sessiontime').text(time_str);
+    if (evn_accepted == "True"){
+      $('#even_accepted').append('<i class="fa fa-check-circle" style="margin-left: 10px;font-size: 18px;margin-top: 5px;color: #413ada;"> Approved</i>')
+    }
+    else
+    {
+      $('#even_accepted').append('<i class="fa fa-check-circle" style="margin-left: 10px;font-size: 18px;margin-top: 5px;color: #413ada;"> Pending</i>')
+    }
+
+    $('#event_id').val(event_id);
+    $('#description').val(evn_description);
+
+    $('#popupEvent').dialog( "open" );
+}
+
+function getOpenSlots(data) {
+
+    messages = data.split('|');
+
+    _size = messages.length;
+
+    isSlot = false;
+    
+    document.getElementById('slots').innerHTML='';
+
+    for (  i = 0; i< _size; i++) {
+
+        if(messages[i].length >0){
+
+            time_slot = messages[i];
+
+            update_slot(time_slot);
+            isSlot =true;
+
+        }
+    }
+
+
+    if(isSlot){
+
+        $('#popupSelection').dialog( "open" );
+
+    }
+
+}
+
+
+// add button with yeear, month, date, hour, minute info
+function update_slot(time_slot) {
+    time = time_slot.split('-');
+
+    $('#slots_title').html(time[0]+'-'+zeropad(time[1])+'-'+zeropad(time[2]));
+
+    $('#slots').append('<button onClick = "reserveTime('+
+    time[0]+','+time[1]+','+time[2]+','+time[3]+','+time[4]+
+     ');" class="btn btn-primary btn-block" style="font-family: Barlow, sans-serif;background: rgb(244,122,98);border-radius: 10px;font-weight: bold;">'+
+     zeropad(time[3])+':'+zeropad(time[4]) +'</button>');
+}
+
+function zeropad(nNum) {
+      if(nNum<10)
+        return ('0' +  nNum);
+      else
+        return (''+ nNum)
+};
+
+
+
+
+
+
+</script>
+{% endblock %}  

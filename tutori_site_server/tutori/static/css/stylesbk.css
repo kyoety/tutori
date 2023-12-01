@@ -1,0 +1,49 @@
+.avatar {
+  vertical-align: middle;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+}
+
+
+.avatar_big{
+  vertical-align: middle;
+  width: 75px;
+  height: 75px;
+  border-radius: 50%;
+}
+
+.avatar_big2{ 
+  vertical-align: middle;
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+}
+
+.avatar_huge{
+  vertical-align: middle;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.nowrapp_text{
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  min-width:1px;
+}
+
+        
+.error-message{
+  font-family: 'Montserrat', sans-serif;
+  color: white;
+  font-size:15px;
+  text-align: center;
+  background: 100%;
+  background-color: #EA795E;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}

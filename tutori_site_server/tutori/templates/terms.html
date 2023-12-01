@@ -1,0 +1,15 @@
+{% extends 'site_base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="card mx-auto" style="width: 640px;margin-top: 20px;margin-bottom: 50px;box-shadow: -15px 15px 1px rgb(176,142,50);border-radius: 0px;">
+        <div id="popbox" class="card-body" style="width: 640px;height: 650px;background: #ffffff;">
+            <h2 class="sr-only">Terms & Conditions of the Service</h2>
+            <h1 class="d-xl-flex mx-auto justify-content-xl-center" style="font-family: Barlow, sans-serif;font-weight: bold;text-align: center;letter-spacing: 4px;line-height: 57px;margin-top: 15px;color: rgb(234,121,97);font-size: 20px;width: 272px;">Terms & Conditionse</h1>
+            <p style="font-family: Barlow, sans-serif;margin-top: 12px;margin-bottom: 16px;text-align: center;">Here is the terms and condition of the service.....&nbsp;<br><br>Click the button below to go back to the sign up page</p>
+            <div class="form-group" style="font-family: Barlow, sans-serif;">
+                <button onClick = "window.history.back();" class="btn btn-primary btn-block" style="font-family: Barlow, sans-serif;background: rgb(244,122,98);border-radius: 0px;font-weight: bold;margin-top: 48px;">Done </button>
+            </div><a class="forgot" href="#"></a>
+        </div>
+    </div>
+{% endblock %}   

@@ -1,0 +1,1873 @@
+{% extends 'site_base.html' %}
+
+{% load static %}
+
+{% block mystyle %}
+<link rel="stylesheet" href="{% static 'css/Bootstrap-Calendar.css' %}">
+<link rel="stylesheet" href="{% static 'css/Bootstrap-4-Calendar-No-Custom-Code.css' %}">
+
+<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+ 
+<script src="https://code.jquery.com/ui/1.11.1/jquery-ui.min.js"></script>
+<script src="{% static 'js/moment.min.js' %}"></script>
+
+
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css" />
+
+
+<style>
+    .ui-widget-header,.ui-state-default, ui-button {
+       background:#b9cd6d;
+       border: 1px solid #b9cd6d;
+       color: #FFFFFF;
+       font-weight: bold;
+    }
+
+    rect.btn {
+    stroke:#fff;
+    fill:#fff;
+    fill-opacity:0;
+    stroke-opacity:0;
+    }
+
+
+    .myDialogClass {
+        border-radius: 13px;
+        box-shadow: 0px 0px 0px #e1e1e1;
+        border: 0px solid #FFFFFF;
+        outline: 0 none;
+        outline-width: 0px !important;
+    }
+
+    .myDialogClassFrameless {
+        border-radius: 13px;
+        border: none !important;
+        outline: 0 none;
+        outline-width: 0px !important;
+    }
+
+    .ui-dialog .ui-dialog-content {
+        padding: 0 ;
+    }
+
+</style>
+
+{% endblock %}
+
+{% block additional_head_space %}
+<li class="nav-item" style="color: #9ca5ff;margin-left:40%;">
+    <p></p>
+</li>
+{% endblock %}
+
+{% block content %}
+    <div class="row" style="padding-top: 0px;width: 100%;margin-right: 0px;margin-left: 0px;height: 100%;">
+        <div class="col-xl-3" style="padding-top: 0px;padding-left: 0px;padding-right: 0px;">
+            <ul class="nav nav-tabs" style="border-bottom-style: none;padding-left: 0px;width: 100%;height: 100%;box-shadow: 5px 0px 0px;">
+                <li class="nav-item" style="letter-spacing: 0.5px;margin-left: 0px;width: 100%;height: 100%;padding-top: 43px;padding-left: 85px;box-shadow: 1px 0px;">
+                        <a class="nav-link" name="showSession" id="showSession" href="javascript:showSession();" style="font-family: Barlow, sans-serif;color: #473fa8;letter-spacing: 0 px;margin-bottom: 0px;margin-top: 5px;border-top-style: none;border-right-style: none;border-left-style: none;font-size: 18px;">My Sessions<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" style="margin-left: -140px;font-size: 21px;margin-bottom: 5px;">
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M6 22.8787C4.34315 22.8787 3 21.5355 3 19.8787V9.87866C3 9.84477 3.00169 9.81126 3.00498 9.77823H3C3 9.20227 3.2288 8.64989 3.63607 8.24262L9.87868 2.00002C11.0502 0.828445 12.9497 0.828445 14.1213 2.00002L20.3639 8.24264C20.7712 8.6499 21 9.20227 21 9.77823H20.995C20.9983 9.81126 21 9.84477 21 9.87866V19.8787C21 21.5355 19.6569 22.8787 18 22.8787H6ZM12.7071 3.41423L19 9.70713V19.8787C19 20.4309 18.5523 20.8787 18 20.8787H15V15.8787C15 14.2218 13.6569 12.8787 12 12.8787C10.3431 12.8787 9 14.2218 9 15.8787V20.8787H6C5.44772 20.8787 5 20.4309 5 19.8787V9.7072L11.2929 3.41423C11.6834 3.02371 12.3166 3.02371 12.7071 3.41423Z" fill="currentColor"></path>
+                        </svg></a>
+                        {% if not tutor %}
+                        <a class="nav-link" href="/subjects"  style="font-family: Barlow, sans-serif;color: #80ddd9;letter-spacing: 0 px;margin-bottom: 5px;margin-top: 0px;border-top-style: none;border-right-style: none;border-left-style: none;font-size: 18px;padding-left: 16px;">Find tutors</a>
+                        {% endif %}
+                        <a class="nav-link" name="showCalendar" id="showCalendar" href="javascript:showCalendar();" style="font-family: Barlow, sans-serif;color: #473fa8;letter-spacing: 0 px;margin-bottom: 5px;margin-top: 5px;border-top-style: none;border-right-style: none;border-left-style: none;font-size: 18px;">Calendar<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" style="margin-left: -116px;font-size: 21px;margin-bottom: 5px;">
+                            <path d="M15 17C16.1046 17 17 16.1046 17 15C17 13.8954 16.1046 13 15 13C13.8954 13 13 13.8954 13 15C13 16.1046 13.8954 17 15 17Z" fill="currentColor"></path>
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M6 3C4.34315 3 3 4.34315 3 6V18C3 19.6569 4.34315 21 6 21H18C19.6569 21 21 19.6569 21 18V6C21 4.34315 19.6569 3 18 3H6ZM5 18V7H19V18C19 18.5523 18.5523 19 18 19H6C5.44772 19 5 18.5523 5 18Z" fill="currentColor"></path>
+                        </svg></a>
+                        <a class="nav-link" name="showProfile" id="showProfile" href="javascript:showProfile();"  style="font-family: Barlow, sans-serif;color: #473fa8;letter-spacing: 0 px;margin-bottom: 5px;margin-top: 5px;border-top-style: none;border-right-style: none;border-left-style: none;font-size: 18px;">Profile<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" style="margin-left: -97px;font-size: 21px;margin-bottom: 5px;">
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M16 9C16 11.2091 14.2091 13 12 13C9.79086 13 8 11.2091 8 9C8 6.79086 9.79086 5 12 5C14.2091 5 16 6.79086 16 9ZM14 9C14 10.1046 13.1046 11 12 11C10.8954 11 10 10.1046 10 9C10 7.89543 10.8954 7 12 7C13.1046 7 14 7.89543 14 9Z" fill="currentColor"></path>
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M12 1C5.92487 1 1 5.92487 1 12C1 18.0751 5.92487 23 12 23C18.0751 23 23 18.0751 23 12C23 5.92487 18.0751 1 12 1ZM3 12C3 14.0902 3.71255 16.014 4.90798 17.5417C6.55245 15.3889 9.14627 14 12.0645 14C14.9448 14 17.5092 15.3531 19.1565 17.4583C20.313 15.9443 21 14.0524 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12ZM12 21C9.84977 21 7.87565 20.2459 6.32767 18.9878C7.59352 17.1812 9.69106 16 12.0645 16C14.4084 16 16.4833 17.1521 17.7538 18.9209C16.1939 20.2191 14.1881 21 12 21Z" fill="currentColor"></path>
+                        </svg></a>
+
+<!--                         <a class="nav-link" name="showSetting" id="showSetting" href="javascript:showSetting();" style="font-family: Barlow, sans-serif;color: #473fa8;letter-spacing: 0 px;margin-bottom: 5px;margin-top: 5px;border-top-style: none;border-right-style: none;border-left-style: none;font-size: 18px;">Settings<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" style="margin-left: -111px;font-size: 21px;margin-bottom: 5px;">
+                            <path d="M7 14C8.10457 14 9 13.1046 9 12C9 10.8954 8.10457 10 7 10C5.89543 10 5 10.8954 5 12C5 13.1046 5.89543 14 7 14Z" fill="currentColor"></path>
+                            <path d="M14 12C14 13.1046 13.1046 14 12 14C10.8954 14 10 13.1046 10 12C10 10.8954 10.8954 10 12 10C13.1046 10 14 10.8954 14 12Z" fill="currentColor"></path>
+                            <path d="M17 14C18.1046 14 19 13.1046 19 12C19 10.8954 18.1046 10 17 10C15.8954 10 15 10.8954 15 12C15 13.1046 15.8954 14 17 14Z" fill="currentColor"></path>
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M24 12C24 18.6274 18.6274 24 12 24C5.37258 24 0 18.6274 0 12C0 5.37258 5.37258 0 12 0C18.6274 0 24 5.37258 24 12ZM22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z" fill="currentColor"></path>
+                        </svg></a> -->
+
+
+                        <a class="nav-link" onclick="logOut();" href="#" style="font-family: Barlow, sans-serif;color: #fbaf00;letter-spacing: 0 px;margin-bottom: 5px;margin-top: 5px;border-top-style: none;border-right-style: none;border-left-style: none;font-size: 18px;">LOGOUT
+                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" style="margin-left: -109px;font-size: 23px;margin-bottom: 5px;color: #fbaf00;">
+                            <path d="M8.51428 20H4.51428C3.40971 20 2.51428 19.1046 2.51428 18V6C2.51428 4.89543 3.40971 4 4.51428 4H8.51428V6H4.51428V18H8.51428V20Z" fill="currentColor"></path>
+                            <path d="M13.8418 17.385L15.262 15.9768L11.3428 12.0242L20.4857 12.0242C21.038 12.0242 21.4857 11.5765 21.4857 11.0242C21.4857 10.4719 21.038 10.0242 20.4857 10.0242L11.3236 10.0242L15.304 6.0774L13.8958 4.6572L7.5049 10.9941L13.8418 17.385Z" fill="currentColor"></path>
+                            </svg>
+                        </a></li>
+            </ul>
+        </div>
+        <div class="col-xl-9 offset-xl-0" style="background: #efeeee;max-width: 100%;width: 100%;padding-right: 0px;padding-left: 0px;box-shadow: inset 0px 0px;">
+            <div name="profile_box" id="profile_box" style="width: 100%;height: 800px;background: #f1f1f1;">
+
+                <div class="card mx-auto" style="width: 700px;margin-top: 30px;margin-bottom: 0px;border-radius: 0px;padding-left: 15px;padding-right: 15px;padding-top: 15px;padding-bottom: 15px;border-style: solid;border-top-left-radius: 13px;border-top-right-radius: 13px;border-bottom-right-radius: 13px;border-bottom-left-radius: 13px;height: 80%;">
+                    <div class="card-body" style="width: 640px;height: 650px;background: #ffffff;margin-bottom: 50px;">
+                        <div class="row">
+                            <div class="col" style="width: 300px;border-style: none;padding-right: 0px;padding-left: 0px;height: 300px;">
+                                <img class="rounded-circle" style="border-style: none;width: 210px;height: 210px;margin: 50px;margin-right: 50px;margin-left: 50px;" width="200px" src="{{ tu_user.acc_avatar }}"></div>
+                            <div class="col" style="width: 300px;border-style: none;height: 300px;">
+                                <div class="container" style="margin-top: 25%;margin-bottom: 0px;">
+                                    <h4 style="font-family: Barlow, sans-serif;text-align: left;font-size: 40px;font-weight: normal;margin-left: 0px;margin-top: 18px;color: #5762d5;width: 100%;">{{tu_user.acc_firstname}} {{tu_user.acc_lastname}}</h4>
+                                    <p style="font-family: Barlow, sans-serif;text-align: left;margin-left: 0px;font-size: 18px;margin-bottom: 0px;color: #505e6c;margin-top: 10px;">Grade {{tu_user.acc_grade}}</p>
+                                    <div class="btn-group" role="group" style="background: rgba(234,121,97,0);border-top-left-radius: 108px;border-top-right-radius: 108px;border-bottom-right-radius: 108px;border-bottom-left-radius: 108px;margin-top: 30px;margin-left: -15px;">
+                                        <button onclick=" openProfileEdit(); return false;"  class="btn btn-primary" type="button" style="font-family: Barlow, sans-serif;font-size: 14px;text-align: center;background: #fbaf00;margin-right: 15px;border-radius: 0px;width: 162px;height: 50px;font-weight: normal;border-top-left-radius: 108px;border-top-right-radius: 108px;border-bottom-right-radius: 108px;border-bottom-left-radius: 108px;border-color: #fbaf00;border-bottom-color: #fbaf00;">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icon-tabler-edit" style="margin-top: -4px;margin-right: 7px;font-size: 18px;">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                <path d="M9 7h-3a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-3"></path>
+                                                <path d="M9 15h3l8.5 -8.5a1.5 1.5 0 0 0 -3 -3l-8.5 8.5v3"></path>
+                                                <line x1="16" y1="5" x2="19" y2="8"></line>
+                                            </svg>Edit Profile</button>
+                                        {% if tutor %}
+
+                                        <button onclick=" openSlotEdit(); return false;" class="btn btn-primary" type="button" style="font-family: Barlow, sans-serif;font-size: 14px;text-align: center;background: #fbaf00;margin-right: 20px;border-radius: 0px;width: 162px;height: 50px;font-weight: normal;border-top-left-radius: 108px;border-top-right-radius: 108px;border-bottom-right-radius: 108px;border-bottom-left-radius: 108px;border-color: #fbaf00;border-bottom-color: #fbaf00;">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icon-tabler-edit" style="margin-top: -4px;margin-right: 7px;font-size: 18px;">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                            <path d="M9 7h-3a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-3"></path>
+                                            <path d="M9 15h3l8.5 -8.5a1.5 1.5 0 0 0 -3 -3l-8.5 8.5v3"></path>
+                                            <line x1="16" y1="5" x2="19" y2="8"></line>
+                                            </svg>Tutor Slot</button>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            {% if tutor %}
+ 
+                            <div class="col">
+                                <p style="font-family: Barlow, sans-serif;margin-bottom: 15px;text-align: left;margin-left: 35px;font-size: 24px;color: #cbcbcb;margin-top: 0px;">{{tu_user.acc_firstname}} is tutoring:</p>
+                                {% for course,grades in course_dict.items %}
+                                <p style="font-family: Barlow, sans-serif;margin-bottom: 5px;text-align: left;margin-left: 35px;font-size: 18px;color: #505e6c;">{{grades}} {{course}} </p>
+
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+
+                            <div class="col">
+                                <p style="font-family: Barlow, sans-serif;margin-bottom: 5px;text-align: left;margin-left: 0px;font-size: 24px;color: #cbcbcb;margin-top: 0px;">About</p>
+                                <p style="font-family: Barlow, sans-serif;margin-bottom: 0px;text-align: left;margin-left: 0px;font-size: 18px;color: #505e6c;margin-top: 0px;">{{tu_user.acc_aboutme}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+ 
+
+            <div name="session_box" id="session_box" style="width: 100%;height: 800px;background: #f1f1f1;">
+                <div class="row" style="width: 100%;margin-right: 0px;margin-left: 0px;height: default;">
+                    {% if not events %}
+                    <div class="col" style="padding-top: 50px;padding-right: 20px;padding-left: 50px;font-family: Barlow, sans-serif;height: 100%;">
+                        <div class="card" style="border-radius: 10px;border-style: none;font-family: Barlow, sans-serif;box-shadow: 0px 5px 13px #cbcbcb;">
+                            <div class="card-body" style="font-family: Barlow, sans-serif;box-shadow: 0px 0px;height: 173px;">
+                                <h6 id="ev_with_name_0"  class="card-subtitle mb-2" style="font-family: Barlow, sans-serif;color: rgb(34,38,42);"> 
+                                    No Session for the moment
+                                </h6>
+                            </div>
+
+                        </div>                    
+                    </div>
+                    {% endif %}
+
+                    {% for event in events%}
+
+                        {% if event %}
+                        
+                        <div 
+                        {% if tutor %}
+                            onClick="viewEvent('{{event.0.id}}',{{event.0.evn_tutee.acc_user_id}})"
+                        {% else %}
+                            onClick="viewEvent('{{event.0.id}}',{{event.0.evn_tutor.tu_user.acc_user_id}})"
+                        {% endif %}
+                             
+                            class="col" style="padding-top: 50px;padding-right: 20px;padding-left: 50px;font-family: Barlow, sans-serif;height: 100%;">
+                            <div class="card" style="border-radius: 10px;border-style: none;font-family: Barlow, sans-serif;box-shadow: 0px 5px 13px #cbcbcb;">
+                                <div class="card-body" style="font-family: Barlow, sans-serif;box-shadow: 0px 0px;height: 173px;">
+                                    <h4 id="ev_subject_{{event.0.id}}" class="card-title" style="font-family: Barlow, sans-serif;font-weight: normal;color: #fbaf00;">{{event.0.evn_subject}}</h4>
+                                    <h6 id="ev_with_name_{{event.0.id}}"  class="card-subtitle mb-2" style="font-family: Barlow, sans-serif;color: rgb(34,38,42);">with 
+                                        {% if tutor %}
+                                        {{event.0.evn_tutee.acc_firstname}} {{event.0.evn_tutee.acc_lastname}}
+                                        {% else %}
+                                        {{event.0.evn_tutor.tu_user.acc_firstname}} {{event.0.evn_tutor.tu_user.acc_lastname}}
+                                        {% endif %}
+                                    </h6>
+
+
+                                    <div style="padding-top: 15px;">
+                                        <div class="row">
+                                            <div class="col-xl-1"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none">
+                                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M14 3V3.28988C16.8915 4.15043 19 6.82898 19 10V17H20V19H4V17H5V10C5 6.82898 7.10851 4.15043 10 3.28988V3C10 1.89543 10.8954 1 12 1C13.1046 1 14 1.89543 14 3ZM7 17H17V10C17 7.23858 14.7614 5 12 5C9.23858 5 7 7.23858 7 10V17ZM14 21V20H10V21C10 22.1046 10.8954 23 12 23C13.1046 23 14 22.1046 14 21Z" fill="currentColor"></path>
+                                                </svg></div>
+                                            <div class="col">
+                                                <p id="ev_time_{{event.0.id}}" style="font-family: Barlow, sans-serif;margin-bottom: 0px;width: 75%;">{{event.1}} {{event.2}} - {{event.3}}</p>
+                                                <p id="ev_status_{{event.0.id}}" style="font-family: Barlow, sans-serif;margin-bottom: 0px;width: 75%;color: #fbaf00;font-weight: normal;">{{event.0.evn_status_str}}</p>
+                                                {% if event.0.evn_net_meeting %}
+                                                <a id="ev_link_{{event.0.id}}" href="{{event.0.evn_net_meeting}}" style=" font-family: Barlow, sans-serif;margin-bottom: 0px;width: 75%; ">Session link</a>
+                                                {% else %}
+                                                <a id="ev_link_{{event.0.id}}" href="" style="Display:None; font-family: Barlow, sans-serif;margin-bottom: 0px;width: 75%;">Session link</a> 
+                                                {% endif %}
+                                                <p id="ev_desc_{{event.0.id}}" style="Display:None; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; font-family: Barlow, sans-serif;margin-bottom: 0px;width: 350px;">{{event.0.evn_description}}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        {% else %}
+                        <div class="col" style="padding-top: 50px;padding-right: 20px;padding-left: 50px;font-family: Barlow, sans-serif;height: 100%;">
+                        </div>
+
+                        {% endif %}
+
+                        {% if forloop.counter|divisibleby:"2" and not forloop.last %}
+                            </div>
+                            <div class="row" style="width: 100%;margin-right: 0px;margin-left: 0px;height: default;">
+                        {% endif %}                        
+                    {% endfor %}
+                </div>
+
+            </div>
+
+            <div id="calendar_box" id="calendar_box" style="width: 100%;background: rgba(241,241,241,0);">
+                <section class="mx-auto" style="width: 90%;height: 110%;padding-left: 0px;padding-top: 27px;padding-bottom: 3px;background: #ffffff;margin-right: 0px;margin-left: 0px;margin-top: 40px;border-radius: 10px;box-shadow: 0px 5px 13px 0px rgb(225,225,225);margin-bottom: 75px;border: 1.9px none #cbcbcb;border-bottom-width: 1.9px;">
+                    <div>
+                        <div><button id="prev_month" onClick="" class="btn btn-primary float-left" type="button" style="margin-left: 50px;background: rgba(0,123,255,0);color: #9ca5ff;border-style: none;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" style="font-size: 40px;color: rgb(33,37,41);">
+                                    <path d="M16.2426 6.34317L14.8284 4.92896L7.75739 12L14.8285 19.0711L16.2427 17.6569L10.5858 12L16.2426 6.34317Z" fill="currentColor"></path>
+                                </svg></button>
+                                <button  id="next_month" onClick=""  class="btn btn-primary float-right" type="button" style="margin-right: 50px;background: rgba(0,123,255,0);color: #495057;border-style: none;"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" style="font-size: 40px;color: rgb(33,37,41);">
+                                    <path d="M10.5858 6.34317L12 4.92896L19.0711 12L12 19.0711L10.5858 17.6569L16.2427 12L10.5858 6.34317Z" fill="currentColor"></path>
+                                </svg></button></div>
+                        <div class="calendar" style="margin-right: 50px;margin-left: 50px;margin-bottom: 0px;margin-top: 20px;font-family: Barlow, sans-serif;">
+                            <div class="d-flex align-items-center" style="padding-left: 20px;"><i class="far fa-calendar fa-3x mr-3" style="font-size: 32px;"></i>
+                                <h1 id="month_text" class="month font-weight-bold mb-0 text-uppercase" style="padding-left:30%; font-size: 36px;font-family: Barlow, sans-serif;font-weight: normal;color: rgb(33, 37, 41);">MAY&nbsp;2021</h1>
+                            </div>
+                             <p class="font-italic text-muted mb-5" style="font-family: 'Barlow Semi Condensed', sans-serif;font-size: 14px;margin-top: 20px;padding-left: 30px;"></p> 
+                            <ol class="day-names list-unstyled">
+                                <li class="font-weight-bold text-uppercase" style="font-family: Barlow, sans-serif;font-weight: normal;font-style: normal;font-size: 14px;">Sunday</li>
+                                <li class="font-weight-bold text-uppercase" style="font-family: Barlow, sans-serif;font-weight: normal;font-style: normal;font-size: 14px;">Monday</li>
+                                <li class="font-weight-bold text-uppercase" style="font-family: Barlow, sans-serif;font-weight: normal;font-style: normal;font-size: 14px;">Tuesday</li>
+                                <li class="font-weight-bold text-uppercase" style="font-family: Barlow, sans-serif;font-weight: normal;font-style: normal;font-size: 14px;">Wednesday</li>
+                                <li class="font-weight-bold text-uppercase" style="font-family: Barlow, sans-serif;font-weight: normal;font-style: normal;font-size: 14px;">thursday</li>
+                                <li class="font-weight-bold text-uppercase" style="font-family: Barlow, sans-serif;font-weight: normal;font-style: normal;font-size: 14px;">Friday</li>
+                                <li class="font-weight-bold text-uppercase" style="font-family: Barlow, sans-serif;font-weight: normal;font-style: normal;font-size: 14px;">Saturday</li>
+                            </ol>
+                            <ol id="cal_table" class="days list-unstyled" style="font-size: 14px;">
+                                <li class="outside" style="font-size: 14px;">
+                                    <div class="date" style="font-size: 14px;"><span style="font-family: Barlow, sans-serif;font-size: 14px;">27</span></div>
+                                    <!-- <div class="event bg-later" style="font-family: Barlow, sans-serif;padding-left: 12px;width: 90%;height: 33.7812px;border-radius: 44px;padding-top: 6.4px;margin-bottom: 0px;padding-right: 12px;background: #9ca5ff;"><i class="fa fa-square" style="margin-right: 14px;margin-top: 0px;font-size: 12px;margin-bottom: 0px;padding-bottom: 0px;"></i><span style="font-family: Barlow, sans-serif;margin-top: 0px;font-size: 12px;margin-right: 0px;">Session1</span><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" class="float-right" style="margin-right: 0px;margin-top: 5px;font-size: 12px;">
+                                            <path d="M8 12C8 13.1046 7.10457 14 6 14C4.89543 14 4 13.1046 4 12C4 10.8954 4.89543 10 6 10C7.10457 10 8 10.8954 8 12Z" fill="currentColor"></path>
+                                            <path d="M14 12C14 13.1046 13.1046 14 12 14C10.8954 14 10 13.1046 10 12C10 10.8954 10.8954 10 12 10C13.1046 10 14 10.8954 14 12Z" fill="currentColor"></path>
+                                            <path d="M18 14C19.1046 14 20 13.1046 20 12C20 10.8954 19.1046 10 18 10C16.8954 10 16 10.8954 16 12C16 13.1046 16.8954 14 18 14Z" fill="currentColor"></path>
+                                        </svg></div> -->
+                                </li>
+                                <li class="outside" style="font-family: Barlow, sans-serif;font-size: 14px;">
+                                    <div class="date" style="font-family: Barlow, sans-serif;font-size: 14px;"><span style="font-family: Barlow, sans-serif;font-size: 14px;">28</span></div>
+                                </li>
+                                <li class="outside" style="font-family: Barlow, sans-serif;font-size: 14px;">
+                                    <div class="date" style="font-family: Barlow, sans-serif;font-size: 14px;"><span style="font-family: Barlow, sans-serif;font-size: 14px;">29</span></div>
+                                </li>
+                                <li class="outside" style="font-family: Barlow, sans-serif;font-size: 14px;">
+                                    <div class="date" style="font-family: Barlow, sans-serif;font-size: 14px;"><span style="font-family: Barlow, sans-serif;font-size: 14px;">30</span></div>
+                                </li>
+                                <li style="font-family: Barlow, sans-serif;font-size: 14px;">
+                                    <div class="date" style="font-family: Barlow, sans-serif;font-size: 14px;"><span style="font-family: Barlow, sans-serif;font-size: 14px;">1</span></div>
+                                </li>
+                                <li style="font-family: Barlow, sans-serif;font-size: 14px;">
+                                    <div class="date" style="font-family: Barlow, sans-serif;font-size: 14px;"><span style="font-family: Barlow, sans-serif;font-size: 14px;">2</span></div>
+                                    <div class="event bg-later" style="font-family: Barlow, sans-serif;padding-left: 12px;width: 90%;height: 33.7812px;border-radius: 44px;padding-top: 6.4px;margin-bottom: 0px;padding-right: 12px;background: #fbaf00;"><i class="fa fa-square" style="margin-right: 14px;margin-top: 0px;font-size: 12px;margin-bottom: 0px;padding-bottom: 0px;"></i><span style="font-family: Barlow, sans-serif;margin-top: 0px;font-size: 12px;margin-right: 0px;">Session2</span><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" class="float-right" style="margin-right: 0px;margin-top: 5px;font-size: 12px;">
+                                            <path d="M8 12C8 13.1046 7.10457 14 6 14C4.89543 14 4 13.1046 4 12C4 10.8954 4.89543 10 6 10C7.10457 10 8 10.8954 8 12Z" fill="currentColor"></path>
+                                            <path d="M14 12C14 13.1046 13.1046 14 12 14C10.8954 14 10 13.1046 10 12C10 10.8954 10.8954 10 12 10C13.1046 10 14 10.8954 14 12Z" fill="currentColor"></path>
+                                            <path d="M18 14C19.1046 14 20 13.1046 20 12C20 10.8954 19.1046 10 18 10C16.8954 10 16 10.8954 16 12C16 13.1046 16.8954 14 18 14Z" fill="currentColor"></path>
+                                        </svg></div>
+                                </li>
+                                <li style="font-family: Barlow, sans-serif;font-size: 14px;">
+                                    <div class="date" style="font-family: Barlow, sans-serif;font-size: 14px;"><span style="font-family: Barlow, sans-serif;font-size: 14px;color: rgb(221,221,221);">3</span></div>
+                                </li>
+                                <li style="font-family: Barlow, sans-serif;font-size: 14px;">
+                                    <div class="date" style="font-family: Barlow, sans-serif;font-size: 14px;"><span style="font-family: Barlow, sans-serif;font-size: 14px;color: rgb(221,221,221);">4</span></div>
+                                </li>
+                                <li style="font-family: Barlow, sans-serif;font-size: 14px;">
+                                    <div class="date" style="font-family: Barlow, sans-serif;font-size: 14px;"><span style="font-family: Barlow, sans-serif;font-size: 14px;">5</span></div>
+                                </li>
+                                <li style="font-family: Barlow, sans-serif;font-size: 14px;">
+                                    <div class="date" style="font-family: Barlow, sans-serif;font-size: 14px;"><span style="font-family: Barlow, sans-serif;font-size: 14px;">6</span></div>
+                                </li>
+                                <li style="font-family: Barlow, sans-serif;font-size: 14px;">
+                                    <div class="date" style="font-family: Barlow, sans-serif;font-size: 14px;"><span style="font-family: Barlow, sans-serif;font-size: 14px;color: rgb(221,221,221);">7</span></div>
+                                </li>
+                                <li style="font-family: Barlow, sans-serif;font-size: 14px;">
+                                    <div class="date" style="font-family: Barlow, sans-serif;font-size: 14px;"><span style="font-family: Barlow, sans-serif;font-size: 14px;">8</span></div>
+                                </li>
+                                <li style="font-family: Barlow, sans-serif;font-size: 14px;">
+                                    <div class="date" style="font-family: Barlow, sans-serif;font-size: 14px;"><span style="font-family: Barlow, sans-serif;font-size: 14px;">9</span></div>
+                                </li>
+                                <li style="font-family: Barlow, sans-serif;font-size: 14px;">
+                                    <div class="date" style="font-family: Barlow, sans-serif;font-size: 14px;"><span style="font-family: Barlow, sans-serif;font-size: 14px;color: rgb(221,221,221);">10</span></div>
+                                </li>
+                                <li style="font-family: Barlow, sans-serif;font-size: 14px;">
+                                    <div class="date" style="font-family: Barlow, sans-serif;font-size: 14px;"><span style="font-family: Barlow, sans-serif;font-size: 14px;color: rgb(221,221,221);">11</span></div>
+                                </li>
+                                <li style="font-family: Barlow, sans-serif;font-size: 14px;">
+                                    <div class="date" style="font-family: Barlow, sans-serif;font-size: 14px;"><span style="font-family: Barlow, sans-serif;font-size: 14px;">12</span></div>
+                                </li>
+                                <li style="font-family: Barlow, sans-serif;font-size: 14px;">
+                                    <div class="date" style="font-family: Barlow, sans-serif;font-size: 14px;"><span style="font-family: Barlow, sans-serif;font-size: 14px;">13</span></div>
+                                </li>
+                                <li style="font-family: Barlow, sans-serif;font-size: 14px;">
+                                    <div class="date" style="font-family: Barlow, sans-serif;font-size: 14px;"><span style="font-family: Barlow, sans-serif;font-size: 14px;color: rgb(221,221,221);">14</span></div>
+                                </li>
+                                <li style="font-family: Barlow, sans-serif;font-size: 14px;">
+                                    <div class="date" style="font-family: Barlow, sans-serif;font-size: 14px;"><span style="font-family: Barlow, sans-serif;font-size: 14px;">15</span></div>
+                                </li>
+                                <li style="font-family: Barlow, sans-serif;font-size: 14px;">
+                                    <div class="date" style="font-family: Barlow, sans-serif;font-size: 14px;"><span style="font-family: Barlow, sans-serif;font-size: 14px;">16</span></div>
+                                </li>
+                                <li style="font-family: Barlow, sans-serif;font-size: 14px;">
+                                    <div class="date" style="font-family: Barlow, sans-serif;font-size: 14px;"><span style="font-family: Barlow, sans-serif;font-size: 14px;">17</span></div>
+                                </li>
+                                <li style="font-family: Barlow, sans-serif;font-size: 14px;">
+                                    <div class="date" style="font-family: Barlow, sans-serif;font-size: 14px;"><span style="font-family: Barlow, sans-serif;font-size: 14px;color: rgb(221,221,221);">18</span></div>
+                                </li>
+                                <li style="font-family: Barlow, sans-serif;font-size: 14px;">
+                                    <div class="date" style="font-family: Barlow, sans-serif;font-size: 14px;"><span style="font-family: Barlow, sans-serif;font-size: 14px;">19</span></div>
+                                </li>
+                                <li style="font-family: Barlow, sans-serif;font-size: 14px;">
+                                    <div class="date" style="font-family: Barlow, sans-serif;font-size: 14px;"><span style="font-family: Barlow, sans-serif;font-size: 14px;">20</span></div>
+                                </li>
+                                <li style="font-family: Barlow, sans-serif;font-size: 14px;">
+                                    <div class="date" style="font-family: Barlow, sans-serif;font-size: 14px;"><span style="font-family: Barlow, sans-serif;font-size: 14px;color: rgb(221,221,221);">21</span></div>
+                                </li>
+                                <li style="font-family: Barlow, sans-serif;font-size: 14px;">
+                                    <div class="date" style="font-family: Barlow, sans-serif;font-size: 14px;"><span style="font-family: Barlow, sans-serif;font-size: 14px;">22</span></div>
+                                </li>
+                                <li style="font-family: Barlow, sans-serif;font-size: 14px;">
+                                    <div class="date" style="font-family: Barlow, sans-serif;font-size: 14px;"><span style="font-family: Barlow, sans-serif;font-size: 14px;">23</span></div>
+                                </li>
+                                <li style="font-family: Barlow, sans-serif;font-size: 14px;">
+                                    <div class="date" style="font-family: Barlow, sans-serif;font-size: 14px;"><span style="font-family: Barlow, sans-serif;font-size: 14px;">24</span></div>
+                                </li>
+                                <li style="font-family: Barlow, sans-serif;font-size: 14px;">
+                                    <div class="date" style="font-family: Barlow, sans-serif;font-size: 14px;"><span style="font-family: Barlow, sans-serif;font-size: 14px;color: rgb(221,221,221);">25</span></div>
+                                </li>
+                                <li style="font-family: Barlow, sans-serif;font-size: 14px;">
+                                    <div class="date" style="font-family: Barlow, sans-serif;font-size: 14px;"><span style="font-family: Barlow, sans-serif;font-size: 14px;">26</span></div>
+                                </li>
+                                <li style="font-family: Barlow, sans-serif;font-size: 14px;">
+                                    <div class="date" style="font-family: Barlow, sans-serif;font-size: 14px;"><span style="font-family: Barlow, sans-serif;font-size: 14px;">27</span></div>
+                                </li>
+                                <li style="font-family: Barlow, sans-serif;font-size: 14px;">
+                                    <div class="date" style="font-family: Barlow, sans-serif;font-size: 14px;"><span style="font-family: Barlow, sans-serif;font-size: 14px;color: rgb(221,221,221);">28</span></div>
+                                </li>
+                                <li style="font-family: Barlow, sans-serif;font-size: 14px;">
+                                    <div class="date" style="font-family: Barlow, sans-serif;font-size: 14px;"><span style="font-family: Barlow, sans-serif;font-size: 14px;">29</span></div>
+                                </li>
+                                <li style="font-family: Barlow, sans-serif;font-size: 14px;">
+                                    <div class="date" style="font-family: Barlow, sans-serif;font-size: 14px;"><span style="font-family: Barlow, sans-serif;font-size: 14px;">30</span></div>
+                                </li>
+                                <li style="font-family: Barlow, sans-serif;font-size: 14px;">
+                                    <div class="date" style="font-family: Barlow, sans-serif;"><span style="color: rgb(221,221,221);">31</span></div>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </section>
+                                <!-- ??? 
+                <div class="card" style="border-style: none;border-bottom-style: none;border-radius: 10px;margin-left: 50px;margin-right: 50px;margin-top: 50px;">
+                    <div class="card-body" style="height: 205px;border-style: none;border-bottom-style: none;border-left-width: 1.7px;border-left-style: none;border-radius: 70px;">
+                        <div class="row" style="margin-left: 14px;margin-top: 20px;">
+                            <div class="col-xl-2 offset-xl-0" style="padding-left: 0px;padding-right: 0px;">
+                                <img class = "avatar_big2" style="margin-left: 26px; " src="{{ tu_user.acc_avatar }}"></div>
+                            <div class="col">
+                                <h4 style="font-family: Barlow, sans-serif;font-size: 30px;margin-top: 35px;">{{tu_user.acc_firstname}} {{tu_user.acc_lastname}}</h4>
+                            </div>
+                            <div class="col">
+
+                                <button onclick=" openProfileEdit(); return false;" class="btn btn-primary" type="button" style="background: rgba(0,123,255,0);border-style: none;font-family: Barlow, sans-serif;color: #fbaf00;padding: 0px;padding-left: 300px;font-weight: normal;padding-bottom: 130px;">Edit</button>
+                            </div>
+                            {% if tutor %}
+                            <div class="col">
+
+                                <button onclick=" openSlotEdit(); return false;" class="btn btn-primary" type="button" style="background: rgba(0,123,255,0);border-style: none;font-family: Barlow, sans-serif;color: #fbaf00;padding: 0px;padding-left: 5px;font-weight: normal;padding-bottom: 130px;">My Tutor Slots</button>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="card" style="border-style: none;border-bottom-style: none;border-radius: 10px;margin-left: 50px;margin-right: 50px;margin-top: 22px;">
+                    <div class="card-body" style="height: 205px;border-style: none;border-bottom-style: none;border-left-width: 1.7px;border-left-style: none;border-radius: 10px;">
+                        <p style="font-size: 18px;font-family: Barlow, sans-serif;">GRADE {{ tu_user.acc_grade }}</p>
+                        <p style="font-size: 18px;font-family: Barlow, sans-serif;">{{tu_user.acc_aboutme}}</p>
+
+                        {% if tutor %}
+
+                        <p style="font-family: Barlow, sans-serif;margin-bottom: 0px;text-align: left;margin-left: 0px;font-size: 18px;color: #505e6c;"> 
+                            Tutors:
+                            {% for course,grades in course_dict.items %}
+                            {{course}} (grade: {{grades}}) &nbsp;
+                            {% endfor %}
+                        </p>
+
+                        <p style="font-size: 18px;font-family: Barlow, sans-serif;">{{tutor.acc_info}}</p>
+                        {% endif %}
+
+                    </div>
+                </div>
+                -->
+            </div>
+
+
+            <!-- chat button -->
+
+            <div style="width: 90px;height: 90px;position: fixed;bottom: 7%;right: 70px;">
+                <button id="chatbutton" onclick="openChatsView(); " class="btn btn-primary" type="button" style="width: 90px;height: 90px;border-radius: 50px;background: #fbaf00;border-style: none;border-color: rgb(255, 255, 255);border-top-color: rgb(255,;border-right-color: 255,;border-bottom-color: 255);border-left-color: 255,;box-shadow: 0px 5px 10px rgba(33,37,41,0.16);">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icon-tabler-message-circle" style="font-size: 38px;">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                        <path d="M3 20l1.3 -3.9a9 8 0 1 1 3.4 2.9l-4.7 1"></path>
+                        <line x1="12" y1="12" x2="12" y2="12.01"></line>
+                        <line x1="8" y1="12" x2="8" y2="12.01"></line>
+                        <line x1="16" y1="12" x2="16" y2="12.01"></line>
+                    </svg>
+                </button>
+            </div>
+            
+
+        </div>
+    </div>
+
+    {% if tutor %}
+    <div id = "popupSlotEdit" name="popupSlotEdit" title = "Edit your tutor time slot">
+
+        <button onclick="$('#popupSlotEdit').dialog( 'close' ); "  class="btn btn-primary" type="button" style="padding: 0px;color: rgb(255, 255, 255);background: rgba(0,123,255,0);border-style: none;margin-top: 20px;margin-left: 20px;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" style="font-size: 26px;color: #9ca5ff;">
+            <path d="M16.3394 9.32245C16.7434 8.94589 16.7657 8.31312 16.3891 7.90911C16.0126 7.50509 15.3798 7.48283 14.9758 7.85938L12.0497 10.5866L9.32245 7.66048C8.94589 7.25647 8.31312 7.23421 7.90911 7.61076C7.50509 7.98731 7.48283 8.62008 7.85938 9.0241L10.5866 11.9502L7.66048 14.6775C7.25647 15.054 7.23421 15.6868 7.61076 16.0908C7.98731 16.4948 8.62008 16.5171 9.0241 16.1405L11.9502 13.4133L14.6775 16.3394C15.054 16.7434 15.6868 16.7657 16.0908 16.3891C16.4948 16.0126 16.5171 15.3798 16.1405 14.9758L13.4133 12.0497L16.3394 9.32245Z" fill="currentColor"></path>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M1 12C1 5.92487 5.92487 1 12 1C18.0751 1 23 5.92487 23 12C23 18.0751 18.0751 23 12 23C5.92487 23 1 18.0751 1 12ZM12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21Z" fill="currentColor"></path>
+            </svg>
+        </button>
+        <section style="height: 653px;margin-top: 20px;font-weight: 200;">
+
+            <form name="timeSlotForm" id="timeSlotForm">
+                {% csrf_token %}
+                
+                <div class="row" style="width: 600px;margin-right: 0px;margin-left: 0px;">
+                    <div class="col" style="color: #ea7961;">
+                        <h1 style="font-family: Barlow, sans-serif;font-size: 25px;text-align: center;color: #9ca5ff;">Set your weekly hours&nbsp;</h1>
+                    </div>
+                </div>
+                {% for week_day, week_day_name in week_days.items %}
+                <div class="row" style="width: 600px;margin-right: 0px;margin-left: 0px;margin-top: 40px;">
+
+                    <div class="col-lg-2 offset-lg-3 offset-xl-1" style="min-width: 0px;padding-right: 0px;width: 300px;padding-left: 0PX;margin-left: 130px;">
+                        <div class="form-check mx-auto" style="width: 99px;padding: 5px;padding-top: 0px;padding-left: 31px;">
+                            <input name="formCheck-{{week_day}}" id="formCheck-{{week_day}}" class="form-check-input" type="checkbox"  style="font-weight: bold;font-family: Barlow, sans-serif;margin-top: 7px;width: auto;padding-top: 0px;">
+                            <label for="formCheck-{{week_day}}" class="form-check-label" style="font-family: Barlow, sans-serif;font-weight: 500px;font-size: 16px;letter-spacing: 0px;margin-left: 7px;padding-top: 0px;"><em>{{week_day_name}}</em>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-lg-5 offset-lg-0 offset-xl-1" style="border-radius: 0px;padding-left: 0px;padding-top: 0px;">
+
+                        <select name="start_time{{week_day}}" id="start_time{{week_day}}" style="padding: 11px;margin-right: 0px;font-family: Barlow, sans-serif;padding-top: 0px;">
+
+                        {% for the_time in day_time_slots %}
+                            <option value="{{the_time}}" selected="">{{the_time}}</option>
+                        {% endfor%}
+                        </select>
+                        <i class="fa fa-minus" style="font-weight: normal;font-size: 7px;padding-top: 0px;"></i>
+                        <select name="end_time{{week_day}}" id="end_time{{week_day}}"style="padding: 11px;margin-right: 0px;font-family: Barlow, sans-serif;margin-left: 13px;padding-top: 0px;">
+                        {% for the_time in day_time_slots%}
+                            <option value="{{the_time}}" selected="">{{the_time}}</option>
+                        {% endfor%}
+                        </select>
+                    </div>
+                </div>
+                {% endfor%}
+                <div class="row">
+                    <div class="col" style="margin-top: 45px;padding-left: 240px;">
+                        <button id="save_button" onClick="saveSlots(); return false;"  class="btn btn-primary mx-auto" type="button" style="border-radius: 0;background: #9ca5ff;width: 150px;font-family: Barlow, sans-serif;height: 45px;border-style: none;border-top-left-radius: 235px;border-top-right-radius: 235px;border-bottom-right-radius: 235px;border-bottom-left-radius: 235px;">SAVE &amp; CLOSE</button></div>
+                </div>
+            </form>
+        </section>
+
+    </div>         
+    {% endif %}
+
+    <div id = "popupProfileEdit" name="popupProfileEdit" title = "Edit your profile">
+
+        <button onclick="$('#popupProfileEdit').dialog( 'close' ); "  class="btn btn-primary" type="button" style="padding: 0px;color: rgb(255, 255, 255);background: rgba(0,123,255,0);border-style: none;margin-top: 20px;margin-left: 20px;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" style="font-size: 26px;color: #9ca5ff;">
+            <path d="M16.3394 9.32245C16.7434 8.94589 16.7657 8.31312 16.3891 7.90911C16.0126 7.50509 15.3798 7.48283 14.9758 7.85938L12.0497 10.5866L9.32245 7.66048C8.94589 7.25647 8.31312 7.23421 7.90911 7.61076C7.50509 7.98731 7.48283 8.62008 7.85938 9.0241L10.5866 11.9502L7.66048 14.6775C7.25647 15.054 7.23421 15.6868 7.61076 16.0908C7.98731 16.4948 8.62008 16.5171 9.0241 16.1405L11.9502 13.4133L14.6775 16.3394C15.054 16.7434 15.6868 16.7657 16.0908 16.3891C16.4948 16.0126 16.5171 15.3798 16.1405 14.9758L13.4133 12.0497L16.3394 9.32245Z" fill="currentColor"></path>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M1 12C1 5.92487 5.92487 1 12 1C18.0751 1 23 5.92487 23 12C23 18.0751 18.0751 23 12 23C5.92487 23 1 18.0751 1 12ZM12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21Z" fill="currentColor"></path>
+            </svg>
+        </button>
+        <h1 style="font-size: 24px;font-family: Barlow, sans-serif;text-align: center;margin-top: 0px;padding-top: 5px;">EDIT PROFILE</h1>
+
+        <form name="profileForm" id="profileForm">
+            {% csrf_token %}
+
+            <input name="firstname" id="firstname"  value="{{tu_user.acc_firstname}}" class="form-control mx-auto" type="text" style="width: 75%; margin-left: 20%;font-size: 16px;font-family: Barlow, sans-serif;color: #000000;padding-right: 0px;padding-left: 0px;border-style: none;padding-top: 0px;padding-bottom: 2px;margin-bottom: 20px;" >
+            <input name="lastname" id="lastname"  value="{{tu_user.acc_lastname}}" class="form-control mx-auto" type="text" style="width: 75%; margin-left: 20%;font-size: 16px;font-family: Barlow, sans-serif;color: #000000;padding-right: 0px;padding-left: 0px;border-style: none;padding-top: 0px;padding-bottom: 2px;margin-bottom: 20px;" >
+            <input name="aboutme" id="aboutme"  value="{{tu_user.acc_aboutme}}" placeholder="Details about me..."  class="form-control mx-auto" type="text" style="width: 75%; margin-left: 20%;font-size: 16px;font-family: Barlow, sans-serif;color: #000000;padding-right: 0px;padding-left: 0px;border-style: none;padding-top: 0px;padding-bottom: 2px;margin-bottom: 20px;" >
+            <select class="form-control  mx-auto" name="grade" id="grade" style="width: 75%; margin-left: 20%;font-size: 16px;font-family: Barlow, sans-serif;color: #000000;padding-right: 0px;padding-left: 0px;border-style: none;padding-top: 0px;padding-bottom: 2px;margin-bottom: 20px;" required="">
+                <optgroup label="Select an option">
+                    {% for i in '1234567'|make_list %}
+
+                        <option value="{{forloop.counter|add:6}}" {% if forloop.counter|add:6 == tu_user.acc_grade %} selected="" {% endif %} >
+                            {% if forloop.counter < 7 %}
+                                Grade {{forloop.counter|add:6}}
+                            {% else %}
+                                Completed post-secondary education
+                            {% endif %}
+                        </option>
+                    {% endfor %}
+                </optgroup>
+            </select>
+
+            {% if tutor %}
+                <input name="isTutor" id="isTutor"  value="1" type="hidden" >
+<!--                 <label class="d-xl-flex justify-content-xl-start mx-auto" style="width: 75%; margin-left: 20%; color: rgb(93,194,104);font-family: Barlow, sans-serif;">Subjects you tutor:</label>
+                <div style="width: 65%;  ">
+                    <ul class="nav nav-tabs" role="tablist" style="font-size: 12px;width: 380px;">
+                        <li class="nav-item" role="presentation" style="color: #64758e;border-width: -10px;"><a class="nav-link active" role="tab" data-toggle="tab" href="#tab-1" style="color: #64758e;border-width: -10px;width: 76px;font-size: 11px;">Grade 7</a></li>
+                        <li class="nav-item" role="presentation" style="color: #64758e;border-width: -10px;width: 76px;font-size: 11px;"><a class="nav-link" role="tab" data-toggle="tab" href="#tab-2" style="color: #64758e;border-width: -10px;width: 76px;font-size: 11px;">Grade 8</a></li>
+                        <li class="nav-item" role="presentation" style="color: #64758e;border-width: -10px;width: 76px;font-size: 11px;"><a class="nav-link" role="tab" data-toggle="tab" href="#tab-3" style="color: rgb(100,117,142);border-width: -10px;width: 76px;font-size: 11px;">Grade 9</a></li>
+                        <li class="nav-item" role="presentation" style="color: #64758e;border-width: -10px;width: 76px;font-size: 11px;"><a class="nav-link" role="tab" data-toggle="tab" href="#tab-4" style="color: rgb(100,117,142);border-width: -10px;width: 80px;font-size: 11px;">Grade 10</a></li>
+                        <li class="nav-item" role="presentation" style="color: #64758e;border-width: -10px;width: 76px;font-size: 11px;"><a class="nav-link" role="tab" data-toggle="tab" href="#tab-5" style="color: rgb(100,117,142);width: 80px;font-size: 11px;">Grade 11</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active" role="tabpanel" id="tab-1" style="margin-top: 10px;margin-bottom: 0px;">
+                            <div class="form-row">
+                                <div class="col">
+                                    <div class="form-check" style="font-family: Barlow, sans-serif;">
+                                        <input class="form-check-input" type="checkbox" style="border-radius: 0px;border-top-color: rgb(91,190,95);color: rgb(91,191,96);font-family: Barlow, sans-serif;" id="Subject1" name="Subject1" value="Math:7" {% if 'Math:7' in tutor.acc_subjects%}checked{% endif %}><label class="form-check-label" for="Subject1" style="border-top-color: rgb(91,190,95);color: rgb(91,191,96);font-family: Barlow, sans-serif;margin-left: 10px;">Math</label></div>
+                                    <div class="form-check" style="font-family: Barlow, sans-serif;">
+                                        <input class="form-check-input" type="checkbox" style="border-radius: 0px;border-top-color: rgb(91,190,95);color: rgb(91,191,96);font-family: Barlow, sans-serif;" id="Subject2" name="Subject2" value="Science:7" {% if 'Science:7' in tutor.acc_subjects%}checked{% endif %}><label class="form-check-label" for="Subject1" style="border-top-color: rgb(91,190,95);color: rgb(91,191,96);font-family: Barlow, sans-serif;margin-left: 10px;margin-bottom: 24px;">Science</label></div>
+                                </div>
+                                <div class="col">
+                                    <div class="form-check" style="font-family: Barlow, sans-serif;">
+                                        <input class="form-check-input" type="checkbox"  style="border-radius: 0px;border-top-color: rgb(91,190,95);color: rgb(91,191,96);font-family: Barlow, sans-serif;" id="Subject3" name="Subject3" value="French:7" {% if 'French:7' in tutor.acc_subjects%}checked{% endif %}><label class="form-check-label" for="Subject1" style="border-top-color: rgb(91,190,95);color: rgb(91,191,96);font-family: Barlow, sans-serif;margin-left: 10px;">French</label></div>
+                                    <div class="form-check" style="font-family: Barlow, sans-serif;">
+                                        <input class="form-check-input" type="checkbox" style="border-radius: 0px;border-top-color: rgb(91,190,95);color: rgb(91,191,96);font-family: Barlow, sans-serif;" id="Subject4" name="Subject4" value="English:7" {% if 'English:7' in tutor.acc_subjects%}checked{% endif %}><label class="form-check-label" for="Subject1" style="border-top-color: rgb(91,190,95);color: rgb(91,191,96);font-family: Barlow, sans-serif;margin-left: 10px;">English</label></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane" role="tabpanel" id="tab-2" style="margin-top: 10px;">
+                            <div class="form-row">
+                                <div class="col">
+                                    <div class="form-check" style="font-family: Barlow, sans-serif;">
+                                        <input class="form-check-input" type="checkbox"  style="border-radius: 0px;border-top-color: rgb(91,190,95);color: rgb(91,191,96);font-family: Barlow, sans-serif;" id="Subject5" name="Subject5" value="Math:8" {% if 'Math:8' in tutor.acc_subjects%}checked{% endif %} ><label class="form-check-label" for="Subject1" style="border-top-color: rgb(91,190,95);color: rgb(91,191,96);font-family: Barlow, sans-serif;margin-left: 10px;">Math</label></div>
+                                    <div class="form-check" style="font-family: Barlow, sans-serif;">
+                                        <input class="form-check-input" type="checkbox" style="border-radius: 0px;border-top-color: rgb(91,190,95);color: rgb(91,191,96);font-family: Barlow, sans-serif;" id="Subject6" name="Subject6" value="Science:8" {% if 'Science:8' in tutor.acc_subjects%}checked{% endif %} ><label class="form-check-label" for="Subject1" style="border-top-color: rgb(91,190,95);color: rgb(91,191,96);font-family: Barlow, sans-serif;margin-left: 10px;margin-bottom: 24px;">Science</label></div>
+                                </div>
+                                <div class="col">
+                                    <div class="form-check" style="font-family: Barlow, sans-serif;">
+                                        <input class="form-check-input" type="checkbox" style="border-radius: 0px;border-top-color: rgb(91,190,95);color: rgb(91,191,96);font-family: Barlow, sans-serif;" id="Subject7" name="Subject7" value="French:8" {% if 'French:8' in tutor.acc_subjects%}checked{% endif %} ><label class="form-check-label" for="Subject1" style="border-top-color: rgb(91,190,95);color: rgb(91,191,96);font-family: Barlow, sans-serif;margin-left: 10px;">French</label></div>
+                                    <div class="form-check" style="font-family: Barlow, sans-serif;">
+                                        <input class="form-check-input" type="checkbox" style="border-radius: 0px;border-top-color: rgb(91,190,95);color: rgb(91,191,96);font-family: Barlow, sans-serif;" id="Subject8" name="Subject8" value="English:8" {% if 'English:8' in tutor.acc_subjects%}checked{% endif %} ><label class="form-check-label" for="Subject1" style="border-top-color: rgb(91,190,95);color: rgb(91,191,96);font-family: Barlow, sans-serif;margin-left: 10px;">English</label></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane" role="tabpanel" id="tab-3" style="margin-top: 10px;">
+                            <div class="form-row">
+                                <div class="col">
+                                    <div class="form-check" style="font-family: Barlow, sans-serif;">
+                                        <input class="form-check-input" type="checkbox" style="border-radius: 0px;border-top-color: rgb(91,190,95);color: rgb(91,191,96);font-family: Barlow, sans-serif;" id="Subject9" name="Subject9" value="Math:9" {% if 'Math:9' in tutor.acc_subjects%}checked{% endif %}><label class="form-check-label" for="Subject1" style="border-top-color: rgb(91,190,95);color: rgb(91,191,96);font-family: Barlow, sans-serif;margin-left: 10px;">Math</label></div>
+                                    <div class="form-check" style="font-family: Barlow, sans-serif;">
+                                        <input class="form-check-input" type="checkbox" style="border-radius: 0px;border-top-color: rgb(91,190,95);color: rgb(91,191,96);font-family: Barlow, sans-serif;" id="Subject10" name="Subject10" value="Science:9" {% if 'Science:9' in tutor.acc_subjects%}checked{% endif %}><label class="form-check-label" for="Subject1" style="border-top-color: rgb(91,190,95);color: rgb(91,191,96);font-family: Barlow, sans-serif;margin-left: 10px;margin-bottom: 24px;">Science</label></div>
+                                </div>
+                                <div class="col">
+                                    <div class="form-check" style="font-family: Barlow, sans-serif;">
+                                        <input class="form-check-input" type="checkbox"  style="border-radius: 0px;border-top-color: rgb(91,190,95);color: rgb(91,191,96);font-family: Barlow, sans-serif;" id="Subject11" name="Subject11" value="French:9" {% if 'French:9' in tutor.acc_subjects%}checked{% endif %}><label class="form-check-label" for="Subject1" style="border-top-color: rgb(91,190,95);color: rgb(91,191,96);font-family: Barlow, sans-serif;margin-left: 10px;">French</label></div>
+                                    <div class="form-check" style="font-family: Barlow, sans-serif;">
+                                        <input class="form-check-input" type="checkbox" style="border-radius: 0px;border-top-color: rgb(91,190,95);color: rgb(91,191,96);font-family: Barlow, sans-serif;" id="Subject12" name="Subject12" value="English:9" {% if 'English:9' in tutor.acc_subjects%}checked{% endif %}><label class="form-check-label" for="Subject1" style="border-top-color: rgb(91,190,95);color: rgb(91,191,96);font-family: Barlow, sans-serif;margin-left: 10px;">English</label></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane " role="tabpanel" id="tab-4" style="margin-top: 10px;">
+                            <div class="form-row">
+                                <div class="col">
+                                    <div class="form-check" style="font-family: Barlow, sans-serif;">
+                                        <input class="form-check-input" type="checkbox" style="border-radius: 0px;border-top-color: rgb(91,190,95);color: rgb(91,191,96);font-family: Barlow, sans-serif;" id="Subject13" name="Subject13" value="Math:10" {% if 'Math:10' in tutor.acc_subjects%}checked{% endif %}><label class="form-check-label" for="Subject1" style="border-top-color: rgb(91,190,95);color: rgb(91,191,96);font-family: Barlow, sans-serif;margin-left: 10px;">Math</label></div>
+                                    <div class="form-check" style="font-family: Barlow, sans-serif;">
+                                        <input class="form-check-input" type="checkbox" style="border-radius: 0px;border-top-color: rgb(91,190,95);color: rgb(91,191,96);font-family: Barlow, sans-serif;" id="Subject14" name="Subject14" value="Science:10" {% if 'Science:10' in tutor.acc_subjects%}checked{% endif %}><label class="form-check-label" for="Subject1" style="border-top-color: rgb(91,190,95);color: rgb(91,191,96);font-family: Barlow, sans-serif;margin-left: 10px;margin-bottom: 24px;">Science</label></div>
+                                </div>
+                                <div class="col">
+                                    <div class="form-check" style="font-family: Barlow, sans-serif;">
+                                        <input class="form-check-input" type="checkbox"  style="border-radius: 0px;border-top-color: rgb(91,190,95);color: rgb(91,191,96);font-family: Barlow, sans-serif;" id="Subject15" name="Subject15" value="French:10" {% if 'French:10' in tutor.acc_subjects%}checked{% endif %}><label class="form-check-label" for="Subject1" style="border-top-color: rgb(91,190,95);color: rgb(91,191,96);font-family: Barlow, sans-serif;margin-left: 10px;">French</label></div>
+                                    <div class="form-check" style="font-family: Barlow, sans-serif;">
+                                        <input class="form-check-input" type="checkbox" style="border-radius: 0px;border-top-color: rgb(91,190,95);color: rgb(91,191,96);font-family: Barlow, sans-serif;" id="Subject16" name="Subject16" value="English:10" {% if 'English:10' in tutor.acc_subjects%}checked{% endif %}><label class="form-check-label" for="Subject1" style="border-top-color: rgb(91,190,95);color: rgb(91,191,96);font-family: Barlow, sans-serif;margin-left: 10px;">English</label></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane" role="tabpanel" id="tab-5" style="margin-top: 10px;">
+                            <div class="form-row">
+                                <div class="col">
+                                    <div class="form-check" style="font-family: Barlow, sans-serif;">
+                                        <input class="form-check-input" type="checkbox"  style="border-radius: 0px;border-top-color: rgb(91,190,95);color: rgb(91,191,96);font-family: Barlow, sans-serif;" id="Subject17" name="Subject17" value="Math:11" {% if 'Math:11' in tutor.acc_subjects%}checked{% endif %}><label class="form-check-label" for="Subject1" style="border-top-color: rgb(91,190,95);color: rgb(91,191,96);font-family: Barlow, sans-serif;margin-left: 10px;">Math</label></div>
+                                    <div class="form-check" style="font-family: Barlow, sans-serif;">
+                                        <input class="form-check-input" type="checkbox"  style="border-radius: 0px;border-top-color: rgb(91,190,95);color: rgb(91,191,96);font-family: Barlow, sans-serif;"  id="Subject18" name="Subject18" value="Biology:11" {% if 'Biology:11' in tutor.acc_subjects%}checked{% endif %}><label class="form-check-label" for="Subject1" style="border-top-color: rgb(91,190,95);color: rgb(91,191,96);font-family: Barlow, sans-serif;margin-left: 10px;">Biology</label></div>
+                                    <div class="form-check" style="font-family: Barlow, sans-serif;">
+                                        <input class="form-check-input" type="checkbox"  style="border-radius: 0px;border-top-color: rgb(91,190,95);color: rgb(91,191,96);font-family: Barlow, sans-serif;" id="Subject19" name="Subject19" value="Physics:11" {% if 'Physics:11' in tutor.acc_subjects%}checked{% endif %}><label class="form-check-label" for="Subject1" style="border-top-color: rgb(91,190,95);color: rgb(91,191,96);font-family: Barlow, sans-serif;margin-left: 10px;">Physics</label></div>
+                                </div>
+                                <div class="col">
+                                    <div class="form-check" style="font-family: Barlow, sans-serif;">
+                                        <input class="form-check-input" type="checkbox"  style="border-radius: 0px;border-top-color: rgb(91,190,95);color: rgb(91,191,96);font-family: Barlow, sans-serif;" id="Subject20" name="Subject20" value="Chemistry:11" {% if 'Chemistry:11' in tutor.acc_subjects%}checked{% endif %}><label class="form-check-label" for="Subject1" style="border-top-color: rgb(91,190,95);color: rgb(91,191,96);font-family: Barlow, sans-serif;margin-left: 10px;">Chemistry</label></div>
+                                    <div class="form-check" style="font-family: Barlow, sans-serif;">
+                                        <input class="form-check-input" type="checkbox"  style="border-radius: 0px;border-top-color: rgb(91,190,95);color: rgb(91,191,96);font-family: Barlow, sans-serif;" id="Subject21" name="Subject21" value="French:11" {% if 'French:11' in tutor.acc_subjects%}checked{% endif %}><label class="form-check-label" for="Subject1" style="border-top-color: rgb(91,190,95);color: rgb(91,191,96);font-family: Barlow, sans-serif;margin-left: 10px;">French</label></div>
+                                    <div class="form-check" style="font-family: Barlow, sans-serif;">
+                                        <input class="form-check-input" type="checkbox" style="border-radius: 0px;border-top-color: rgb(91,190,95);color: rgb(91,191,96);font-family: Barlow, sans-serif;" id="Subject22" name="Subject22" value="English:11" {% if 'English:11' in tutor.acc_subjects%}checked{% endif %}><label class="form-check-label" for="Subject1" style="border-top-color: rgb(91,190,95);color: rgb(91,191,96);font-family: Barlow, sans-serif;margin-left: 10px;">English</label></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+            {% else %}
+            <input name="isTutor" id="isTutor"  value="0" type="hidden" >
+
+            {% endif %}
+            <div class="mx-auto" style="width: 80px;height: 36px;padding-bottom:90px">
+                <button onClick="saveProfile(); return false;" class="btn btn-primary" type="submit" style="font-family: Barlow, sans-serif;background: #9ca5ff;border-radius: 40px;border-style: none;border-bottom-color: #9ca5ff;width: 80px;margin-top: 22px;margin-right: 100%;margin-left: 0px;">Save</button>
+            </div>
+        </form>
+     
+    </div>  
+
+    <div id = "popupEventView" name="popupEventView" title = "Edit your session">
+
+        <button onclick="$('#popupEventView').dialog( 'close' ); "  class="btn btn-primary" type="button" style="padding: 0px;color: rgb(255, 255, 255);background: rgba(0,123,255,0);border-style: none;margin-top: 20px;margin-left: 20px;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" style="font-size: 26px;color: #9ca5ff;">
+            <path d="M16.3394 9.32245C16.7434 8.94589 16.7657 8.31312 16.3891 7.90911C16.0126 7.50509 15.3798 7.48283 14.9758 7.85938L12.0497 10.5866L9.32245 7.66048C8.94589 7.25647 8.31312 7.23421 7.90911 7.61076C7.50509 7.98731 7.48283 8.62008 7.85938 9.0241L10.5866 11.9502L7.66048 14.6775C7.25647 15.054 7.23421 15.6868 7.61076 16.0908C7.98731 16.4948 8.62008 16.5171 9.0241 16.1405L11.9502 13.4133L14.6775 16.3394C15.054 16.7434 15.6868 16.7657 16.0908 16.3891C16.4948 16.0126 16.5171 15.3798 16.1405 14.9758L13.4133 12.0497L16.3394 9.32245Z" fill="currentColor"></path>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M1 12C1 5.92487 5.92487 1 12 1C18.0751 1 23 5.92487 23 12C23 18.0751 18.0751 23 12 23C5.92487 23 1 18.0751 1 12ZM12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21Z" fill="currentColor"></path>
+            </svg>
+        </button>
+
+        <div class="col" style="padding-top: 10px;padding-right: 20px;padding-left: 50px;font-family: Barlow, sans-serif;height: 100%;">
+            <!-- <div class="card" style="border-radius: 10px;border-style: none;font-family: Barlow, sans-serif;box-shadow: 0px 5px 13px #cbcbcb;"> -->
+                <div class="card-body" style="font-family: Barlow, sans-serif;box-shadow: 0px 0px;">
+                    <h4 id="ev_box_subject" class="card-title" style="font-family: Barlow, sans-serif;font-weight: normal;color: #fbaf00;"></h4>
+                    <h6 id="ev_box_with_name"  class="card-subtitle mb-2" style="font-family: Barlow, sans-serif;color: rgb(34,38,42);">
+                    </h6>
+
+
+                    <div style="padding-top: 15px;">
+                        <div class="row">
+                            <div class="col-xl-1"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none">
+                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M14 3V3.28988C16.8915 4.15043 19 6.82898 19 10V17H20V19H4V17H5V10C5 6.82898 7.10851 4.15043 10 3.28988V3C10 1.89543 10.8954 1 12 1C13.1046 1 14 1.89543 14 3ZM7 17H17V10C17 7.23858 14.7614 5 12 5C9.23858 5 7 7.23858 7 10V17ZM14 21V20H10V21C10 22.1046 10.8954 23 12 23C13.1046 23 14 22.1046 14 21Z" fill="currentColor"></path>
+                                </svg></div>
+                            <div class="col">
+                                <p id="ev_box_time" style="font-family: Barlow, sans-serif;margin-bottom: 0px;width: 75%;"></p>
+                                <p id="ev_box_status" style="font-family: Barlow, sans-serif;margin-bottom: 0px;width: 75%;color: #fbaf00;font-weight: normal;"></p>
+                                <p id="ev_box_desc" style="font-family: Barlow, sans-serif;margin-bottom: 0px;width: 75%;"></p>
+
+                                {% if not tutor %}
+                                <a id="ev_box_link" href="#" style=" font-family: Barlow, sans-serif;margin-bottom: 0px;width: 75%;">Session link</a>
+                                {% endif %}
+
+                                <!-- <a id="ev_box_add_calendar" href="#" style=" font-family: Barlow, sans-serif;margin-bottom: 0px;width: 75%;" href="#" > Add to Google Calendar</a> -->
+
+                                </div>
+                        </div>
+                    </div>
+                </div>
+
+            <!-- </div> -->
+
+            <form name="sessionForm" id="sessionForm"  style="padding-top:30px; padding-bottom:30px">
+                {% csrf_token %}
+    
+                <input name="event_id" id="event_id"  class="form-control mx-auto" type="text" style="display:None" >
+                <input name="other_id" id="other_id"  class="form-control mx-auto" type="text" style="display:None" >
+                
+                <input name="comments" id="comments"  placeholder="Comments about session.." class="form-control mx-auto" type="text" style="width: 100%; margin-left: 20%;font-size: 16px;font-family: Barlow, sans-serif;color: #000000;padding-right: 0px;padding-left: 0px;border-style: none;padding-top: 0px;padding-bottom: 2px;margin-bottom: 20px;" >
+    
+                {% if tutor %}
+                <input name="ev_box_link" id="ev_box_link"  placeholder="link for web session .." class="form-control mx-auto" type="text" style="width: 100%; margin-left: 20%;font-size: 16px;font-family: Barlow, sans-serif;color: #000000;padding-right: 0px;padding-left: 0px;border-style: none;padding-top: 0px;padding-bottom: 2px;margin-bottom: 20px;" >
+
+                <div class="mx-auto" style="width: 455px;height: 36px;padding-bottom:90px">
+                    <button id="TutorAcceptButton" onClick="acceptSession(1); return false;" class="btn btn-primary" type="submit" style="font-family: Barlow, sans-serif;background: #9ca5ff;border-radius: 40px;border-style: none;border-bottom-color: #9ca5ff;width: 120px;margin-top: 22px;margin-left: 0px;">Accept Session</button>
+                    <button onClick="acceptSession(0); return false;" class="btn btn-primary" type="submit" style="font-family: Barlow, sans-serif;background: #9ca5ff;border-radius: 40px;border-style: none;border-bottom-color: #9ca5ff;width: 120px;margin-top: 22px;margin-left: 10px;">Reject Session</button>
+                    <button onClick="sendMessageWithEvent(); return false;" class="btn btn-primary" type="submit" style="font-family: Barlow, sans-serif;background: #9ca5ff;border-radius: 40px;border-style: none;border-bottom-color: #9ca5ff;width: 120px;margin-top: 22px;margin-left: 10px;">Message Student</button>
+
+                </div>
+                {% else %}
+
+                <div class="mx-auto" style="width: 255px;height: 36px;padding-bottom:90px">
+                    <button onClick="withDrawSession(); return false;" class="btn btn-primary" type="submit" style="font-family: Barlow, sans-serif;background: #9ca5ff;border-radius: 40px;border-style: none;border-bottom-color: #9ca5ff;width: 120px;margin-top: 22px;margin-left: 0px;">Cancel Session</button>
+                    <button onClick="sendMessageWithEvent(); return false;" class="btn btn-primary" type="submit" style="font-family: Barlow, sans-serif;background: #9ca5ff;border-radius: 40px;border-style: none;border-bottom-color: #9ca5ff;width: 120px;margin-top: 22px;margin-left: 10px;">Message Tutor</button>
+                </div>
+                {% endif %}
+    
+            </form>
+        </div>
+
+
+     
+    </div>     
+
+
+
+    <div id = "popupChatsView" name="popupChatsView" title = "Edit your session">
+
+        <div class="card" style="width: 100%;margin-top: 0px;margin-bottom: 0px;border-radius: 13px;padding: 0px;padding-left: 0px;padding-right: 0px;padding-top: 0pxpx;padding-bottom: 0px;border-top-left-radius: 13px;border-top-right-radius: 13px;border-bottom-right-radius: 13px;border-bottom-left-radius: 13px;border-style: none;border-right-style: none;height: 100%;">
+            <div class="card-body" style="width: 100%;height: 650px;background: #f1f1f1;margin-bottom: 50px;margin-left: 0px;padding-left: 0px;padding-right: 0px;padding-top: 0px;border-top-left-radius: 13px;border-top-right-radius: 13px;">
+
+                <div class="row" style="background: #9ca5ff;margin-right: 0px;margin-left: 0px;width: 100%;padding-top: 19px;height: 100px;border-radius: 11px;">
+                    <!-- <div class="col-lg-1 col-xl-1" style="width: 30px;padding-right: 0px;padding-left: 14px;color: #9ca5ff;">
+                        <button onclick="$('#popupChatsView').dialog( 'close' ); " class="btn btn-primary" type="button" style="width: 24px;height: 30px;border-style: none;background: rgba(0,123,255,0);padding: 0px;margin-right: 0px;margin-left: 20px;margin-top: 15px;"></button>
+                    </div> -->
+                    <div class="col-xl-10" style="padding-right: 0px;padding-left: 50px;font-size: 18px;color: #fbaf00;">
+                        <p style="font-family: Barlow, sans-serif;font-size: 32px;width: 419px;padding-left: 0px;color: #fbfbfb;margin-bottom: 0px;margin-top: 5px;">Chats</p>
+                    </div>
+                    <div class="col-lg-1 col-xl-1" style="width: 30px;padding-right: 0px;padding-left: 40px;color: #fbfbfb;">
+                        <button onclick="$('#popupChatsView').dialog( 'close' ); " class="btn btn-primary" type="button" style="width: 24px;height: 30px;border-style: none;background: rgba(0,123,255,0);padding: 0px;color: #fbfbfb;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" style="font-size: 30px;color: #fbfbfb;width: 24px;padding-top: 0px;font-weight: 200;margin-top: 0px;">
+                                <path d="M16.3394 9.32245C16.7434 8.94589 16.7657 8.31312 16.3891 7.90911C16.0126 7.50509 15.3798 7.48283 14.9758 7.85938L12.0497 10.5866L9.32245 7.66048C8.94589 7.25647 8.31312 7.23421 7.90911 7.61076C7.50509 7.98731 7.48283 8.62008 7.85938 9.0241L10.5866 11.9502L7.66048 14.6775C7.25647 15.054 7.23421 15.6868 7.61076 16.0908C7.98731 16.4948 8.62008 16.5171 9.0241 16.1405L11.9502 13.4133L14.6775 16.3394C15.054 16.7434 15.6868 16.7657 16.0908 16.3891C16.4948 16.0126 16.5171 15.3798 16.1405 14.9758L13.4133 12.0497L16.3394 9.32245Z" fill="currentColor"></path>
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M1 12C1 5.92487 5.92487 1 12 1C18.0751 1 23 5.92487 23 12C23 18.0751 18.0751 23 12 23C5.92487 23 1 18.0751 1 12ZM12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21Z" fill="currentColor"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="row" style="background: #f1f1f1;margin-right: 0px;margin-left: 0px;width: 100%;padding-top: 25px;height: 18.5%;border-radius: 0px;border-top-left-radius: 0px;border-top-right-radius: 0px;">
+                    <div class="col" style="padding: 0px;">
+                        <form class="form-inline mr-auto" target="_self">
+                            <div class="form-group mx-auto" style="width: 85%;">
+                                <label for="search-field"></label>
+                                <input id="chat_box_serach"  class="form-control search-field" type="search" id="search-field" name="search" style="border-radius: 54px;border-style: none;width: 100%;height: 49px;box-shadow: 0px 5px 10px #e0e0e0;font-family: 'Barlow Semi Condensed', sans-serif;padding-left: 36px;color: #495057;font-size: 18px;" placeholder="Search"></div>
+                        </form>
+                    </div>
+                </div>
+                <section id="chats_container" class="overflow-auto" style="height: 75.9%;padding-top: 0px;padding-bottom: 25px;background: #f1f1f1;margin-bottom: 25px;border-bottom-right-radius: 13px;border-bottom-left-radius: 13px;">
+
+                </section>
+            </div>
+        </div>
+     
+    </div>   
+
+    <div id = "popupMessagesView" name="popupMessagesView" title = "Edit your session">
+
+        <div class="row" style="background: #f1f1f1;margin-right: 0px;margin-left: 0px;width: 100%;padding-top: 19px;height: 100px;border-top-left-radius: 13px;border-top-right-radius: 13px;">
+            <div class="col-lg-1 col-xl-1" style="width: 30px;padding-right: 0px;padding-left: 24px;color: #9ca5ff;padding-top: 15px;">
+                <button onclick="closeMessageDialog();"  class="btn btn-primary" type="button" style="width: 24px;height: 30px;border-style: none;background: rgba(0,123,255,0);padding: 0px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" style="font-size: 30px;color: #cbcbcb;width: 24px;padding-top: 0px;font-weight: 200;margin-top: 0px;">
+                        <path d="M11.9481 14.8285L10.5339 16.2427L6.29122 12L10.5339 7.7574L11.9481 9.17161L10.1196 11H17.6568V13H10.1196L11.9481 14.8285Z" fill="currentColor"></path>
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M4.22183 19.7782C-0.0739419 15.4824 -0.0739419 8.51759 4.22183 4.22183C8.51759 -0.0739419 15.4824 -0.0739419 19.7782 4.22183C24.0739 8.51759 24.0739 15.4824 19.7782 19.7782C15.4824 24.0739 8.51759 24.0739 4.22183 19.7782ZM5.63604 18.364C2.12132 14.8492 2.12132 9.15076 5.63604 5.63604C9.15076 2.12132 14.8492 2.12132 18.364 5.63604C21.8787 9.15076 21.8787 14.8492 18.364 18.364C14.8492 21.8787 9.15076 21.8787 5.63604 18.364Z" fill="currentColor"></path>
+                    </svg></button></div>
+            <div class="col-xl-10" style="padding-right: 0px;padding-left: 43px;font-size: 18px;color: #fbaf00;">
+                <p id="chat_partners"  style="font-family: Barlow, sans-serif;font-size: 24px;width: 400px;padding-left: 0px;color: #495057;margin-bottom: 0px;">Sam Adams</p>
+                <div class="row" style="height: 0px;width: 100%;color: #9ca5ff;">
+                    <div class="col-xl-1" style="height: 0px;padding-right: 0px;padding-left: 16px;color: #9ca5ff;">
+                        <i id="online_ind" class="fa fa-circle" style="width: 0px;font-size: 16px;color: #1ec161;"></i></div>
+                    <div class="col" style="height: 0px;padding: 0px;color: #9ca5ff;">
+                        <p id="online_txt" style="font-family: 'Barlow Semi Condensed', sans-serif;font-size: 16px;width: 88px;padding-left: 0px;color: #495057;margin-left: 5px;margin-top: 1px;">Online</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-1 col-xl-1" style="width: 30px;padding-right: 0px;padding-left: 0px;color: #9ca5ff;">
+                <button  onclick="closeMessageDialog(); "  class="btn btn-primary" type="button" style="width: 24px;height: 30px;border-style: none;background: rgba(0,123,255,0);padding: 0px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" style="font-size: 30px;color: #cbcbcb;width: 24px;padding-top: 0px;font-weight: 200;margin-top: 0px;">
+                        <path d="M16.3394 9.32245C16.7434 8.94589 16.7657 8.31312 16.3891 7.90911C16.0126 7.50509 15.3798 7.48283 14.9758 7.85938L12.0497 10.5866L9.32245 7.66048C8.94589 7.25647 8.31312 7.23421 7.90911 7.61076C7.50509 7.98731 7.48283 8.62008 7.85938 9.0241L10.5866 11.9502L7.66048 14.6775C7.25647 15.054 7.23421 15.6868 7.61076 16.0908C7.98731 16.4948 8.62008 16.5171 9.0241 16.1405L11.9502 13.4133L14.6775 16.3394C15.054 16.7434 15.6868 16.7657 16.0908 16.3891C16.4948 16.0126 16.5171 15.3798 16.1405 14.9758L13.4133 12.0497L16.3394 9.32245Z" fill="currentColor"></path>
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M1 12C1 5.92487 5.92487 1 12 1C18.0751 1 23 5.92487 23 12C23 18.0751 18.0751 23 12 23C5.92487 23 1 18.0751 1 12ZM12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21Z" fill="currentColor"></path>
+                    </svg></button>
+            </div>
+        </div>
+
+
+        <section  id="message_scroller" class="overflow-auto" style="height: 70%;padding-top: 45px;padding-bottom: 25px;">
+            <div id="message_container" >
+
+            </div>
+        </section>
+
+
+        <section style="height:12%;border-bottom-right-radius: 13px;border-bottom-left-radius: 13px;border-style: none;border-top: 1px solid #e1e1e1;padding-top: 0px;">
+            <form name="messageForm" id="messageForm" >
+                <div class="row" style="width: 100%;margin-top: 10px;">
+
+                    {% csrf_token %}
+                    <div class="col-xl-10" style="padding-left: 47px;font-family: 'Barlow Semi Condensed', sans-serif;">
+                        <input id="chat_massage"   type="text" placeholder="Type a message ..." style="background: rgba(238,238,238,0);padding-top: 10px;padding-bottom: 10px;margin-left: 0px;width: 100%;height: 40px;font-family: 'Barlow Semi Condensed', sans-serif;border-style: none;border-radius: 13px;font-size: 21pxl.5tf">
+                        <input id="chat_msg_hidden_conv_id" type="hidden">
+                        <input id="chat_msg_hidden_avator" type="hidden">
+                    </div>
+
+                    <div class="col-xl-1 offset-xl-1" style="padding-right: 0px;padding-left: 0px;padding-top: 2px;">
+                        <button id="chat_msg_button" onClick="submitMessage(); return false;" class="btn btn-primary" type="button" style="color: rgba(255,255,255,0);background: rgba(0,123,255,0);border-style: none;padding: 0px;margin-top: 3px;margin-left: -12px;">
+                            <span class="fa-stack fa-lg">
+                            <i id="chat_msg_button_pic" class="fa fa-circle fa-stack-2x" style="color: #fbaf00;"></i>
+                            <i class="fa fa-send fa-stack-1x fa-inverse" style="font-size: 16px;margin-top: -1px;margin-left: -1px;"></i>
+                            </span>
+                        </button>
+                    </div>
+                </div>
+
+            </form>
+        </section> 
+    </div>  
+{% endblock %}    
+
+
+
+{% block myscript %}
+<script type="text/javascript">
+
+$(function() {
+    
+
+    $( "#popupChatsView" ).dialog({
+                autoOpen: false,
+                modal: true,
+                resizable: false,
+                bgiframe: true,
+                overlay: { opacity: 0.3, background: "white" },
+                autoOpen: false,
+                height: 600,
+                width: 500,
+                dialogClass: "myDialogClassFrameless",
+                position: { 
+                    my: 'right bottom',
+                    at: 'right bottom',
+                    of: $('#chatbutton')
+                },
+            }).dialog("widget").find(".ui-dialog-titlebar").hide();
+    $( "#popupMessagesView" ).dialog({
+                autoOpen: false,
+                modal: true,
+                resizable: false,
+                bgiframe: true,
+                overlay: { opacity: 0.3, background: "white" },
+                autoOpen: false,
+                height: 600,
+                width: 500,
+                dialogClass: "myDialogClassFrameless",
+                position: { 
+                    my: 'right bottom',
+                    at: 'right bottom',
+                    of: $('#chatbutton')
+                },
+        }).dialog("widget").find(".ui-dialog-titlebar").hide();
+
+
+        
+    $( "#popupProfileEdit" ).dialog({
+                autoOpen: false,
+                modal: true,
+                resizable: false,
+                bgiframe: true,
+                overlay: { opacity: 0.3, background: "white" },
+                autoOpen: false,
+                height: 'auto',
+                width: 'auto',
+                dialogClass: "myDialogClassFrameless",
+            }).dialog("widget").find(".ui-dialog-titlebar").hide();
+    $( "#popupEventView" ).dialog({
+                autoOpen: false,
+                modal: true,
+                resizable: false,
+                bgiframe: true,
+                overlay: { opacity: 0.3, background: "white" },
+                autoOpen: false,
+                height: 'auto',
+                width: 500,
+                dialogClass: "myDialogClassFrameless",
+            }).dialog("widget").find(".ui-dialog-titlebar").hide();
+
+    {% if tutor %}
+        $( "#popupSlotEdit" ).dialog({
+                    autoOpen: false,
+                    modal: true,
+                    resizable: false,
+                    bgiframe: true,
+                    overlay: { opacity: 0.3, background: "white" },
+                    autoOpen: false,
+                    height: 'auto',
+                    width: 'auto',
+                    dialogClass: "myDialogClassFrameless",
+                }).dialog("widget").find(".ui-dialog-titlebar").hide();  
+
+        {% for tutorSlot in tutorslots %}
+            $('#formCheck-{{tutorSlot.0}}').prop('checked', true);
+            $('#start_time{{tutorSlot.0}}').val("{{tutorSlot.1}}");
+            $('#end_time{{tutorSlot.0}}').val("{{tutorSlot.2}}");
+        {% endfor %}
+    {% endif %}
+
+    showSession();
+
+    {% if tab %}
+    if("{{tab}}" == "showSession")     
+         showSession();
+    else if("{{tab}}" == "showProfile")    
+        showProfile();
+    else if("{{tab}}" == "showCalendar")  
+        showCalendar();
+    else 
+        showSession(); 
+    {% else %}
+        showSession();
+    {% endif %}
+
+    //LOAD CURRENT CALENDDAR
+    $('#cal_table').empty();
+
+    
+    loadCalendar();
+
+    //loadChat();
+ 
+    $("#chat_massage").keydown( function( event ) {
+        if ( event.which == 13 ) {
+            // Do something
+            // Handle enter key in msg input field
+            submitMessage();
+            return false;
+        }
+    });
+
+    $("#chat_box_serach").keydown( function( event ) {
+        if ( event.which == 13 ) {
+            // Do something
+            // Handle enter key in msg input field
+            searchChat();
+            return false;
+        }
+    });
+    
+ });
+
+ function searchChat(){
+
+     search_txt = $("#chat_box_serach").val();
+
+     $('p[id^="conv_box_name_"]').each(function( index ) {
+
+        if ( $( this ).text().includes(search_txt))
+        {
+            element_id = $( this ).attr('id').replace("conv_box_name_", ""); 
+            
+            roll_size = $('#conv_box_item_'+element_id ).offset().top -200;
+
+            $("#chats_container").animate({ scrollTop: roll_size +$("#chats_container").scrollTop() }, 'normal'); //Autoscroll to bottom of div
+
+        }
+
+
+     });
+
+ }
+
+ function loadChat()
+ {
+
+    $.get('/conversations', function(data) {
+
+        handleOneChatPoll(data)
+
+    });
+
+ }
+
+ function handleOneChatPoll(data)
+ {
+
+    if (data=="NO PERMISSION")
+    {
+        alert("Sorry. Your session time is over. Please try to log in again!");
+       
+        //redirect to home
+        window.location.href ='/';
+
+        return;
+    }
+    
+    $('#chats_container').empty();
+
+    conversations = data.split('^');
+
+    is_chat = false;
+
+    if ( conversations.length >1 )
+    {
+        _size_conv = conversations.length;
+
+        for( i =0; i< _size_conv; i++)
+        {
+
+            conv_items = conversations[i].split('|');
+            if ( conv_items.length >1 ){
+                is_chat = true;
+                conv_id = conv_items[0];
+                conv_new_flag = conv_items[1];
+                conv_other_users = conv_items[2].split('~');
+
+                _size_users = conv_other_users.length;
+
+                for (j=0;j< _size_users; j++)
+                {
+                    if(conv_other_users[j].length >1)
+                    {
+                        conv_other_user_infos = conv_other_users[j].split('#');
+                        conv_other_user_first_name = conv_other_user_infos[0];
+                        conv_other_user_last_name = conv_other_user_infos[1];
+                        conv_other_user_avatar = conv_other_user_infos[2];
+                    }
+                }
+
+                conv_last_message = conv_items[3];
+                conv_last_meessage_date = conv_items[4];
+
+                FONT = "'Barlow Semi Condensed'";
+                onClick_param = conv_id+",'"+conv_other_user_first_name+"', '"+conv_other_user_last_name+"', '"+conv_other_user_avatar+"', true";
+                content = '<div id="conv_box_item_'+conv_id+ '"  onclick="openMessagesView('+onClick_param+');" class="row mx-auto" style="width: 85%;margin: 0px;padding: 0px;padding-left: 30px;box-shadow: 0px 5px 10px #e0e0e0;padding-top: 15px; padding-bottom: 10px;background: #fbfbfb;border-radius: 13px;height: 90px;margin-bottom: 20px;">'+
+                                '<div class="col" style="width: 100%;padding: 0px;">'+
+                                    '<div class="row" style="width: 100%;margin: 0px;padding-right: 40px;margin-top: 0px;height: 60px;">'+
+                                        '<div class="col-xl-1" style="padding: 0px;"><div style="width: 0px;">'+
+                                            '<img class="rounded-circle" style="width: 50px;height: 50px;" src="'+conv_other_user_avatar+'"></div></div>'+
+                                        '<div class="col-xl-1 offset-xl-0" style="padding: 0px;"></div>'+
+                                        '<div class="col-xl-8" style="padding-right: 0px;padding-left: 0px;height: 60px;">'+
+                                            '<p id="conv_box_name_'+conv_id+ '" style="padding-top: 0px;font-size: 20px;padding-bottom: 0px;margin-bottom: 0px;padding-left: 0px;color: #495057;border-radius: 30px;width: 100%;font-family: '+FONT+', sans-serif;margin-left: 0px;">'+conv_other_user_first_name+' '+conv_other_user_last_name+'</p>'+
+                                            '<p class="text-truncate" style="padding-top: 0px;font-size: 16px;padding-bottom: 0px;margin-bottom: 0px;padding-left: 0px;color: #cbcbcb;border-radius: 30px;width: 300px;font-family: '+FONT+', sans-serif;margin-left: 0px;">'+
+                                                    conv_last_message+'</p></div>'+
+                                        '<div class="col-xl-2" style="height: 60px;padding: 0px;">'+
+                                        '<p style="padding-left: 0px;color: #cbcbcb;font-family: '+FONT+', sans-serif;width: 91px;text-align: right;margin-bottom: 0px;">'+conv_last_meessage_date+'</p>' +
+                                        '<div class="float-right" onclick="leaveChat(event,'+onClick_param+ ')" style="cursor: pointer; padding-left: 10px" ><i  class="far fa-trash-alt  float-right" style=" width: 0px;font-size: 18px;color: #CCCCCC; margin-left: 10px;padding-right: 8px;"></i></div>';
+
+                if (conv_new_flag =='1')
+                {//new msg
+
+                    content = content +'<i class="fa fa-circle float-right" style="width: 0px;font-size: 18px;color: #f76c5e;padding-left: 0px;margin-left: 10px;padding-right: 8px;margin-bottom: 0px;margin-top: 0px;"></i>'+
+                                '</div></div></div></div>';
+                }
+                else
+                {
+                    content = content +'</div></div></div></div> </div>';
+                }
+
+                $('#chats_container').append(content);
+            }
+        }
+    }
+
+    if(!is_chat)
+    {
+        // add no chat message
+    }
+
+ }
+
+ function leaveChat(event, conv_id, first_name, last_name, avator, is_not_new_conv){
+    event.stopPropagation();
+    ret = confirm("Please confirm that you want to leave the Chat with "+first_name+" "+last_name+"? \n\n"+first_name+" "+last_name+ " won't be able to message you any more until you restart the chat again with him/her again.");
+    if(!ret)
+        return;
+    
+    csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+    $.ajax({
+            url : "archiveConv", // the endpoint,commonly same url
+            type : "POST", // http method
+            data : { csrfmiddlewaretoken : csrftoken, 
+            "conv_id" : conv_id
+            }, // data sent with the post request
+
+        // handle a successful response
+        success : function(json) {
+
+            if (json == "NO PERMISSION")
+            {
+                alert("Sorry. Your session time is over. Please try to log in again!");
+                
+                //redirect to home
+                window.location.href ='/'
+            }
+            
+            else if (json == "SUCCESS")
+            {
+                loadChat();
+                alert("You left the chat with "+first_name+" "+last_name+".");
+
+            }       
+            else
+            {
+                alert(json);
+
+            }
+            
+        //On success show the data posted to server as a message
+        },
+    });
+
+}
+
+ function sendMessageWithEvent(){
+    other_id = $('#other_id').val();
+    name = $('#ev_box_with_name').text();
+    messageUser(other_id);
+ }
+
+function messageUser(uid) {
+    $.get('/messageUser?uid='+uid, function(data) {
+
+        if(data == "NO PERMISSION"){
+            alert("Sorry. Your session time is over. Please try to log in again!");
+        
+            //redirect to home
+            window.location.href ='/';
+            return;
+        }
+
+        if(data.length >1){
+            conv_infos = data.split('^');
+            conv_id = conv_infos[0];
+            first_name = conv_infos[1];
+            last_name = conv_infos[2];
+            avator = conv_infos[3];
+            is_not_new_conv = conv_infos[4];
+
+
+            openMessagesView(conv_id, first_name, last_name, avator, is_not_new_conv);
+
+
+        }
+
+    });
+}
+
+var g_cont_msg_poll_id = 0; // switch of msg poll
+var g_msg_id = 0; 
+var previous_user = "";
+var previous_msg_id =0;
+var previous_time=0;
+
+function closeMessageDialog(){
+    $('#popupMessagesView').dialog( 'close' ); 
+    g_cont_msg_poll_id = 0;
+}
+
+function openMessagesView( conv_id, first_name, last_name, avator, is_not_new_conv){
+
+     $('#popupMessagesView').dialog('open');
+     $('#chat_massage').focus();
+     $('#message_container').empty();
+     $('#chat_partners').text(first_name+" "+ last_name);
+     $('#chat_msg_hidden_conv_id').val(conv_id);
+     $('#chat_msg_hidden_avator').val(avator);
+
+     if(is_not_new_conv){
+        //load old messages
+        previous_user = "";
+        previous_msg_id =0;
+        g_msg_id= 0;
+        g_cont_msg_poll_id = Math.random();
+
+        startMsgPollonOneConv(conv_id, avator,false,g_cont_msg_poll_id);
+
+     }
+ }
+
+
+function startMsgPollonOneConv( conv_id,  avator, is_onePoll,  poll_id) {
+
+    if ( poll_id != g_cont_msg_poll_id && !is_onePoll )
+        return;
+
+    $.get('/getMessages?conv_id='+conv_id+"&last_msg_id="+g_msg_id, function(data) {
+
+        new_last_msg_id = handleOneMsgPoll(data,g_msg_id, avator)
+
+
+        if (new_last_msg_id > g_msg_id)
+        {
+            g_msg_id = new_last_msg_id;
+            rollToLast();
+
+        }
+
+
+        _FONT = "'Barlow Semi Condensed', sans-serif;";
+
+        if(g_msg_id == 0)
+        {
+            content = '<p style="border-color: rgb(33, 37, 41);font-family: '+_FONT+'color: #cbcbcb;text-align: center;font-size: 16px;margin-bottom: 38px;">Start chatting with '+$('#chat_partners').text()  +'!</p>'
+            $('#message_container').append(content);
+
+        }
+        
+
+
+        if(g_cont_msg_poll_id == poll_id && !is_onePoll)
+        {
+            setTimeout(function() {
+                startMsgPollonOneConv(conv_id,  avator,false,  poll_id);
+                }, 10000)
+        }
+    });
+}
+
+function handleOneMsgPoll(data, last_msg_id,  avator){
+
+    if (data=="NO PERMISSION")
+    {
+        alert("Sorry. Your session time is over. Please try to log in again!");
+       
+        //redirect to home
+        window.location.href ='/';
+        g_cont_msg_poll_id = 0;
+        return;
+    }
+
+    cur_last_msg_id = last_msg_id;
+
+    sections = data.split('~');
+
+    section_length = sections.length;
+
+    $('#chat_massage').removeAttr('disabled');
+    $('#chat_msg_button').removeAttr('disabled');
+    $('#chat_msg_button_pic').css('color','#fbaf00');
+
+    
+    if (section_length >=2)
+    {
+        if(sections[0] == "1"){
+            //online
+            $('#online_ind').css('color', '#1ec161');
+            $('#online_txt').text("Online");
+
+
+        }
+        else if(sections[0] == "0")
+        {
+
+            $('#online_ind').css('color', '#CCCCCC');
+            $('#online_txt').text("Offline");
+
+            // offline
+        }
+        else{
+            $('#online_ind').css('color', '#AAAAAA');
+            $('#online_txt').text("Left Chat");
+            $('#chat_massage').attr('disabled','disabled');
+            $('#chat_msg_button').attr('disabled','disabled');
+            $('#chat_msg_button_pic').css('color','#AAAAAA');
+
+        }
+
+
+        messages = sections[1].split('^');
+
+        _msg_size = messages.length;
+
+
+
+        is_new_msg = false;
+        for (  i = 0; i< _msg_size; i++) {
+
+            if(messages[i].length >0){
+                is_new_msg = true;
+                items = messages[i].split('|');
+                username = items[0];
+                msg = items[1];
+                time = parseInt(items[2]);
+                id = items[3];
+                display_time = items[4];
+
+                if( parseInt(id) > cur_last_msg_id){
+                    cur_last_msg_id = parseInt(id);
+                }
+                is_same_as_previous_user = false;
+                is_close_time = false;
+
+                if(previous_user == username){
+                    is_same_as_previous_user = true;
+                }
+
+                update_chat_message(username, msg, time, previous_time, display_time, avator,is_same_as_previous_user,id,previous_msg_id);
+
+                previous_user = username;
+                previous_msg_id = id;
+                previous_time = time
+
+            }
+        }
+
+    }
+
+
+
+    return cur_last_msg_id;
+}
+ 
+var isNotFirstLoad = false;
+// Open the chat box when someone pings (or) Users want to ping others
+function update_chat_message(username, msg, msg_time,previous_time, display_time, avator,is_same_as_previous_user,current_id, previous_msg_id) {
+
+    _FONT = "'Barlow Semi Condensed', sans-serif;";
+    me_align_class = "offset-xl-1";
+
+
+
+    message_time_diff = $.now()/1000 - msg_time;
+
+    if( message_time_diff < 30)
+        display_time = "A few seconds ago";
+    else if ( message_time_diff < 300)
+        display_time = "A few minutes ago";
+    else if ( message_time_diff < 600)
+        display_time = "5 minutes ago";
+    
+    if(is_same_as_previous_user && (message_time_diff <300 || msg_time -previous_time < 300) )
+    { //remove previous time tag
+        $('#msg_timetag_'+previous_msg_id).remove();
+    }
+
+    time_content = '';
+
+    _size = msg.length;
+
+    // msg_box_size = "100%"
+    // if(_size <= 6)
+    // {
+    //     msg_box_size= "12%"
+    // }
+    // else if(_size <= 12)
+    // {
+    //     msg_box_size= "25%"
+    // }
+    // else if(_size <= 18)
+    // {
+    //     msg_box_size= "37%"
+    // }
+    // else if(_size <= 25)
+    // {
+    //     msg_box_size= "50%"
+    // }
+    // else if(_size <= 40)
+    // {
+    //     msg_box_size= "63%"
+    // }
+    // else if (_size <= 55){
+    //     msg_box_size= "75%"
+    // }
+
+    
+
+    if(username == "Me")
+    {
+        content = '<div class="row" style="width: 100%;margin: 0px;padding-left: 30px;padding-top: 20px;">'+
+            '<div class="col" style="width: 100%;padding: 0px;">'+
+                '<div class="row" style="width: 100%;margin: 0px;padding-right: 40px;>'+
+                    '<div class="col-xl-11 offset-xl-1" style="padding-right: 0px;padding-left: 22px;">'+
+                        ' <p class="ml-auto" style="padding-top: 10px;text-align: right; font-size: 20px;padding-bottom: 10px;margin-bottom: 10px;padding-left: 24px;background: #9ca5ff;color: #fbfbfb;border-radius: 30px;padding-right: 24px;font-family: '+_FONT+' box-shadow: 3px 5px 10px #e0e0e0;">'+
+                            msg+'</p>'+
+                    '</div>'+
+                          //      '<p style="color: #cbcbcb;padding-right: 63px;text-align: right;font-family: '+_FONT+'">5 minutes ago</p>'+
+
+                        '<p id="msg_timetag_'+current_id+'" style="color: #cbcbcb;padding-right: 63px;text-align: right;font-family: '+_FONT+'">'+display_time+'</p>'+
+              '</div></div>';
+    }
+    else{
+        content = '<div class="row" style="width: 100%;margin: 0px;padding-left: 30px;padding-top: 20px;">'+
+            '<div class="col" style="width: 100%;padding: 0px;">'+
+                '<div class="row" style="width: 100%;margin: 0px;padding-right: 40px;>'+
+                     '<div class="col-xl-1 " style="padding: 0px;">'+
+                         '<div style="width: 0px;">'+
+                             '<img class="rounded-circle" style="width: 50px;height: 50px;" src="'+avator+'">'+
+                     '</div>'+
+
+                    '<div class=" offset-xl-1"  style="padding-right: 0px;padding-left: 23px;">'+
+                        '<p  class="mr-auto" style="padding-top: 10px;font-size: 20px;padding-bottom: 10px;margin-bottom: 10px;padding-left: 24px; padding-right: 24px;background: #f1f1f1;color: #7f7f7f;border-radius: 30px;font-family: '+_FONT+' box-shadow: 3px 5px 10px #e0e0e0;">'+
+                            msg+'</p>'+
+                    '</div></div>'+
+
+                        '<p id="msg_timetag_'+current_id+'" style="color: #cbcbcb;padding-right: 63px;text-align: right;font-family: '+_FONT+'">'+display_time+'</p>'+
+              '</div></div>';
+
+    }
+
+    $('#message_container').append(content);
+
+    //Auto-scroll
+    if(isNotFirstLoad) {          
+        rollToLast();
+    }
+}
+
+//var oldscrollHeight = 0;
+
+function rollToLast(){
+
+    if(g_msg_id>0 )
+    {
+        roll_size = $('#msg_timetag_'+g_msg_id).offset().top;
+
+        if(roll_size >600)
+        {
+            $("#message_scroller").scrollTop($('#msg_timetag_'+g_msg_id).offset().top +$("#message_scroller").scrollTop()); //Autoscroll to bottom of div
+
+        }
+        else
+        {
+            $("#message_scroller").animate({ scrollTop: $('#msg_timetag_'+g_msg_id).offset().top +$("#message_scroller").scrollTop() }, 'normal'); //Autoscroll to bottom of div
+
+        }
+
+    }
+
+}
+
+function submitMessage(){
+
+    csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+    if (($("#chat_massage").val()).length ==0)
+        return;
+    //This is the Ajax post.Observe carefully. It is nothing but details of where_to_post,what_to_post
+    //Send data  
+
+    $.ajax({
+            url : "sendMessage", // the endpoint,commonly same url
+            type : "POST", // http method
+            data : { csrfmiddlewaretoken : csrftoken, 
+            "sendMsg" : $("#chat_massage").val(),
+            "conv_id" : $("#chat_msg_hidden_conv_id").val()
+        }, // data sent with the post request
+
+        // handle a successful response
+        success : function(json) {
+
+            if (json == "NO PERMISSION")
+            {
+                alert("Sorry. Your session time is over. Please try to log in again!");
+                
+                //redirect to home
+                window.location.href ='/'
+            }
+            else if (json == "SUCCESS")
+            {
+
+                startMsgPollonOneConv( $("#chat_msg_hidden_conv_id").val(),  $("#chat_msg_hidden_avator").val(), true,1111);            
+            }       
+            
+        //On success show the data posted to server as a message
+        },
+    });
+
+    $("#chat_massage").val("")
+}
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ function loadCalendar(month='')
+ {
+
+    $.get('/getCalendarContetData?'+month, function(data) {
+
+        handleOneCalPoll(data)
+
+
+    });
+
+ }
+
+ function handleOneCalPoll(data)
+ {
+
+    if (data=="NO PERMISSION")
+    {
+        alert("Sorry. Your session time is over. Please try to log in again!");
+       
+        //redirect to home
+        window.location.href ='/';
+
+        return;
+    }
+    $('#cal_table').empty();
+
+    days = data.split('^');
+    $('#month_text').text(days[0])
+    $('#prev_month').attr('onClick', 'loadCalendar("'+days[1]+'");');
+    $('#next_month').attr('onClick', 'loadCalendar("'+days[2]+'");');
+
+    for(  i = 0; i< 6; i++)
+    {
+            for( j = 0; j < 7; j++)
+            {
+                day_data = days[i*7+j+3];
+
+                if ( day_data.length ==0)
+                {
+
+                    text_str = '<li style="font-family: Barlow, sans-serif;font-size: 14px;"><div class="date" style="font-family: Barlow, sans-serif;font-size: 14px;"><span style="font-family: Barlow, sans-serif;font-size: 14px;"></span></div></li>';
+
+                }
+                else
+                {
+
+                    one_day_data = day_data.split('|');
+
+                    text_str = '<li style="font-family: Barlow, sans-serif;font-size: 14px;"><div class="date" style="font-family: Barlow, sans-serif;font-size: 14px;"><span style="font-family: Barlow, sans-serif;font-size: 14px;">'+one_day_data[0]+'</span></div>';
+
+                    if ( one_day_data.length >1 )
+                    {
+
+                        this_events = one_day_data[1].split('_');
+
+                        _event_size = this_events.length;
+                        
+                        for ( k = 0; k < _event_size; k++)
+                        {
+                            if(this_events[k].length>0)
+                            {
+                                 event_items = this_events[k].split('-');
+                                 text_str = text_str+'<div onClick="viewEventWithId('+event_items[0] +')" class="event bg-later" style="font-family: Barlow, sans-serif;padding-left: 12px;width: 90%;height: 33px;border-radius: 44px;padding-top: 6.4px;margin-bottom: 2px;padding-right: 12px;background: #fbaf00;">'+
+                                    '<i class="fa fa-square" style="margin-right: 14px;margin-top: 0px;font-size: 12px;margin-bottom: 0px;padding-bottom: 0px;"></i>'+
+                                    '<span style="font-family: Barlow, sans-serif;margin-top: 0px;font-size: 12px;margin-right: 0px;">'+event_items[1]+' with '+ event_items[2]+'</span>'+
+                                    '<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" class="float-right" style="margin-right: 0px;margin-top: 5px;font-size: 12px;">'+
+                                             '<path d="M8 12C8 13.1046 7.10457 14 6 14C4.89543 14 4 13.1046 4 12C4 10.8954 4.89543 10 6 10C7.10457 10 8 10.8954 8 12Z" fill="currentColor"></path>'+
+                                            '<path d="M14 12C14 13.1046 13.1046 14 12 14C10.8954 14 10 13.1046 10 12C10 10.8954 10.8954 10 12 10C13.1046 10 14 10.8954 14 12Z" fill="currentColor"></path>'+
+                                            '<path d="M18 14C19.1046 14 20 13.1046 20 12C20 10.8954 19.1046 10 18 10C16.8954 10 16 10.8954 16 12C16 13.1046 16.8954 14 18 14Z" fill="currentColor"></path></svg></div> ';
+                                                                       
+                            }
+                        }
+                    }
+                    text_str = text_str + '</li>'
+
+                }
+
+                $('#cal_table').append(text_str);
+                if(j == 6 &&  day_data.length ==0)
+                {
+                    return;
+                }
+            }
+    }
+ }
+ function openProfileEdit(){
+     $('#popupProfileEdit').dialog('open');
+     $('#firstname').focus();
+ }
+
+ function openChatsView(){
+     $('#popupChatsView').dialog('open');
+     $('#chat_box_serach').focus();
+     loadChat();
+ }
+
+
+ {% if tutor %}
+
+ function openSlotEdit(){
+     $('#popupSlotEdit').dialog('open');
+     $('#save_button').focus();
+ }
+
+ function saveSlots(){
+
+    //Prepare csrf token
+    var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+    //This is the Ajax post.Observe carefully. It is nothing but details of where_to_post,what_to_post
+    //Send data  
+
+    var formData = $('#timeSlotForm').serialize();
+
+
+    $.ajax({
+        url : "setMySchedule", // the endpoint,commonly same url
+        type : "POST", // http method
+        data : formData, // data sent with the post request
+        // handle a successful response
+        success : function(json) {
+            if (json == "NO PERMISSION")
+            {
+                alert("Sorry. Your session time is over. Please try to log in again!");
+               
+                //redirect to home
+                window.location.href ='/'
+            }
+            else if (json == "SUCCESS")
+            {
+                alert("Your setting for Tutor schedule is saved!");
+
+                window.location.href ='/mainPanel?tab=showProfile'
+            }
+            //close pop up
+            //On success show the data posted to server as a message
+        },
+    });
+ }
+
+ {% endif %}
+
+function showSession(){
+    $('#showSession').addClass("active");
+    $('#showProfile').removeClass("active");
+    $('#showCalendar').removeClass("active");
+
+    $('#profile_box').hide();
+    $('#calendar_box').hide();
+    $('#session_box').show();
+}
+
+function showProfile(){
+    $('#showSession').removeClass("active");
+    $('#showProfile').addClass("active");
+    $('#showCalendar').removeClass("active");
+
+    $('#profile_box').show();
+    $('#calendar_box').hide();
+    $('#session_box').hide();
+}
+
+function showCalendar(){
+
+    $('#showSession').removeClass("active");
+    $('#showProfile').removeClass("active");
+    $('#showCalendar').addClass("active");
+
+    $('#profile_box').hide();
+    $('#calendar_box').show();
+    $('#session_box').hide();
+}
+
+
+function saveProfile(){
+
+    //Prepare csrf token
+    var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+    //This is the Ajax post.Observe carefully. It is nothing but details of where_to_post,what_to_post
+    //Send data  
+
+    var formData = $('#profileForm').serialize();
+
+    $.ajax({
+        url : "saveProfile", // the endpoint,commonly same url
+        type : "POST", // http method
+        data : formData, // data sent with the post request
+        // handle a successful response
+        success : function(json) {
+            if (json == "NO PERMISSION")
+            {
+                alert("Sorry. Your session time is over. Please try to log in again!");
+
+                //redirect to home
+                window.location.href ='/'
+            }
+            else if (json == "SUCCESS")
+            {
+                window.location.href ='/mainPanel?tab=showProfile'
+            }
+            //close pop up
+            //On success show the data posted to server as a message
+        },
+    });
+
+
+}
+
+
+function viewEvent(event_id, other_id)
+{
+    $('#ev_box_subject').text($('#ev_subject_'+event_id).text());
+    $('#ev_box_with_name').text($('#ev_with_name_'+event_id).text());
+    $('#ev_box_time').text($('#ev_time_'+event_id).text());
+    $('#ev_box_status').text($('#ev_status_'+event_id).text());
+    $('#ev_box_desc').text($('#ev_desc_'+event_id).text());
+    $('#event_id').val(event_id);
+    $('#other_id').val(other_id);
+   
+    ev_link = $('#ev_link_'+event_id).attr("href");
+
+    {%if tutor %}
+        $('#ev_box_link').val(ev_link);
+
+        if( $('#ev_status_'+event_id).text() == "Accepted")
+        {
+            $('#TutorAcceptButton').html('Update Session');
+        }
+        else{
+            $('#TutorAcceptButton').html('Accept Session');
+        }
+        
+
+    {% else %}
+        if(ev_link == "")
+        {
+            $('#ev_box_link').hide();
+        }
+        else{
+            $('#ev_box_link').show();
+            $('#ev_box_link').attr("href", ev_link);
+        }
+    {% endif %}
+
+    //google_cal_link = "https://calendar.google.com/calendar/render?action=TEMPLATE&dates=20220112T180000Z%2F20220112T200000Z&details=Learn%20all%20about%20the%20rules%20of%20the%20Motorway%20and%20how%20to%20access%20the%20fast%20lane.%0A%0Ahttps%3A%2F%2Fen.wikipedia.org%2Fwiki%2FGridlock_%28Doctor_Who%29&location=New%20Earth&text=Welcome%20to%20the%20Motorway"
+    //$('#ev_box_add_calendar').attr("href", google_cal_link);
+    
+
+    $('#popupEventView').dialog('open');
+     $('#comments').focus();
+    
+}
+
+function viewEventWithId(event_id)
+{
+    $.get('/viewEventWithId?ev_id='+event_id, function(data) {
+
+        
+        if (data=="NO PERMISSION")
+        {
+            alert("Sorry. Your session time is over. Please try to log in again!");
+        
+            //redirect to home
+            window.location.href ='/';
+
+            return;
+        }
+
+        if (data=="ERROR")
+        {
+            alert("Sorry. Something is wrong. Please try again later!");
+        
+            //redirect to home
+
+            return;            
+        }
+
+        items = data.split("^");
+        
+        console.log(data);
+        $('#ev_box_subject').text(items[0]);
+        $('#ev_box_with_name').text(items[1]);
+        $('#ev_box_time').text(items[2]);
+        $('#ev_box_status').text(items[3]);
+        $('#ev_box_desc').text(items[4]);
+        $('#other_id').val(items[6]);
+        $('#event_id').val(event_id);
+
+
+        {%if tutor %}
+            $('#ev_box_link').val(items[5]);
+            if( items[3] == "Accepted")
+            {
+                $('#TutorAcceptButton').html('Update Session');
+            }
+            else{
+                $('#TutorAcceptButton').html('Accept Session');
+            }
+        {% else %}
+            if(items[5] == "")
+            {
+                $('#ev_box_link').hide();
+            }
+            else{
+                $('#ev_box_link').attr("href", items[5]);
+                $('#ev_box_link').show();
+            }
+        {% endif %}
+
+        $('#popupEventView').dialog('open');
+        $('#comments').focus();
+
+    });
+}
+
+function acceptSession(isAccept)
+{
+    if (isAccept ==0 )
+    {
+        ret = confirm("Please confirm you want to reject the session request?");
+
+        if (!ret)
+            return;
+    }
+
+    //Prepare csrf token
+    var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+    //This is the Ajax post.Observe carefully. It is nothing but details of where_to_post,what_to_post
+    //Send data  
+
+
+    $.ajax({
+        url : "acceptSlots", // the endpoint,commonly same url
+        type : "POST", // http method
+        data : { csrfmiddlewaretoken : csrftoken, 
+            "event_id" : $('#event_id').val(),
+            "comments" : $('#comments').val(),
+            "ev_link" :$('#ev_box_link').val(),
+            
+            "isAccept" : isAccept
+        }, // data sent with the post request        // handle a successful response
+        success : function(json) {
+            if (json == "NO PERMISSION")
+            {
+                alert("Sorry. Your session time is over. Please try to log in again!");
+
+                //redirect to home
+                window.location.href ='/'
+            }
+            else if (json == "SUCCESS")
+            {
+                //loadSessionData();
+                window.location.href ='/mainPanel'
+            }
+            //close pop up
+            //On success show the data posted to server as a message
+        },
+    });
+
+}
+
+function withDrawSession()
+{
+
+    ret = confirm("Do you really want to withdraw from the session? It cannot be reversed once it is withdrawed.");
+
+    if(!ret){
+        return;
+    }
+
+    //Prepare csrf token
+    var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+    //This is the Ajax post.Observe carefully. It is nothing but details of where_to_post,what_to_post
+    //Send data  
+
+
+    $.ajax({
+        url : "cancelSlots", // the endpoint,commonly same url
+        type : "POST", // http method
+        data : { csrfmiddlewaretoken : csrftoken, 
+            "event_id" : $('#event_id').val(),
+            "comments" : $('#comments').val(),
+        }, // data sent with the post request        // handle a successful response
+        success : function(json) {
+            if (json == "NO PERMISSION")
+            {
+                alert("Sorry. Your session time is over. Please try to log in again!");
+
+                //redirect to home
+                window.location.href ='/'
+            }
+            else if (json == "SUCCESS")
+            {
+                alert("You successfully withddraw from the session!");
+
+                //loadSessionData();
+                window.location.href ='/mainPanel?tab=showSession'
+            }
+            //close pop up
+            //On success show the data posted to server as a message
+        },
+    });
+
+}
+</script>
+
+{% endblock %}

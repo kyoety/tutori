@@ -1,0 +1,43 @@
+{% extends 'site_base.html' %}
+
+ {% load static %}
+ 
+ {% block content %}
+
+    <div class="card mx-auto" style="width: 640px;margin-top: 20px;margin-bottom: 50px;box-shadow: -15px 15px 1px rgb(176,142,50);border-radius: 0px;">
+        <div id="popbox" class="card-body" style="width: 640px;height: 650px;background: #ffffff;">
+            <div class="row">
+                <div class="col-lg-1" style="width: 30px;padding-right: 0px;padding-left: 17px;">
+                    <a class="fa fa-chevron-left" onClick="window.history.back();" style="font-size: 18px;color: rgb(234,121,97);width: 24px;padding-top: 5px;font-weight: 200;"></a></div>
+                <div class="col" style="padding-right: 0px;padding-left: 0px;font-size: 18px;">
+                    <p style="font-family: Barlow, sans-serif;font-size: 18px;width: 469px;padding-left: 0px;color: rgb(234,121,97);">My Chat List</p>
+                </div>
+            </div>
+            {% for conv_user in conv_user_list%}
+
+            <div class="row">
+                <div style="padding-left: 10px; width:400px;">
+
+                    <div style="font-family: Barlow, sans-serif;text-align: left; {% if conv_user.1 %} font-weight: bold; {% endif %} font-size: 18px;margin-left: 30px;margin-top: 20px;color: rgb(244,122,98); height:20px">chat with
+                    <a  style="font-family: Barlow, sans-serif;text-align: left; {% if conv_user.1 %}  font-weight: bold; {% endif %} font-size: 18px;margin-left: 3px;margin-top: 18px;color: rgb(244,122,98);; height:20px" href='/messageUser?uid={{conv_user.0.id}}'>
+                        <img style = 'margin-right:5px,' src="{{ conv_user.0.acc_avatar }}"  alt="Avatar" class="avatar"/> &nbsp{{ conv_user.0.acc_firstname}} {{ conv_user.0.acc_lastname}} &nbsp</a>
+                    </div>
+
+                </div>
+                <div style="padding-right: 10px;padding-left: 0px;font-size: 18px;width:70px;height:30px;margin-top: 20px;">
+                    <a  style="text-align: right;font-size: 13px;margin-left: 3px;margin-top: 18px; height:20px;width:50px;" href='/messageUser?uid={{conv_user.0.id}}'>
+                        Open</a>
+                </div>
+                <div style="padding-right: 10px;padding-left: 0px;font-size: 18px; width:70px;height:30px;margin-top: 20px;">
+                    <a  style="text-align: right;font-size: 13px;margin-left: 3px;margin-top: 18px; height:20px;width:50px;" href='/archiveConv?uid={{conv_user.0.id}}'>
+                        Archive</a>
+                </div>
+            </div>
+            {% endfor %}
+
+            <section style="height: 230px;margin-top: 20px;"></section>
+        </div>
+    </div>
+
+{% endblock %}    
+

@@ -1,0 +1,329 @@
+{% extends 'site_base.html' %}
+{% load static %}
+
+{% block mystyle %}
+
+
+<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+ 
+<script src="https://code.jquery.com/ui/1.11.1/jquery-ui.min.js"></script>
+
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css" />
+
+
+<style>
+  .ui-widget-header,.ui-state-default, ui-button {
+     background:#b9cd6d;
+     border: 1px solid #b9cd6d;
+     color: #FFFFFF;
+     font-weight: bold;
+  }
+</style>
+<style>
+
+      
+.calendar {
+  width: 98%;
+  margin: auto;
+  font-size: 13px;
+}
+
+.calendar tr, .calendar td {
+  border: 1px solid black;
+}
+
+.calendar th {
+  padding: 10px;
+  text-align: center;
+  font-size: 18px;
+}
+
+.calendar td {
+  width: 200px;
+  height: 110px;
+  padding: 20px 0px 0px 5px;
+}
+
+.month {
+  font-size: 25px;
+}
+
+.date {
+  font-size: 16px;
+}
+
+ul {
+  height: 100%;
+  padding: 0px 5px 0px 20px;
+}
+
+a {
+  color: #17a2b8;
+}
+
+.left {
+  float: left;
+}
+
+.right {
+  float: right;
+}
+
+.btn {
+  outline: none;
+  color: white;
+  background-color: transparent;
+  box-shadow: 0 0 0 0;
+}
+
+.clearfix {
+  margin: 15px;
+}
+
+.close-icon {
+  cursor: pointer;
+}
+
+</style>
+{% endblock %}  
+
+{% block content %}
+    <div id="cal_box" class="card mx-auto" style="width: 640px;margin-top: 20px;margin-bottom: 50px;box-shadow: -15px 15px 1px rgb(176,142,50);border-radius: 0px;">
+        <div id="popbox" class="card-body" style="width: 640px;height: 770px;background: #ffffff;">
+            <div id="calendar"  style="min-width:320px;height:480px;">
+                <div class="clearfix text-center">
+                    <a class="btn btn-info left" style="background: rgb(244,122,98);" href="/myCalendar?{{ prev_month }}"> Previous Month </a>
+                    {% if tutor %}
+                    <a class="btn btn-info " style="background: rgb(244,122,98);" href="/setMySchedule">Set Schedule</a>
+                    {% endif %}
+                    <a class="btn btn-info right" style="background: rgb(244,122,98);" href="/myCalendar?{{ next_month }}"> Next Month </a>
+                </div>
+                
+                {{ calendar }}
+            </div>
+ 
+        </div>
+        <div  style="font-family: Barlow, sans-serif;margin-top: 10px;margin-left: 10px;margin-right: 10px;margin-bottom: 10px;">
+            <button onClick = "window.history.back();" class="btn btn-primary btn-block" style="font-family: Barlow, sans-serif;background: rgb(244,122,98);border-radius: 10px;font-weight: bold; ">Done </button>
+
+        </div>
+    </div>
+
+    <div id = "popupEvent" title = "Your session request">
+      <div  id="formplace" style="font-family: Barlow, sans-serif;">
+
+        <form class="mx-auto" method="post" >
+          {% csrf_token %}
+          <h6 id='tutor_name'class="d-xl-flex mx-auto justify-content-xl-center" style="font-family: Barlow, sans-serif;font-weight: bold;text-align: center;letter-spacing: 1px;line-height: 57px;margin-top: 15px;color: rgb(234,121,97);font-size: 17px;"></h6>
+          <div id='sessiondate' class="d-xl-flex mx-auto justify-content-xl-center" style="font-family: Barlow, sans-serif;text-align: center;letter-spacing: 1px;margin-top: 0px;color: rgb(234,121,97);font-size: 17px;"></div>
+          <div id='sessiontime' class="justify-content-xl-center" style="font-family: Barlow, sans-serif;text-align: center;letter-spacing: 1px;margin-top: 0px;color: rgb(234,121,97);font-size: 17px;"></div>
+          <div id='even_accepted' class="col" style="padding-left: 0px;">
+          </div>
+          <textarea id="description" name="description" rows="4" cols="27" placeholder="Your requests to Tutor..."  style="font-family: Barlow, sans-serif;color: rgb(14,193,103);border-bottom-width: 3px;border-bottom-color: rgb(14,193,103);margin-bottom: 15px;margin-top: 15px;c"></textarea>
+          <input id='event_id' type="hidden" name="event_id" value=""></input>
+          <input id='slot_str' type="hidden" name="slot_str" ></input>
+          <input id='othertutor_id' type="hidden" name="othertutor_id" ></input>
+          <div class="form-group" style="font-family: Barlow, sans-serif;">
+              <button class="btn btn-primary btn-block" type="submit" style="font-family: Barlow, sans-serif;background: rgb(244,122,98);border-radius: 0px;font-weight: bold;margin-top: 20px;">Submit</button>
+              <button id = "withdraw" onClick="withdrawevent(); return false;" class="btn btn-primary btn-block" style="font-family: Barlow, sans-serif;background: rgb(244,122,98);border-radius: 0px;font-weight: bold;margin-top: 20px;">Withdraw</button>
+          </div>
+      </form>
+    </div>
+
+    <div id = "popupTutorEvent" title = "Session request">
+      <div  id="formplace" style="font-family: Barlow, sans-serif;">
+        <h6 id='tutee_name'class="d-xl-flex mx-auto justify-content-xl-center" style="font-family: Barlow, sans-serif;font-weight: bold;text-align: center;letter-spacing: 1px;line-height: 57px;margin-top: 15px;color: rgb(234,121,97);font-size: 17px;"></h6>
+        <div id='Tutorsessiondate' class="d-xl-flex mx-auto justify-content-xl-center" style="font-family: Barlow, sans-serif;text-align: center;letter-spacing: 1px;margin-top: 0px;color: rgb(234,121,97);font-size: 17px;"></div>
+        <div id='Tutorsessiontime' class="justify-content-xl-center" style="font-family: Barlow, sans-serif;text-align: center;letter-spacing: 1px;margin-top: 0px;color: rgb(234,121,97);font-size: 17px;"></div>
+        <div id='Tutoreven_accepted' class="col" style="padding-left: 0px;"></div>
+        <div id="Tutordescription" name="description"  style="font-family: Barlow, sans-serif;color: rgb(14,193,103);border-bottom-width: 3px;border-bottom-color: rgb(14,193,103);margin-bottom: 15px;margin-top: 15px;c"></div>
+        <input id='Tutorevent_id' type="hidden" name="event_id" value=""></input>
+ 
+        <div class="form-group" style="font-family: Barlow, sans-serif;">
+            <button id = "accept" onClick="acceptSessionRequest(); return false;"class="btn btn-primary btn-block" style="font-family: Barlow, sans-serif;background: rgb(244,122,98);border-radius: 0px;font-weight: bold;margin-top: 20px;">Accept</button>
+            <button id = "decline" onClick="declineSessionRequest(); return false;" class="btn btn-primary btn-block" style="font-family: Barlow, sans-serif;background: rgb(244,122,98);border-radius: 0px;font-weight: bold;margin-top: 20px;">Decline</button>
+        </div>
+    </div>
+{% endblock %}
+
+{% block myscript %}
+<script type="text/javascript">
+
+$(function() {
+            $( "#popupEvent" ).dialog({
+                autoOpen: false,
+                modal: true,
+            });
+            $( "#popupTutorEvent" ).dialog({
+                autoOpen: false,
+                modal: true,
+            });
+            $( "#popupEvent" ).dialog({
+                autoOpen: false,
+                modal: true,
+            });         
+    });
+
+      
+function acceptSessionRequest() {
+  console.log($('#event_id').val()); 
+
+    //cancel the event
+  //Prepare csrf token
+    var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+    //This is the Ajax post.Observe carefully. It is nothing but details of where_to_post,what_to_post
+    //Send data  
+
+    $.ajax({
+        url : "acceptSlots", // the endpoint,commonly same url
+        type : "POST", // http method
+        data : { csrfmiddlewaretoken : csrftoken, 
+        "event_id" : $('#Tutorevent_id').val(),
+    }, // data sent with the post request
+
+    // handle a successful response
+    success : function(json) {
+        console.log(json); // another sanity check
+
+        location.reload();
+        //close pop up
+        //On success show the data posted to server as a message
+    },
+
+
+    });
+
+}
+
+
+function declineSessionRequest() {
+
+  //cancel the event
+  //Prepare csrf token
+  var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+  //This is the Ajax post.Observe carefully. It is nothing but details of where_to_post,what_to_post
+  //Send data  
+
+  $.ajax({
+      url : "declineSlots", // the endpoint,commonly same url
+      type : "POST", // http method
+      data : { csrfmiddlewaretoken : csrftoken, 
+      "event_id" : $('#Tutorevent_id').val(),
+  }, // data sent with the post request
+
+  // handle a successful response
+  success : function(json) {
+      console.log(json); // another sanity check
+
+      location.reload();
+      //close pop up
+      //On success show the data posted to server as a message
+  },
+
+
+  });
+
+}
+
+
+function withdrawevent() {
+  if ($('#event_id').val().length ==0)
+  {
+    $('#popupEvent').dialog( "close" );
+    //just close window
+  }
+  else
+  {
+    //cancel the event
+  //Prepare csrf token
+    var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+    //This is the Ajax post.Observe carefully. It is nothing but details of where_to_post,what_to_post
+    //Send data  
+
+    $.ajax({
+        url : "cancelSlots", // the endpoint,commonly same url
+        type : "POST", // http method
+        data : { csrfmiddlewaretoken : csrftoken, 
+        "event_id" : $('#event_id').val(),
+    }, // data sent with the post request
+
+    // handle a successful response
+    success : function(json) {
+        console.log(json); // another sanity check
+
+        location.reload();
+        //close pop up
+        //On success show the data posted to server as a message
+    },
+
+
+    });
+
+
+  }
+
+}
+
+// function get event to show
+function openTuteeEventWindow(event_id,date_str,time_str,evn_duration_str,tutor_firstname,evn_description,evn_accepted,event){
+    if(event)
+      event.stopPropagation();
+
+    document.getElementById('even_accepted').innerHTML='';
+
+    $('#tutor_name').text("With: "+tutor_firstname);
+    $('#sessiondate').text(date_str);
+    $('#sessiontime').text(time_str);
+    if (evn_accepted == "True"){
+      $('#even_accepted').append('<i class="fa fa-check-circle" style="margin-left: 10px;font-size: 18px;margin-top: 5px;color: #413ada;">Approved</i>')
+    }
+    else
+    {
+      $('#even_accepted').append('<i class="fa fa-check-circle" style="margin-left: 10px;font-size: 18px;margin-top: 5px;color: #413ada;">Pending</i>')
+    }
+
+    $('#event_id').val(event_id);
+    $('#description').val(evn_description);
+
+    $('#popupEvent').dialog( "open" );
+}
+
+// function get event to show
+function openTutorEventWindow(event_id,date_str,time_str,evn_duration_str,tutee_firstname,evn_description,evn_accepted,event){
+    if(event)
+      event.stopPropagation();
+
+    document.getElementById('Tutoreven_accepted').innerHTML='';
+
+    $('#tutee_name').text("Request From: "+tutee_firstname);
+    $('#Tutorsessiondate').text("Session Date: "+date_str);
+    $('#Tutorsessiontime').text("Session Time: "+time_str);
+    if (evn_accepted == "True"){
+      $('#Tutoreven_accepted').append('<i class="fa fa-check-circle" style="margin-left: 10px;font-size: 18px;margin-top: 5px;color: #413ada;"> Approved</i>')
+    }
+    else
+    {
+      $('#Tutoreven_accepted').append('<i class="fa fa-check-circle" style="margin-left: 10px;font-size: 18px;margin-top: 5px;color: #413ada;"> Pending</i>')
+    }
+
+    $('#Tutorevent_id').val(event_id);
+    $('#Tutordescription').text(evn_description);
+
+    $('#popupTutorEvent').dialog( "open" );
+}
+
+
+
+function zeropad(nNum) {
+      if(nNum<10)
+        return ('' + (Math.pow(10, 1) + nNum)).slice(1);
+      else
+        return (''+ nNum)
+};
+
+
+</script>
+{% endblock %}  

@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+{% load static %}
+{% load socialaccount %}
+
+<html class="text-center">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>TuTori</title>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Barlow:500,600,700,800,900">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Barlow+Semi+Condensed">
+    <link rel="stylesheet" href="{% static 'css/Login-Form-Clean.css' %}">
+    <link rel="stylesheet" href="{% static 'css/Navigation-Clean.css' %}">
+    <link rel="stylesheet" href="{% static 'css/Navigation-with-Button.css' %}">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    
+    <link rel="stylesheet" href="{% static 'fonts/font-awesome.min.css' %}">
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+
+    <style>
+
+    .myMenuTextClass {
+        color: #413ada;
+    }
+    
+    .myHeaderBannerClass {
+        background: #f4c852;
+        height: 121px;
+        padding-top: 40.5px;
+        padding-bottom: 40.5px;
+        width: 100%;    
+    }
+    </style>
+
+
+<link rel="stylesheet" href="{% static 'css/Bootstrap-Calendar.css' %}">
+<link rel="stylesheet" href="{% static 'css/Bootstrap-4-Calendar-No-Custom-Code.css' %}">
+
+<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+ 
+<script src="https://code.jquery.com/ui/1.11.1/jquery-ui.min.js"></script>
+<script src="{% static 'js/moment.min.js' %}"></script>
+
+
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css" />
+
+
+<style>
+    .ui-widget-header,.ui-state-default, ui-button {
+       background:#b9cd6d;
+       border: 1px solid #b9cd6d;
+       color: #FFFFFF;
+       font-weight: bold;
+    }
+
+    rect.btn {
+    stroke:#fff;
+    fill:#fff;
+    fill-opacity:0;
+    stroke-opacity:0;
+    }
+
+
+    .myDialogClass {
+        border-radius: 13px;
+        box-shadow: 0px 5px 13px #e1e1e1;
+        border: 10px solid #FF0000;
+        outline: 0 none;
+    }
+</style>
+
+
+</head>
+
+<body style="background: rgb(248,200,83);">
+    {% if 'errorlogin' in request.GET %}
+    <div class = 'error-message'> Please log in to access the web site! </div>
+    {% endif %}
+    {% if 'errornouser' in request.GET %}
+    <div class = 'error-message'> Please Sign up a account to access the web site! </div>
+    {% endif %}
+    <section class="nav-bar-section myHeaderBannerClass" >
+        <nav class="navbar navbar-light navbar-expand-md navigation-clean" style="margin-top: 0px;background: rgba(255,255,255,0);margin-bottom: 0px;width: 100%;height: 5px;">
+            <div class="container">
+                <button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-2">
+                    <span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+                <div class="collapse navbar-collapse" id="navcol-1">
+                    <ul class="navbar-nav mx-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" name="showFeed" id="showFeed" href="javascript:showStudent();" style="font-family: Barlow, sans-serif;font-size: 14px;">Manage Students</a></li>
+                        <li class="nav-item" style="font-family: Barlow, sans-serif;font-size: 14px;">
+                            <a class="nav-link" name="showMem" id="showMem" href="javascript:showTutor();" style="font-family: Barlow, sans-serif;font-size: 14px;">Manage Tutors</a></li>
+                        <li class="nav-item"  style="font-family: Barlow, sans-serif;font-size: 14px;">
+                            <a class="nav-link" name="showEvents" id="showEvents" href="javascript:showAdmins();" style="font-family: Barlow, sans-serif;font-size: 14px;">Manage Admins</a></li>
+                        <li class="nav-item"  style="font-family: Barlow, sans-serif;font-size: 14px;">
+                            <a class="nav-link" name="showEvents" id="showEvents" href="javascript:showEvents();" style="font-family: Barlow, sans-serif;font-size: 14px;">Settings</a></li>
+                        <li class="nav-item" style="color: #413ada;">
+                            <a class="nav-link myMenuTextClass" onclick="logOut();" href="#" >LOGOUT</a>
+                        </li> 
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <form style='display: none;' method="post" action="{% url 'account_logout' %}">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="/"/>
+            <button id="signOutBtn" type="submit">Logout</button>
+        </form>
+    </section>
+
+    
+
+<!--     <section style="width: 75%;height: 20%;padding-left: 64px;padding-top: 27px;padding-bottom: 100px;background: #9ca5ff;margin-right: 12.5%;margin-left: 12.5%;margin-top: 40px;border-radius: 10px;">
+        <h1 style="margin-left: 0px;margin-top: 0px;color: #fbfbfb;font-family: Barlow, sans-serif;">{{room.room_name}}</h1>
+        <h5 style="margin-left: 0px;margin-bottom: 0px;color: #fbfbfb;font-family: Barlow, sans-serif;">{{room.room_organization}}</h5>
+    </section> -->
+    <section style="width: 75%;height: 100%;padding-left: 0px;padding-top: 27px;padding-bottom: 100px;background: #ffffff;margin-right: 12.5%;margin-left: 12.5%;margin-top: 40px;border-radius: 10px;box-shadow: 0px 5px 13px #e1e1e1;border: 1.9px none #cbcbcb ;border-bottom-width: 1.5px;">
+
+        <div id="studentbox" name="studentbox"  style="overflow-y:scroll; height: 100%; width: 100%;">
+
+
+            <h1 style="color: #9ca5ff;font-family: Barlow, sans-serif;margin-left: 64px;margin-right: 64px;border-bottom-width: 2px;border-bottom-style: solid;padding-bottom: 25px;padding-top: 0px;margin-top: 45px;margin-bottom: 35px;font-size: 30px;letter-spacing: normal;">Students
+            <!-- <button onclick ="openAddStudentWindow();"  class="btn btn-primary" type="button" style="height: 36px;padding: 0px;padding-top: 0px;width: 36px;background: rgba(0,123,255,0);border-style: none;margin-left: 17px;margin-bottom: 1px;"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" style="font-size: 24px;margin-bottom: 1px;color: #9ca5ff;border-radius: 28px;border-width: 2px;border-style: none;">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12ZM12 4C7.58172 4 4 7.58172 4 12C4 16.4183 7.58172 20 12 20C16.4183 20 20 16.4183 20 12C20 7.58172 16.4183 4 12 4Z" fill="currentColor"></path>
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M13 7C13 6.44772 12.5523 6 12 6C11.4477 6 11 6.44772 11 7V11H7C6.44772 11 6 11.4477 6 12C6 12.5523 6.44772 13 7 13H11V17C11 17.5523 11.4477 18 12 18C12.5523 18 13 17.5523 13 17V13H17C17.5523 13 18 12.5523 18 12C18 11.4477 17.5523 11 17 11H13V7Z" fill="currentColor"></path>
+            </svg>
+            </button> -->
+
+            <!-- <button onclick ="openAddGroupStudentWindow();"  class="btn btn-primary" type="button" style="height: 36px;padding: 0px;padding-top: 0px;width: 36px;background: rgba(0,123,255,0);border-style: none;margin-left: 17px;margin-bottom: 1px;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" style="font-size: 24px;margin-bottom: 1px;color: #9ca5ff;border-radius: 28px;border-width: 2px;border-style: none;">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12ZM12 4C7.58172 4 4 7.58172 4 12C4 16.4183 7.58172 20 12 20C16.4183 20 20 16.4183 20 12C20 7.58172 16.4183 4 12 4Z" fill="currentColor"></path>
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M13 7C13 6.44772 12.5523 6 12 6C11.4477 6 11 6.44772 11 7V11H7C6.44772 11 6 11.4477 6 12C6 12.5523 6.44772 13 7 13H11V17C11 17.5523 11.4477 18 12 18C12.5523 18 13 17.5523 13 17V13H17C17.5523 13 18 12.5523 18 12C18 11.4477 17.5523 11 17 11H13V7Z" fill="currentColor"></path>
+            </svg>
+            </button> -->
+
+
+            </h1>
+            <section id="memberbox_student" name="memberbox_student" style="margin-bottom: 20px;letter-spacing: normal;">
+                <div style="margin-left: 100px;margin-bottom: 10px;">
+                    <i class="far fa-user" style="font-size: 14px;margin-bottom: 10px;"></i>
+                    <span style="font-size: 14px;margin-left: 35px;margin-bottom: 10px;font-family: 'Barlow Semi Condensed', sans-serif;">Student 1&nbsp;</span></div>
+            </section>
+
+ 
+            <h1 style="color: #9ca5ff;font-family: Barlow, sans-serif;margin-left: 64px;margin-right: 64px;border-bottom-width: 2px;border-bottom-style: solid;padding-bottom: 25px;padding-top: 0px;margin-top: 45px;margin-bottom: 35px;font-size: 30px;letter-spacing: normal;">Students to be Approved
+
+            </h1>
+            <section id="memberbox_pending_student" name="memberbox_pending_student" style="margin-bottom: 20px;letter-spacing: normal;">
+                <div style="margin-left: 100px;margin-bottom: 10px;">
+                    <i class="far fa-user" style="font-size: 14px;margin-bottom: 10px;"></i>
+                    <span style="font-size: 14px;margin-left: 35px;margin-bottom: 10px;font-family: 'Barlow Semi Condensed', sans-serif;">Student 1&nbsp;</span></div>
+            </section>
+
+            <h1 style="color: #9ca5ff;font-family: Barlow, sans-serif;margin-left: 64px;margin-right: 64px;border-bottom-width: 2px;border-bottom-style: solid;padding-bottom: 25px;margin-bottom: 35px;font-size: 30px;letter-spacing: normal;">Admin
+                <button onclick ="openAddAdminWindow();" class="btn btn-primary" type="button" style="height: 36px;padding: 0px;padding-top: 0px;width: 36px;background: rgba(0,123,255,0);border-style: none;margin-left: 17px;margin-bottom: 2px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" style="font-size: 24px;margin-bottom: 1px;color: #9ca5ff;border-radius: 28px;border-width: 2px;border-style: none;">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12ZM12 4C7.58172 4 4 7.58172 4 12C4 16.4183 7.58172 20 12 20C16.4183 20 20 16.4183 20 12C20 7.58172 16.4183 4 12 4Z" fill="currentColor"></path>
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M13 7C13 6.44772 12.5523 6 12 6C11.4477 6 11 6.44772 11 7V11H7C6.44772 11 6 11.4477 6 12C6 12.5523 6.44772 13 7 13H11V17C11 17.5523 11.4477 18 12 18C12.5523 18 13 17.5523 13 17V13H17C17.5523 13 18 12.5523 18 12C18 11.4477 17.5523 11 17 11H13V7Z" fill="currentColor"></path>
+                    </svg>
+                </button>
+            </h1>
+            <section id="memberbox_admin" name="memberbox_admin" style="margin-bottom: 20px;letter-spacing: normal;">
+                <div style="margin-left: 100px;margin-bottom: 10px;font-size: 14px;letter-spacing: normal;">
+                    <i class="far fa-user" style="font-size: 14px;margin-bottom: 10px;letter-spacing: normal;"></i>
+                    <span style="font-size: 14px;margin-left: 35px;margin-bottom: 10px;letter-spacing: normal;font-family: 'Barlow Semi Condensed', sans-serif;">Administrator 1&nbsp;</span></div>
+            </section>
+
+        </div>
+    
+        <div id="tutorbox" name="tutorbox"  style="overflow-y:scroll; height: 100%; width: 100%;">
+
+            <h1 style="color: #9ca5ff;font-family: Barlow, sans-serif;margin-left: 64px;margin-right: 64px;border-bottom-width: 2px;border-bottom-style: solid;padding-bottom: 25px;padding-top: 0px;margin-top: 45px;margin-bottom: 35px;font-size: 30px;letter-spacing: normal;">Invited Tutor
+                <button onclick ="openAddTutorWindow();"  class="btn btn-primary" type="button" style="height: 36px;padding: 0px;padding-top: 0px;width: 36px;background: rgba(0,123,255,0);border-style: none;margin-left: 17px;margin-bottom: 1px;"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" style="font-size: 24px;margin-bottom: 1px;color: #9ca5ff;border-radius: 28px;border-width: 2px;border-style: none;">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12ZM12 4C7.58172 4 4 7.58172 4 12C4 16.4183 7.58172 20 12 20C16.4183 20 20 16.4183 20 12C20 7.58172 16.4183 4 12 4Z" fill="currentColor"></path>
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M13 7C13 6.44772 12.5523 6 12 6C11.4477 6 11 6.44772 11 7V11H7C6.44772 11 6 11.4477 6 12C6 12.5523 6.44772 13 7 13H11V17C11 17.5523 11.4477 18 12 18C12.5523 18 13 17.5523 13 17V13H17C17.5523 13 18 12.5523 18 12C18 11.4477 17.5523 11 17 11H13V7Z" fill="currentColor"></path>
+                </svg>
+                </button>
+            </h1>
+
+            <section id="memberbox_pending_tutor" name="memberbox_tutor" style="margin-bottom: 20px;letter-spacing: normal;">
+                <div style="margin-left: 100px;margin-bottom: 10px;">
+                    <i class="far fa-user" style="font-size: 14px;margin-bottom: 10px;"></i>
+                    <span style="font-size: 14px;margin-left: 35px;margin-bottom: 10px;font-family: 'Barlow Semi Condensed', sans-serif;">Tutor 1&nbsp;</span></div>
+            </section> 
+
+            <h1 style="color: #9ca5ff;font-family: Barlow, sans-serif;margin-left: 64px;margin-right: 64px;border-bottom-width: 2px;border-bottom-style: solid;padding-bottom: 25px;padding-top: 0px;margin-top: 45px;margin-bottom: 35px;font-size: 30px;letter-spacing: normal;">Tutor
+
+            </h1>
+
+            <section id="memberbox_tutor" name="memberbox_tutor" style="margin-bottom: 20px;letter-spacing: normal;">
+                <div style="margin-left: 100px;margin-bottom: 10px;">
+                    <i class="far fa-user" style="font-size: 14px;margin-bottom: 10px;"></i>
+                    <span style="font-size: 14px;margin-left: 35px;margin-bottom: 10px;font-family: 'Barlow Semi Condensed', sans-serif;">Tutor 1&nbsp;</span></div>
+            </section> 
+        </div>
+
+        <!-- invite a new member to group -->
+        <div id = "popupInviteAdminMembers" name="popupInviteAdminMembers" title = "Invite New Administrators"style="height:500px" >
+
+            <button onclick="$('#popupInviteAdminMembers').dialog( 'close' ); " class="btn btn-primary" type="button" style="padding: 0px;color: rgb(255, 255, 255);background: rgba(0,123,255,0);border-style: none;margin-top: 20px;margin-left: 20px;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" style="font-size: 26px;color: #9ca5ff;">
+                    <path d="M16.3394 9.32245C16.7434 8.94589 16.7657 8.31312 16.3891 7.90911C16.0126 7.50509 15.3798 7.48283 14.9758 7.85938L12.0497 10.5866L9.32245 7.66048C8.94589 7.25647 8.31312 7.23421 7.90911 7.61076C7.50509 7.98731 7.48283 8.62008 7.85938 9.0241L10.5866 11.9502L7.66048 14.6775C7.25647 15.054 7.23421 15.6868 7.61076 16.0908C7.98731 16.4948 8.62008 16.5171 9.0241 16.1405L11.9502 13.4133L14.6775 16.3394C15.054 16.7434 15.6868 16.7657 16.0908 16.3891C16.4948 16.0126 16.5171 15.3798 16.1405 14.9758L13.4133 12.0497L16.3394 9.32245Z" fill="currentColor"></path>
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M1 12C1 5.92487 5.92487 1 12 1C18.0751 1 23 5.92487 23 12C23 18.0751 18.0751 23 12 23C5.92487 23 1 18.0751 1 12ZM12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21Z" fill="currentColor"></path>
+                </svg>
+            </button>
+            <h1 style="font-size: 24px;font-family: Barlow, sans-serif;text-align: center;margin-top: 0px;padding-top: 30p0px;">Enable admin (need to have an existing account)</h1>
+            <div class="form-group">
+                <form>
+                    {% csrf_token %}
+                    <input name="invitee_a"  id= "invitee_a"  class="form-control mx-auto" type="email" placeholder="example@email.com" style="font-family: 'Barlow Semi Condensed', sans-serif;font-style: italic;border-radius: 0px;font-weight: normal;width: 60%;margin-top: 64px;2: 1/2 cup of round glutinous rice (100g);3: 5 big candied dates (105g);4: 3.5 cups of water (840 grams);5: 3-4 tablespoons of honey.;2: 1/2 cup of round glutinous rice (100g);3: 5 big candied dates (105g);4: 3.5 cups of water (840 grams);5: 3-4 tablespoons of honey.;color: rgb(73, 80, 87);border-width: 2px;border-top-style: none;border-right-style: none;border-bottom-width: 1.7px;border-bottom-color: rgb(206, 212, 218);border-left-style: none;">
+                    <div class="form-check mx-auto" style="width: 60%;margin-top: 20px;">
+                        <input name="invitee_confirm"  id= "invitee_confirm"  class="form-check-input" type="checkbox" id="formCheck-1" style="margin-top: 11px;"><label class="form-check-label" for="formCheck-1" style="font-family: 'Barlow Semi Condensed', sans-serif;color: #5762d5;margin-left: 9px;font-size: 12px;">I confirm that this person is to be added as an admin and will have administrative access and abilities for this classroom</label></div>
+                    <div class="mx-auto" style="width: 80px;height: 36px;">
+                        <button onClick="inviteAdmin(); return false;" class="btn btn-primary" type="submit" style="font-family: Barlow, sans-serif;background: #9ca5ff;border-radius: 40px;border-style: none;border-bottom-color: #9ca5ff;width: 80px;margin-top: 52px;margin-right: 100%;margin-left: 0px;">Send</button>
+                    </div>
+                </form>
+            </div>               
+        </div>
+
+        <!-- <div id = "popupInviteNewMembers" name="popupInviteNewMembers" title = "Invite New Students">
+            <button onclick="$('#popupInviteNewMembers').dialog( 'close' ); " class="btn btn-primary" type="button" style="padding: 0px;color: rgb(255, 255, 255);background: rgba(0,123,255,0);border-style: none;margin-top: 20px;margin-left: 20px;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" style="font-size: 26px;color: #9ca5ff;">
+                <path d="M16.3394 9.32245C16.7434 8.94589 16.7657 8.31312 16.3891 7.90911C16.0126 7.50509 15.3798 7.48283 14.9758 7.85938L12.0497 10.5866L9.32245 7.66048C8.94589 7.25647 8.31312 7.23421 7.90911 7.61076C7.50509 7.98731 7.48283 8.62008 7.85938 9.0241L10.5866 11.9502L7.66048 14.6775C7.25647 15.054 7.23421 15.6868 7.61076 16.0908C7.98731 16.4948 8.62008 16.5171 9.0241 16.1405L11.9502 13.4133L14.6775 16.3394C15.054 16.7434 15.6868 16.7657 16.0908 16.3891C16.4948 16.0126 16.5171 15.3798 16.1405 14.9758L13.4133 12.0497L16.3394 9.32245Z" fill="currentColor"></path>
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M1 12C1 5.92487 5.92487 1 12 1C18.0751 1 23 5.92487 23 12C23 18.0751 18.0751 23 12 23C5.92487 23 1 18.0751 1 12ZM12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21Z" fill="currentColor"></path>
+            </svg></button>
+            <h1 style="font-size: 24px;font-family: Barlow, sans-serif;text-align: center;margin-top: 0px;padding-top: 30p0px;">Invite Students Join a class</h1>
+            <div class="form-group">
+                <form>
+                     <p class="mx-auto" style="margin-top: 64px;font-family: 'Barlow Semi Condensed', sans-serif;color: rgb(73, 80, 87);font-style: italic;text-align: left;width: 60%;padding-bottom: 6px;border-bottom: 1.7px solid rgb(206,212,218);padding-left: 12px;padding-top: 6px;padding-right: 12px;">https://invitelink.com/
+                        <button class="btn btn-primary float-right" type="button" style="padding-left: 0px;padding-right: 0px;padding-bottom: 0px;padding-top: 0px;height: auto;background: rgba(0,123,255,0);border-style: none;">
+                            <i class="material-icons" style="color: #9ca5ff;font-size: 16px;">content_copy</i></button></p> 
+                    <input name="invitee_m"  id= "invitee_m"  class="form-control mx-auto" type="email" placeholder="example@email.com, example2@email.com, ..." style="font-family: 'Barlow Semi Condensed', sans-serif;font-style: italic;border-radius: 0px;font-weight: normal;width: 80%;margin-top: 20px;color: rgb(73, 80, 87);border-width: 2px;border-top-style: none;border-right-style: none;border-bottom-width: 1.7px;border-bottom-color: rgb(206, 212, 218);border-left-style: none;">
+                    <div class="mx-auto" style="width: 80px;height: 36px;">
+                        <button onClick="inviteStudent(false,true,'invitee_m'); return false;" class="btn btn-primary" type="submit" style="font-family: Barlow, sans-serif;background: #9ca5ff;border-radius: 40px;border-style: none;border-bottom-color: #9ca5ff;width: 80px;margin-top: 52px;margin-right: 100%;margin-left: 0px;">Send</button></div>
+                </form>
+            </div>
+        </div>  -->
+          
+        <div id = "popupInviteNewTutors" name="popupInviteNewTutors" title = "Invite New Students">
+            <button onclick="$('#popupInviteNewTutors').dialog( 'close' ); " class="btn btn-primary" type="button" style="padding: 0px;color: rgb(255, 255, 255);background: rgba(0,123,255,0);border-style: none;margin-top: 20px;margin-left: 20px;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" style="font-size: 26px;color: #9ca5ff;">
+                <path d="M16.3394 9.32245C16.7434 8.94589 16.7657 8.31312 16.3891 7.90911C16.0126 7.50509 15.3798 7.48283 14.9758 7.85938L12.0497 10.5866L9.32245 7.66048C8.94589 7.25647 8.31312 7.23421 7.90911 7.61076C7.50509 7.98731 7.48283 8.62008 7.85938 9.0241L10.5866 11.9502L7.66048 14.6775C7.25647 15.054 7.23421 15.6868 7.61076 16.0908C7.98731 16.4948 8.62008 16.5171 9.0241 16.1405L11.9502 13.4133L14.6775 16.3394C15.054 16.7434 15.6868 16.7657 16.0908 16.3891C16.4948 16.0126 16.5171 15.3798 16.1405 14.9758L13.4133 12.0497L16.3394 9.32245Z" fill="currentColor"></path>
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M1 12C1 5.92487 5.92487 1 12 1C18.0751 1 23 5.92487 23 12C23 18.0751 18.0751 23 12 23C5.92487 23 1 18.0751 1 12ZM12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21Z" fill="currentColor"></path>
+            </svg></button>
+            <h1 style="font-size: 24px;font-family: Barlow, sans-serif;text-align: center;margin-top: 0px;padding-top: 30p0px;">Upload approved Tutor CSV file from Google Form</h1>
+            <div class="form-group">
+
+                <form name="csv_upload"  id= "csv_upload" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <!-- <p class="mx-auto" style="margin-top: 64px;font-family: 'Barlow Semi Condensed', sans-serif;color: rgb(73, 80, 87);font-style: italic;text-align: left;width: 60%;padding-bottom: 6px;border-bottom: 1.7px solid rgb(206,212,218);padding-left: 12px;padding-top: 6px;padding-right: 12px;">https://invitelink.com/
+                        <button class="btn btn-primary float-right" type="button" style="padding-left: 0px;padding-right: 0px;padding-bottom: 0px;padding-top: 0px;height: auto;background: rgba(0,123,255,0);border-style: none;">
+                            <i class="material-icons" style="color: #9ca5ff;font-size: 16px;">content_copy</i></button></p> -->
+                    <input name="csv_file"  id= "csv_file"  class="form-control mx-auto" type="file" placeholder="upload approved file only..." style="font-family: 'Barlow Semi Condensed', sans-serif;font-style: italic;border-radius: 0px;font-weight: normal;width: 60%;margin-top: 20px;color: rgb(73, 80, 87);border-width: 2px;border-top-style: none;border-right-style: none;border-bottom-width: 1.7px;border-bottom-color: rgb(206, 212, 218);border-left-style: none;">
+
+                    <div class="mx-auto" style="width: 80px;height: 36px;">
+                        <button class="btn btn-primary" type="submit" style="font-family: Barlow, sans-serif;background: #9ca5ff;border-radius: 40px;border-style: none;border-bottom-color: #9ca5ff;width: 80px;margin-top: 52px;margin-right: 100%;margin-left: 0px;">Upload</button></div>
+                </form>
+            </div>
+        </div> 
+        
+        
+        <!-- <div id = "popupInviteNewGroups" name="popupInviteNewGroups" title = "Invite New Students">
+            <button onclick="$('#popupInviteNewGroups').dialog( 'close' ); " class="btn btn-primary" type="button" style="padding: 0px;color: rgb(255, 255, 255);background: rgba(0,123,255,0);border-style: none;margin-top: 20px;margin-left: 20px;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" style="font-size: 26px;color: #9ca5ff;">
+                <path d="M16.3394 9.32245C16.7434 8.94589 16.7657 8.31312 16.3891 7.90911C16.0126 7.50509 15.3798 7.48283 14.9758 7.85938L12.0497 10.5866L9.32245 7.66048C8.94589 7.25647 8.31312 7.23421 7.90911 7.61076C7.50509 7.98731 7.48283 8.62008 7.85938 9.0241L10.5866 11.9502L7.66048 14.6775C7.25647 15.054 7.23421 15.6868 7.61076 16.0908C7.98731 16.4948 8.62008 16.5171 9.0241 16.1405L11.9502 13.4133L14.6775 16.3394C15.054 16.7434 15.6868 16.7657 16.0908 16.3891C16.4948 16.0126 16.5171 15.3798 16.1405 14.9758L13.4133 12.0497L16.3394 9.32245Z" fill="currentColor"></path>
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M1 12C1 5.92487 5.92487 1 12 1C18.0751 1 23 5.92487 23 12C23 18.0751 18.0751 23 12 23C5.92487 23 1 18.0751 1 12ZM12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21Z" fill="currentColor"></path>
+            </svg></button>
+            <h1 style="font-size: 24px;font-family: Barlow, sans-serif;text-align: center;margin-top: 0px;padding-top: 30p0px;">Invite A Group Students to Join</h1>
+            <div class="form-group">
+                <form>
+                     <p class="mx-auto" style="margin-top: 64px;font-family: 'Barlow Semi Condensed', sans-serif;color: rgb(73, 80, 87);font-style: italic;text-align: left;width: 60%;padding-bottom: 6px;border-bottom: 1.7px solid rgb(206,212,218);padding-left: 12px;padding-top: 6px;padding-right: 12px;">https://invitelink.com/
+                        <button class="btn btn-primary float-right" type="button" style="padding-left: 0px;padding-right: 0px;padding-bottom: 0px;padding-top: 0px;height: auto;background: rgba(0,123,255,0);border-style: none;">
+                            <i class="material-icons" style="color: #9ca5ff;font-size: 16px;">content_copy</i></button></p> 
+                    <input name="invitee_g"  id= "invitee_g"  class="form-control mx-auto" type="email" placeholder="@email.com ..." style="font-family: 'Barlow Semi Condensed', sans-serif;font-style: italic;border-radius: 0px;font-weight: normal;width: 60%;margin-top: 20px;color: rgb(73, 80, 87);border-width: 2px;border-top-style: none;border-right-style: none;border-bottom-width: 1.7px;border-bottom-color: rgb(206, 212, 218);border-left-style: none;">
+                    <input name="recieving_email"  id= "recieving_email"  class="form-control mx-auto" type="email" placeholder="email from people who will help to distribute code" style="font-family: 'Barlow Semi Condensed', sans-serif;font-style: italic;border-radius: 0px;font-weight: normal;width: 60%;margin-top: 20px;color: rgb(73, 80, 87);border-width: 2px;border-top-style: none;border-right-style: none;border-bottom-width: 1.7px;border-bottom-color: rgb(206, 212, 218);border-left-style: none;">
+                    <input name="num_of_invites"  id= "num_of_invites"  class="form-control mx-auto"  placeholder="number of time the code can be used"  style="font-family: 'Barlow Semi Condensed', sans-serif;font-style: italic;border-radius: 0px;font-weight: normal;width: 60%;margin-top: 20px;color: rgb(73, 80, 87);border-width: 2px;border-top-style: none;border-right-style: none;border-bottom-width: 1.7px;border-bottom-color: rgb(206, 212, 218);border-left-style: none;">
+
+                    <div class="mx-auto" style="width: 80px;height: 36px;">
+                        <button onClick="inviteStudent(false,false,'invitee_g'); return false;" class="btn btn-primary" type="submit" style="font-family: Barlow, sans-serif;background: #9ca5ff;border-radius: 40px;border-style: none;border-bottom-color: #9ca5ff;width: 80px;margin-top: 52px;margin-right: 100%;margin-left: 0px;">Send</button></div>
+                </form>
+            </div>
+        </div>  -->
+
+    </section>
+
+
+</body>
+
+
+<script>
+    function googleLogin() {
+
+        window.location.href="{% provider_login_url 'google' %}"
+    }
+    
+    function logOut(){
+
+        ret = confirm("Do you want to log out?");
+
+        if(ret){
+            $('#signOutBtn').click();
+        }
+
+    }
+</script>
+
+<script type="text/javascript">
+
+var last_feed_id = 0;
+
+$(function() {
+    // start with feed page when it is loaded
+
+
+    showStudent();
+
+    // $( "#popupInviteNewMembers" ).dialog({
+    //             autoOpen: false,
+    //             modal: true,
+    //             resizable: false,
+    //             bgiframe: true,
+    //             overlay: { opacity: 0.3, background: "white" },
+    //             autoOpen: false,
+    //             height: 390,
+    //             width: 1000,
+    //             dialogClass: "myDialogClass",
+
+    //         }).dialog("widget").find(".ui-dialog-titlebar").hide();
+
+    $( "#popupInviteNewTutors" ).dialog({
+                autoOpen: false,
+                modal: true,
+                resizable: false,
+                bgiframe: true,
+                overlay: { opacity: 0.3, background: "white" },
+                autoOpen: false,
+                height: 390,
+                width: 500,
+                dialogClass: "myDialogClass",
+
+            }).dialog("widget").find(".ui-dialog-titlebar").hide();
+    // $( "#popupInviteNewGroups" ).dialog({
+    //             autoOpen: false,
+    //             modal: true,
+    //             resizable: false,
+    //             bgiframe: true,
+    //             overlay: { opacity: 0.3, background: "white" },
+    //             autoOpen: false,
+    //             height: 390,
+    //             width: 500,
+    //             dialogClass: "myDialogClass",
+
+    //         }).dialog("widget").find(".ui-dialog-titlebar").hide();
+
+    $( "#popupInviteAdminMembers" ).dialog({
+                autoOpen: false,
+                modal: true,
+                resizable: false,
+                bgiframe: true,
+                overlay: { opacity: 0.3, background: "white" },
+                autoOpen: false,
+                height: 390,
+                width: 'auto',
+                dialogClass: "myDialogClass",
+
+            }).dialog("widget").find(".ui-dialog-titlebar").hide();
+
+
+
+});
+
+
+function showStudent(){
+    //loadFeedForRoom()
+    loadMemberForRoom();
+
+    $('#showStudent').addClass("active");
+    $('#showTutor').removeClass("active");
+
+    $('#tutorbox').hide();
+    $('#studentbox').show();
+}
+
+function showTutor(){
+    //loadFeedForRoom()
+    loadTutorForRoom();
+
+    $('#showStudent').removeClass("active");
+    $('#showTutor').addClass("active");
+
+    $('#tutorbox').show();
+    $('#studentbox').hide();
+}
+
+
+///////////////Mem Funcc //////////////////////////
+function approveStudentMember(id, name, tag)
+{
+    ret = false;
+
+    ret = confirm("Please confirm you want to fully activate member "+name+" from this room?");
+
+    if(!ret){
+        return;
+    }
+
+    var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+    //This is the Ajax post.Observe carefully. It is nothing but details of where_to_post,what_to_post
+    //Send data  
+
+    $.ajax({
+        url : "approveStudent", // the endpoint,commonly same url
+        type : "POST", // http method
+        data : { csrfmiddlewaretoken : csrftoken, 
+            "uid" : id,
+        }, // data sent with the post request
+
+        // handle a successful response
+        success : function(json) {
+            console.log(json); // another sanity check
+            if (json == "NO PERMISSION")
+            {
+                //redirect to home
+                window.location.href ='/'
+            }
+            else if (json == "SUCCESS")
+            {
+                alert("Member "+name+" was approved successfully!");
+
+                loadMemberForRoom();
+                // confirmation window
+            }
+            //close pop up
+            //On success show the data posted to server as a message
+        },
+    });
+}
+
+
+function deleteMember(id, name, tag)
+{
+    ret = false;
+    if ( tag == "#memberbox_admin")
+    {
+        ret = confirm("Please confirm you want to remove Administrator "+name+" from this room?");
+    }
+    else
+        ret = confirm("Please confirm you want to remove member "+name+" from this room?");
+
+    if(!ret){
+        return;
+    }
+
+    var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+    //This is the Ajax post.Observe carefully. It is nothing but details of where_to_post,what_to_post
+    //Send data  
+
+    $.ajax({
+        url : "removePeople", // the endpoint,commonly same url
+        type : "POST", // http method
+        data : { csrfmiddlewaretoken : csrftoken, 
+            "uid" : id,
+        }, // data sent with the post request
+
+        // handle a successful response
+        success : function(json) {
+            console.log(json); // another sanity check
+            if (json == "NO PERMISSION")
+            {
+                //redirect to home
+                window.location.href ='/'
+            }
+            else if (json == "SUCCESS")
+            {
+                alert("Member "+name+" was deleted successfully!");
+
+                loadMemberForRoom();
+                // confirmation window
+            }
+            //close pop up
+            //On success show the data posted to server as a message
+        },
+    });
+}
+
+function openAddAdminWindow()
+{
+    $('#popupInviteAdminMembers').dialog( "open" );
+    $('#invitee_a').focus();
+
+}
+
+// function openAddStudentWindow()
+// {
+//     $('#popupInviteNewMembers').dialog( "open" );
+//     $('#invitee_m').focus();
+
+
+// }
+
+// function openAddGroupStudentWindow()
+// {
+
+
+//     $('#popupInviteNewGroups').dialog( "open" );
+//     $('#invitee_g').focus();   
+// }
+
+
+function openAddTutorWindow()
+{
+    $('#popupInviteNewTutors').dialog( "open" );
+    $('#invitee_t').focus();
+}
+
+function inviteAdmin()
+{
+    if( $('#invitee_a').val().length > 5 && $('#invitee_confirm').is(':checked') ){
+
+        var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+        //This is the Ajax post.Observe carefully. It is nothing but details of where_to_post,what_to_post
+        //Send data  
+
+        $.ajax({
+            url : "enableAdmin", // the endpoint,commonly same url
+            type : "POST", // http method
+            data : { csrfmiddlewaretoken : csrftoken, 
+                "ema" : $('#invitee_a').val(),
+
+            }, // data sent with the post request
+
+            // handle a successful response
+            success : function(json) {
+                console.log(json); // another sanity check
+                if (json == "NO PERMISSION")
+                {
+                    //redirect to home
+                    window.location.href ='/'
+                }
+                else if (json == "ALREADY")
+                {
+                    alert("the admin is already added!");
+                }
+                else if (json == "NO ACCOUNT")
+                {
+                    alert("the account for this email is not created yet. Ask the admin to create a account first!");
+                }
+                else if (json == "SUCCESS")
+                {
+                    alert("Admin  "+$('#invitee_a').val()+" is now enabled successfully!");
+                    // confirmation window
+                }
+                //close pop up
+                //On success show the data posted to server as a message
+            },
+        });
+
+        $('#invitee_a').val("");
+
+        $( "#popupInviteAdminMembers" ).dialog( "close" );
+    }
+}
+
+$("form#csv_upload").submit(function(e) {
+    e.preventDefault();    
+    var formData = new FormData(this);
+
+    $.ajax({
+        url: "uploadTutorCsv",
+        type: 'POST',
+        data: formData,
+        success : function(json) {
+            console.log(json); // another sanity check
+            if (json == "NO PERMISSION")
+            {
+                //redirect to home
+                window.location.href ='/'
+            }
+            else if (json == "SUCCESS")
+            {
+                alert("new tutor was loaded successfully!");
+                // confirmation window
+            }
+            else{
+                alert(json);
+
+            }
+            //close pop up
+            //On success show the data posted to server as a message
+
+            $( "#popupInviteNewTutors" ).dialog( "close" );
+        },
+        cache: false,
+        contentType: false,
+        processData: false
+    });
+});
+
+
+
+// function inviteStudent(isTutor,isIndividual, field_name)
+// {
+//     if( $('#'+field_name).val().length > 5){
+//         is_tutor_string = "0"
+//         if(isTutor)
+//             is_tutor_string = "1";
+        
+//         isIndividual_str  = "0"
+//         if(isIndividual)
+//             isIndividual_str = "1";
+
+//         console.log("try to invite mem"); 
+//         var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+//         //This is the Ajax post.Observe carefully. It is nothing but details of where_to_post,what_to_post
+//         //Send data  
+
+//         $.ajax({
+//             url : "invitePeople", // the endpoint,commonly same url
+//             type : "POST", // http method
+//             data : { csrfmiddlewaretoken : csrftoken, 
+//                 "ema" : $('#'+field_name).val(),
+//                 "isT":is_tutor_string,
+//                 "isInd":isIndividual_str,
+//                 "rvema": $('#recieving_email').val(),
+//                 "num":$('#num_of_invites').val(),
+//             }, // data sent with the post request
+
+//             // handle a successful response
+//             success : function(json) {
+//                 console.log(json); // another sanity check
+//                 if (json == "NO PERMISSION")
+//                 {
+//                     //redirect to home
+//                     window.location.href ='/'
+//                 }
+//                 else if (json == "SUCCESS")
+//                 {
+//                     alert("Invitation for new members was sent successfully!");
+//                     // confirmation window
+//                 }
+//                 //close pop up
+//                 //On success show the data posted to server as a message
+
+
+//                 $('#invitee_m').val("");
+//                 $('#invitee_t').val("");
+//                 $('#invitee_g').val("");
+
+//                 $( "#popupInviteNewTutors" ).dialog( "close" );
+
+//                 // $( "#popupInviteNewMembers" ).dialog( "close" );
+
+
+//                 // $( "#popupInviteNewGroups" ).dialog( "close" );
+//             },
+//         });
+
+
+//     }
+// }
+
+function loadTutorForRoom()
+{
+    $('#memberbox_tutor').empty();
+    $('#memberbox_pending_tutor').empty();
+
+ //   $('#memberbox_tutor').empty();
+
+    $.get('showTutors', function(data) {//loadMemberForRoom
+
+        if (data=="NO PERMISSION")
+        {
+            //redirect to home
+            window.location.href ='/'
+
+            return;
+        }
+
+        handleOneTutorPoll(data)
+ 
+    });    
+}
+
+function handleOneTutorPoll(data) {
+
+    var isTutor = false;
+
+    var isPendiingTutor = false;
+
+
+    mem_types = data.split('~');
+
+    tutor_list_str = mem_types[0];
+
+    pending_tutor_list_str  = mem_types[1];
+
+    tutors = tutor_list_str.split('^');
+
+    _size = tutors.length;
+
+    for (  i = 0; i< _size; i++) {
+
+        if(tutors[i].length >0){
+            items = tutors[i].split('|');
+            student_name = items[0];
+            id = items[1];
+            homeschool = items[2];
+            grade = items[3];
+            update_mem_stu('#memberbox_tutor',student_name, id,homeschool,grade,false);
+            isTutor = true;
+        }
+    }
+
+    pending_stus = pending_tutor_list_str.split('^');
+
+    _size = pending_stus.length;
+
+    for (  i = 0; i< _size; i++) {
+
+        if(pending_stus[i].length >0){
+            items = pending_stus[i].split('|');
+            student_name = items[0];
+            id = items[1];
+            homeschool = items[2];
+            grade = items[3];
+            update_mem_stu('#memberbox_pending_tutor',student_name, "-1", homeschool, grade,false);
+            isPendiingTutor = true;
+        }
+    }
+
+    var font_style = "'Barlow Semi Condensed'"
+
+    if(!isTutor)
+    {
+
+        $('#memberbox_tutor').append(
+            '<div style="margin-left: 80px;margin-bottom: 10px;font-size: 14px;letter-spacing: normal;">'+
+                '<span style="font-size: 14px;margin-left: 15px;margin-bottom: 10px;letter-spacing: normal;font-family: '+font_style+', sans-serif;">There are no students</span></div>'
+        );
+    }
+
+    if(!isPendiingTutor)
+    {
+
+        $('#memberbox_pending_tutor').append(
+            '<div style="margin-left: 80px;margin-bottom: 10px;font-size: 14px;letter-spacing: normal;">'+
+                '<span style="font-size: 14px;margin-left: 15px;margin-bottom: 10px;letter-spacing: normal;font-family: '+font_style+', sans-serif;">There are no students needs to be approved</span></div>'
+        );
+    }
+
+}
+
+// for students
+function loadMemberForRoom()
+{
+    $('#memberbox_admin').empty();
+    $('#memberbox_pending_student').empty();
+    $('#memberbox_student').empty();
+
+ //   $('#memberbox_tutor').empty();
+
+    $.get('showRoomMembers', function(data) {//loadMemberForRoom
+
+        if (data=="NO PERMISSION")
+        {
+            //redirect to home
+            window.location.href ='/'
+
+            return;
+        }
+
+        handleOneMemPoll(data)
+ 
+        $('#memberbox').show();
+    });    
+}
+
+
+function handleOneMemPoll(data) {
+
+    var isStudent = false;
+
+    var isPendiingStudent = false;
+
+    var isAdmin = false;
+
+
+    mem_types = data.split('~');
+
+    admin_list_str = mem_types[0];
+
+    stu_list_str = mem_types[1];
+
+    pending_stu_list_str  = mem_types[2];
+
+    
+    admins = admin_list_str.split('^');
+
+    _size = admins.length;
+
+    for (  i = 0; i< _size; i++) {
+
+        if(admins[i].length >0){
+            items = admins[i].split('|');
+            admin_name = items[0];
+            id = items[1];
+            update_mem('#memberbox_admin', admin_name, id);
+            isAdmin = true;
+        }
+    }
+
+    students = stu_list_str.split('^');
+
+    _size = students.length;
+
+    for (  i = 0; i< _size; i++) {
+
+        if(students[i].length >0){
+            items = students[i].split('|');
+            student_name = items[0];
+            id = items[1];
+            homeschool = items[2];
+            grade = items[3];
+            update_mem_stu('#memberbox_student',student_name, id,homeschool,grade,false);
+            isStudent = true;
+        }
+    }
+
+    pending_stus = pending_stu_list_str.split('^');
+
+    _size = pending_stus.length;
+
+    for (  i = 0; i< _size; i++) {
+
+        if(pending_stus[i].length >0){
+            items = pending_stus[i].split('|');
+            student_name = items[0];
+            id = items[1];
+            homeschool = items[2];
+            grade = items[3];
+            update_mem_stu('#memberbox_pending_student',student_name, id, homeschool, grade,true);
+            isPendiingStudent = true;
+        }
+    }
+
+    var font_style = "'Barlow Semi Condensed'"
+
+    if(!isAdmin)
+    {
+
+
+        $('#memberbox_admin').append(
+            '<div style="margin-left: 80px;margin-bottom: 10px;font-size: 14px;letter-spacing: normal;">'+
+                '<span style="font-size: 14px;margin-left: 15px;margin-bottom: 10px;letter-spacing: normal;font-family: '+font_style+', sans-serif;">There are no admin</span></div>'
+           );
+    }
+
+    if(!isStudent)
+    {
+
+        $('#memberbox_student').append(
+            '<div style="margin-left: 80px;margin-bottom: 10px;font-size: 14px;letter-spacing: normal;">'+
+                '<span style="font-size: 14px;margin-left: 15px;margin-bottom: 10px;letter-spacing: normal;font-family: '+font_style+', sans-serif;">There are no students</span></div>'
+           );
+    }
+
+    if(!isPendiingStudent)
+    {
+
+        $('#memberbox_pending_student').append(
+            '<div style="margin-left: 80px;margin-bottom: 10px;font-size: 14px;letter-spacing: normal;">'+
+                '<span style="font-size: 14px;margin-left: 15px;margin-bottom: 10px;letter-spacing: normal;font-family: '+font_style+', sans-serif;">There are no students needs to be approved</span></div>'
+           );
+    }
+
+    // if(!isTutor)
+    // {
+
+    //     $('#memberbox_tutor').append(
+    //         '<div style="margin-left: 80px;margin-bottom: 10px;font-size: 14px;letter-spacing: normal;">'+
+    //             '<span style="font-size: 14px;margin-left: 15px;margin-bottom: 10px;letter-spacing: normal;font-family: '+font_style+', sans-serif;">There are no Tutors</span></div>'
+    //        );
+    // }
+}
+
+function update_mem_stu(tag_name, mem_name, id, homeschool, grade, isforprove) {
+
+    var font_style = "'Barlow Semi Condensed'"
+    var mem_name_str = "'"+mem_name+"'"
+    var tag_name_str = "'"+tag_name+"'"
+
+    var content_str =""
+
+
+
+    console.log("id="+id); // another sanity check
+
+    if(id == '-1')// cannot delete this guy
+    {
+        //content_str = '<i class="far fa-user" style="font-size: 14px;margin-bottom: 10px;letter-spacing: normal;"></i>';
+    }
+    else{
+
+        if(isforprove)
+        {
+            content_str = '<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" style="font-size: 14px;margin-bottom: 3px;border-radius: 39px;border-width: 1px;border-style: solid;padding: 0px;">'
+            +'<path d="M4 12C4 11.4477 4.44772 11 5 11H19C19.5523 11 20 11.4477 20 12C20 12.5523 19.5523 13 19 13H5C4.44772 13 4 12.5523 4 12Z" fill="currentColor"></path>'
+            +'<rect class="btn" x="0" y="0" width="20" height="20" onclick="approveStudentMember('+id+','+mem_name_str+','+tag_name_str+')" />'
+            +'</svg>';
+        }
+        else{
+            content_str = '<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" style="font-size: 14px;margin-bottom: 3px;border-radius: 39px;border-width: 1px;border-style: solid;padding: 0px;">'
+                +'<path d="M4 12C4 11.4477 4.44772 11 5 11H19C19.5523 11 20 11.4477 20 12C20 12.5523 19.5523 13 19 13H5C4.44772 13 4 12.5523 4 12Z" fill="currentColor"></path>'
+                +'<rect class="btn" x="0" y="0" width="20" height="20" onclick="deleteMember('+id+','+mem_name_str+','+tag_name_str+')" />'
+                +'</svg>';
+        }
+    }
+
+    $(tag_name).append(
+            '<div style="margin-left: 100px;margin-bottom: 10px;font-size: 14px;letter-spacing: normal;">'
+
+                +content_str
+                +'<span style="font-size: 14px;margin-left: 35px;margin-bottom: 10px;letter-spacing: normal;font-family: '+font_style+', sans-serif;">'+mem_name+' '+"/Grade:"+grade+"/School:"+ homeschool+'</span></div>'
+        );
+
+}
+
+
+function update_mem(tag_name, mem_name, id) {
+
+    var font_style = "'Barlow Semi Condensed'"
+    var mem_name_str = "'"+mem_name+"'"
+    var tag_name_str = "'"+tag_name+"'"
+
+    var content_str =""
+
+
+
+    console.log("id="+id); // another sanity check
+
+    if(id == '-1')// cannot delete this guy
+    {
+        //content_str = '<i class="far fa-user" style="font-size: 14px;margin-bottom: 10px;letter-spacing: normal;"></i>';
+    }
+    else{
+        content_str = '<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" style="font-size: 14px;margin-bottom: 3px;border-radius: 39px;border-width: 1px;border-style: solid;padding: 0px;">'
+            +'<path d="M4 12C4 11.4477 4.44772 11 5 11H19C19.5523 11 20 11.4477 20 12C20 12.5523 19.5523 13 19 13H5C4.44772 13 4 12.5523 4 12Z" fill="currentColor"></path>'
+            +'<rect class="btn" x="0" y="0" width="20" height="20" onclick="deleteMember('+id+','+mem_name_str+','+tag_name_str+')" />'
+            +'</svg>';
+    }
+
+
+
+
+    $(tag_name).append(
+            '<div style="margin-left: 100px;margin-bottom: 10px;font-size: 14px;letter-spacing: normal;">'
+
+                +content_str
+                +'<span style="font-size: 14px;margin-left: 35px;margin-bottom: 10px;letter-spacing: normal;font-family: '+font_style+', sans-serif;">'+mem_name+'</span></div>'
+        );
+
+}
+
+function showStudent(){
+    //loadFeedForRoom()
+    loadMemberForRoom();
+
+    $('#showStudent').addClass("active");
+    $('#showTutor').removeClass("active");
+
+    $('#tutorbox').hide();
+    $('#studentbox').show();
+}
+
+function showTutor(){
+    //loadFeedForRoom()
+    loadTutorForRoom();
+
+    $('#showStudent').removeClass("active");
+    $('#showTutor').addClass("active");
+
+    $('#tutorbox').show();
+    $('#studentbox').hide();
+}
+
+
+</script>

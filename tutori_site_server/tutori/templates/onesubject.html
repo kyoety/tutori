@@ -1,0 +1,556 @@
+{% extends 'site_base.html' %}
+
+{% load static %}
+
+{% block mystyle %}
+
+<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+ 
+<script src="https://code.jquery.com/ui/1.11.1/jquery-ui.min.js"></script>
+<script src="{% static 'js/moment.min.js' %}"></script>
+
+
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css" />
+
+<style>
+
+    .myMenuTextClass {
+        color: #FFFFFF;
+    }
+
+    .myHeaderBannerClass {
+        height: 121px;
+        padding-top: 40.5px;
+        padding-bottom: 20.5px;
+        width: 100%;    
+        background: #{{primary_color}};
+
+    }
+
+
+    .ui-widget-header,.ui-state-default, ui-button {
+       background:#b9cd6d;
+       border: 1px solid #b9cd6d;
+       color: #FFFFFF;
+       font-weight: bold;
+    }
+
+    rect.btn {
+    stroke:#fff;
+    fill:#fff;
+    fill-opacity:0;
+    stroke-opacity:0;
+    }
+
+
+    .myDialogClass {
+        border-radius: 13px;
+        box-shadow: 0px 5px 13px #e1e1e1;
+        border: 10px solid #FF0000;
+        outline: 0 none;
+    }
+
+    .myDialogClassFrameless {
+        border-radius: 13px;
+        border: none !important;
+        outline: 0 none;
+        outline-width: 0px !important;
+    }
+
+</style>
+
+{% endblock %}
+
+{% block additional_head_space %}
+<li class="nav-item" style="color: #9ca5ff;margin-left:40%;">
+    <p></p>
+</li>
+{% endblock %}
+
+{% block content %}
+<div style="margin-top: 80px;">
+    <div class="card mx-auto" style="border-style: none;background: rgba(255,255,255,0);">
+        <div class="card-body mx-auto" style="width: 80%;border-radius: 180px;height: 188px;padding: 0px;background: #{{primary_color}}; box-shadow: 0px 5px 13px #e1e1e1;">
+
+
+            {% if grade_num %}
+            <a href="/oneSubject?sub={{subject_name}}" >
+                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" class="float-left" style="margin-top: 80px;margin-left: 66px;font-size: 30px;color: rgb(251,251,251);">
+                    <path d="M16.2426 6.34317L14.8284 4.92896L7.75739 12L14.8285 19.0711L16.2427 17.6569L10.5858 12L16.2426 6.34317Z" fill="currentColor"></path>
+                </svg>            
+            </a>
+            <h4 class="mx-auto card-title" style="color: rgb(251,251,251);font-size: 36px;width: 75%;margin-top: 45px;">{{subject_name}}</h4>
+            <p class="mx-auto card-text" style="color: rgb(251,251,251);font-size: 20px;width: 75%;">{{grade_num}}</p>
+            {% else %}
+            <h4 class="mx-auto card-title" style="color: rgb(251,251,251);font-size: 36px;width: 75%;margin-top: 70px;">{{subject_name}}</h4>
+            {% endif %}
+        </div>
+        {% if not grade_num %}
+        {% if subject_name == "Science" %}
+
+        <div class="d-lg-flex mx-auto justify-content-lg-center" style="padding-top: 0px;padding-left: 0px;text-align: center;margin-bottom: -20px;width: 75%;border-bottom-left-radius: 12px;border-bottom-right-radius: 12px;border-style: none;margin-top: 40px;margin-right: 0px;">
+            <a href="/oneSubject?sub=science&grade=9"  style="font-family: 'Barlow Semi Condensed', sans-serif;font-size: 16px;margin-right: 30px;margin-left: 30px;color: #{{primary_color}};font-weight: bold;">Grade 9</a>
+            <a href="/oneSubject?sub=science&grade=10"  style="font-family: 'Barlow Semi Condensed', sans-serif;font-size: 16px;margin-right: 30px;margin-left: 30px;color: #{{primary_color}};font-weight: bold;">Grade 10</a>
+            <a href="/oneSubject?sub=physics&grade=11"  style="font-family: 'Barlow Semi Condensed', sans-serif;font-size: 16px;margin-right: 30px;margin-left: 30px;color: #{{primary_color}};font-weight: bold;">Physics 11</a>
+            <a href="/oneSubject?sub=chemistry&grade=11"style="font-family: 'Barlow Semi Condensed', sans-serif;font-size: 16px;margin-right: 30px;margin-left: 30px;color: #{{primary_color}};font-weight: bold;">Chemistry 11</a>
+            <a href="/oneSubject?sub=biology&grade=11" style="font-family: 'Barlow Semi Condensed', sans-serif;font-size: 16px;margin-right: 30px;margin-left: 30px;color: #{{primary_color}};font-weight: bold;">Biology 11</a>
+        </div>
+        <div class="d-lg-flex mx-auto justify-content-lg-center" style="padding-top: 0px;padding-left: 0px;text-align: center;margin-bottom: 0px;width: 75%;border-bottom-left-radius: 12px;border-bottom-right-radius: 12px;border-style: none;margin-top: 40px;margin-right: 0px;">
+            <a href="/oneSubject?sub=physics&grade=12" style="font-family: 'Barlow Semi Condensed', sans-serif;font-size: 16px;margin-right: 30px;margin-left: 30px;color: #{{primary_color}};font-weight: bold;">Physics 12</a>
+            <a href="/oneSubject?sub=chemistry&grade=12" style="font-family: 'Barlow Semi Condensed', sans-serif;font-size: 16px;margin-right: 30px;margin-left: 30px;color: #{{primary_color}};font-weight: bold;">Chemistry 12</a>
+            <a href="/oneSubject?sub=biology&grade=12" style="font-family: 'Barlow Semi Condensed', sans-serif;font-size: 16px;margin-right: 30px;margin-left: 30px;color: #{{primary_color}};font-weight: bold;">Biology 12</a>
+            <a href="/oneSubject?sub=physics&grade=AP"  style="font-family: 'Barlow Semi Condensed', sans-serif;font-size: 16px;margin-right: 30px;margin-left: 30px;color: #{{primary_color}};font-weight: bold;">AP Physics</a>
+            <a href="/oneSubject?sub=chemistry&grade=AP" style="font-family: 'Barlow Semi Condensed', sans-serif;font-size: 16px;margin-right: 30px;margin-left: 30px;color: #{{primary_color}};font-weight: bold;">AP Chemistry</a>
+            <a href="/oneSubject?sub=biology&grade=AP"  style="font-family: 'Barlow Semi Condensed', sans-serif;font-size: 16px;margin-right: 30px;margin-left: 30px;color: #{{primary_color}};font-weight: bold;">AP Biology</a>
+        </div>
+       
+        {% elif subject_name == "Math" %}
+        <div class="d-lg-flex mx-auto justify-content-lg-center" style="padding-top: 0px;padding-left: 0px;text-align: center;margin-bottom: -20px;width: 75%;border-bottom-left-radius: 12px;border-bottom-right-radius: 12px;border-style: none;margin-top: 40px;margin-right: 0px;">
+            <a href="/oneSubject?sub=math&grade=9"  style="font-family: 'Barlow Semi Condensed', sans-serif;font-size: 16px;margin-right: 30px;margin-left: 30px;color: #{{primary_color}};font-weight: bold;">Grade 9</a>
+            <a href="/oneSubject?sub=math&grade=10"  style="font-family: 'Barlow Semi Condensed', sans-serif;font-size: 16px;margin-right: 30px;margin-left: 30px;color: #{{primary_color}};font-weight: bold;">Grade 10</a>
+            <a href="/oneSubject?sub=math&grade=11" style="font-family: 'Barlow Semi Condensed', sans-serif;font-size: 16px;margin-right: 30px;margin-left: 30px;color: #{{primary_color}};font-weight: bold;">Grade 11</a>
+            <a href="/oneSubject?sub=math&grade=12"  style="font-family: 'Barlow Semi Condensed', sans-serif;font-size: 16px;margin-right: 30px;margin-left: 30px;color: #{{primary_color}};font-weight: bold;">Grade 12</a>
+            <a href="/oneSubject?sub=calculus&grade=AP"  style="font-family: 'Barlow Semi Condensed', sans-serif;font-size: 16px;margin-right: 30px;margin-left: 30px;color: #{{primary_color}};font-weight: bold;">AP Calculus</a>
+            <a href="/oneSubject?sub=statistics&grade=AP" style="font-family: 'Barlow Semi Condensed', sans-serif;font-size: 16px;margin-right: 30px;margin-left: 30px;color: #{{primary_color}};font-weight: bold;">AP Statistics</a>
+        </div>
+        {% elif subject_name == "English" %}
+        <div class="d-lg-flex mx-auto justify-content-lg-center" style="padding-top: 0px;padding-left: 0px;text-align: center;margin-bottom: -20px;width: 75%;border-bottom-left-radius: 12px;border-bottom-right-radius: 12px;border-style: none;margin-top: 40px;margin-right: 0px;">
+            <a href="/oneSubject?sub=english&grade=9"  style="font-family: 'Barlow Semi Condensed', sans-serif;font-size: 16px;margin-right: 30px;margin-left: 30px;color: #{{primary_color}};font-weight: bold;">Grade 9</a>
+            <a href="/oneSubject?sub=english&grade=10"  style="font-family: 'Barlow Semi Condensed', sans-serif;font-size: 16px;margin-right: 30px;margin-left: 30px;color: #{{primary_color}};font-weight: bold;">Grade 10</a>
+            <a href="/oneSubject?sub=english&grade=11"  style="font-family: 'Barlow Semi Condensed', sans-serif;font-size: 16px;margin-right: 30px;margin-left: 30px;color: #{{primary_color}};font-weight: bold;">Grade 11</a>
+            <a href="/oneSubject?sub=english&grade=12"  style="font-family: 'Barlow Semi Condensed', sans-serif;font-size: 16px;margin-right: 30px;margin-left: 30px;color: #{{primary_color}};font-weight: bold;">Grade 12</a>
+        </div>
+        {% elif subject_name == "French" %}
+        <div class="d-lg-flex mx-auto justify-content-lg-center" style="padding-top: 0px;padding-left: 0px;text-align: center;margin-bottom: -20px;width: 75%;border-bottom-left-radius: 12px;border-bottom-right-radius: 12px;border-style: none;margin-top: 40px;margin-right: 0px;">
+            <a href="/oneSubject?sub=french&grade=9"  style="font-family: 'Barlow Semi Condensed', sans-serif;font-size: 16px;margin-right: 30px;margin-left: 30px;color: #{{primary_color}};font-weight: bold;">Grade 9</a>
+            <a href="/oneSubject?sub=french&grade=10"  style="font-family: 'Barlow Semi Condensed', sans-serif;font-size: 16px;margin-right: 30px;margin-left: 30px;color: #{{primary_color}};font-weight: bold;">Grade 10</a>
+            <a href="/oneSubject?sub=french&grade=11"  style="font-family: 'Barlow Semi Condensed', sans-serif;font-size: 16px;margin-right: 30px;margin-left: 30px;color: #{{primary_color}};font-weight: bold;">Grade 11</a>
+            <a href="/oneSubject?sub=french&grade=12"  style="font-family: 'Barlow Semi Condensed', sans-serif;font-size: 16px;margin-right: 30px;margin-left: 30px;color: #{{primary_color}};font-weight: bold;">Grade 12</a>
+        </div>
+        {% elif subject_name == "Humanities" %}
+        <div class="d-lg-flex mx-auto justify-content-lg-center" style="padding-top: 0px;padding-left: 0px;text-align: center;margin-bottom: -20px;width: 75%;border-bottom-left-radius: 12px;border-bottom-right-radius: 12px;border-style: none;margin-top: 40px;margin-right: 0px;">
+            <a href="/oneSubject?sub=history"  style="font-family: 'Barlow Semi Condensed', sans-serif;font-size: 16px;margin-right: 30px;margin-left: 30px;color: #{{primary_color}};font-weight: bold;">History</a>
+            <a href="/oneSubject?sub=economics" style="font-family: 'Barlow Semi Condensed', sans-serif;font-size: 16px;margin-right: 30px;margin-left: 30px;color: #{{primary_color}};font-weight: bold;">Economics</a>
+            <a href="/oneSubject?sub=geography" style="font-family: 'Barlow Semi Condensed', sans-serif;font-size: 16px;margin-right: 30px;margin-left: 30px;color: #{{primary_color}};font-weight: bold;">Geography</a>
+        </div>
+        {% elif subject_name == "SAT" %}
+        
+        {% endif %}
+        {% else %}
+        <div class="mx-auto justify-content-lg-center" style="height:1.5em; padding-top: 0px;padding-left: 0px;text-align: center;margin-bottom: -20px;width: 75%;border-bottom-left-radius: 12px;border-bottom-right-radius: 12px;border-style: none;margin-top: 40px;margin-right: 0px;">
+        </div>
+        {% endif %}
+
+    </div>
+</div>
+<div>
+    <div class="container">
+        <div class="row mx-auto" style="margin-top: 50px;margin-bottom: 25px;">
+            {% for thistutor in tutors %}
+
+            {% if thistutor %}
+            <div class="col-md-3 mx-auto" style="padding-left: 5px;">
+                <div class="card mx-auto" style="width: 265px;box-shadow: 0px 5px 13px #e1e1e1;border-style: none;border-color: #6d767d;border-radius: 10px;height: 100%;">
+                    <div class="card-body mx-auto" style="width: 225px;">
+                        <img class="d-lg-flex d-xl-flex mx-auto justify-content-lg-center justify-content-xl-center avatar_big2" src="{{ thistutor.0.tu_user.acc_avatar }}" >
+                        <h4 class="d-lg-flex d-xl-flex mx-auto justify-content-lg-center justify-content-xl-center card-title" style="font-family: Barlow, sans-serif; margin-top: 5px;">{{thistutor.0.tu_user.acc_firstname}} {{thistutor.0.tu_user.acc_lastname}}</h4>
+                        <h6 class="text-muted d-lg-flex d-xl-flex mx-auto justify-content-lg-center justify-content-xl-center card-subtitle mb-2" style="font-family: Barlow, sans-serif;">Grade {{thistutor.0.tu_user.acc_grade}}</h6>
+                        <p class="mx-auto card-text" style=" font-family: Barlow, sans-serif;margin-bottom: 40px; overflow: hidden; display: block; white-space: nowrap;  text-overflow: ellipsis;  ">{{thistutor.1}}&nbsp;</p>
+                        <button onclick = "openProfileView('{{thistutor.0.tu_user_id}}');"  class="btn btn-primary d-lg-flex d-xl-flex mx-auto justify-content-lg-center justify-content-xl-center" type="button" style="font-family: Barlow, sans-serif;border-radius: 27px;background: #80ddd9;margin-bottom: 14px;border-color: transparent;border-bottom-style: none;border-bottom-color: rgb(14,193,103);">View profile</button>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <div class="col-md-3 mx-auto" style="padding-left: 5px;"></div>
+
+            {% endif %}
+
+            {% if forloop.counter|divisibleby:"4" and not forloop.last %}
+                </div>
+                <div class="row mx-auto" style="margin-top: 50px;margin-bottom: 25px;">
+            {% endif %}
+            {% endfor %}
+
+        </div>
+
+    </div>
+</div>
+<h5 style="font-family: 'Barlow Semi Condensed', sans-serif;font-style: italic;color: rgb(33, 37, 41);text-align: center;padding-top: 30px;padding-bottom: 50px;">Looks like you've reached the end!</h5>
+
+<div id = "popupProfileView" name="popupProfileView" title = "View Profile" style="background: #ffffff;">
+
+    <button onclick="$('#popupProfileView').dialog( 'close' ); "  class="btn btn-primary" type="button" style="padding: 0px;color: rgb(255, 255, 255);background: rgba(0,123,255,0);border-style: none;margin-top: 20px;margin-left: 20px;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" style="font-size: 26px;color: #9ca5ff;">
+        <path d="M16.3394 9.32245C16.7434 8.94589 16.7657 8.31312 16.3891 7.90911C16.0126 7.50509 15.3798 7.48283 14.9758 7.85938L12.0497 10.5866L9.32245 7.66048C8.94589 7.25647 8.31312 7.23421 7.90911 7.61076C7.50509 7.98731 7.48283 8.62008 7.85938 9.0241L10.5866 11.9502L7.66048 14.6775C7.25647 15.054 7.23421 15.6868 7.61076 16.0908C7.98731 16.4948 8.62008 16.5171 9.0241 16.1405L11.9502 13.4133L14.6775 16.3394C15.054 16.7434 15.6868 16.7657 16.0908 16.3891C16.4948 16.0126 16.5171 15.3798 16.1405 14.9758L13.4133 12.0497L16.3394 9.32245Z" fill="currentColor"></path>
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M1 12C1 5.92487 5.92487 1 12 1C18.0751 1 23 5.92487 23 12C23 18.0751 18.0751 23 12 23C5.92487 23 1 18.0751 1 12ZM12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21Z" fill="currentColor"></path>
+        </svg>
+    </button>
+    <!-- <h1 name="title_name" id="title_name" style="font-size: 24px;font-family: Barlow, sans-serif;text-align: center;margin-top: 0px;padding-top: 5px;"> PROFILE</h1> -->
+    <div class="card-body" style="width: 640px;height: 650px;background: #ffffff;margin-bottom: 30px;margin-bottom: 30px;">
+
+        <div class="row">
+            <div class="col" style="width: 300px;border-style: none;padding-right: 0px;padding-left: 0px;height: 200px;">
+                <img name="profile_img" id="profile_img" class="rounded-circle" style="border-style: none;width: 210px;height: 210px;margin: 50px;margin-right: 50px;margin-left: 50px;" width="200px" src=""></div>
+            <div class="col" style="width: 300px;border-style: none;height: 300px;">
+                <div class="container" style="margin-top: 25%;margin-bottom: 0px;">
+                    <h4 name="profile_name" id="profile_name"  style="font-family: Barlow, sans-serif;text-align: left;font-size: 40px;font-weight: normal;margin-left: 0px;margin-top: 18px;color: #5762d5;width: 100%;">Sam Adams</h4>
+                    <p name="profile_grade" id="profile_grade"  style="font-family: Barlow, sans-serif;text-align: left;margin-left: 0px;font-size: 18px;margin-bottom: 0px;color: #505e6c;margin-top: 10px;">Grade 11</p>
+                    <div class="btn-group" role="group" style="background: rgba(234,121,97,0);border-top-left-radius: 108px;border-top-right-radius: 108px;border-bottom-right-radius: 108px;border-bottom-left-radius: 108px;margin-top: 30px;margin-left: -15px;">
+                            <!-- <button class="btn btn-primary" type="button" style="font-family: Barlow, sans-serif;font-size: 14px;text-align: center;background: #fbaf00;margin-right: 20px;border-radius: 0px;width: 115px;height: 50px;font-weight: normal;border-top-left-radius: 108px;border-top-right-radius: 108px;border-bottom-right-radius: 108px;border-bottom-left-radius: 108px;border-color: #fbaf00;border-bottom-color: #fbaf00;">Message</button> -->
+                        {% if not tutor %}
+                        <div class="dropdown btn-group" role="group" style="font-family: Barlow, sans-serif;font-size: 14px;background: rgb(234,121,97);border-radius: 0px;border-top-left-radius: 108px;border-top-right-radius: 108px;border-bottom-right-radius: 108px;border-bottom-left-radius: 108px;">
+                            <button id="book_session_button" class="btn btn-primary dropdown-toggle" aria-expanded="false" data-toggle="dropdown" type="button" style="font-size: 14px;font-family: Barlow, sans-serif;width: 175px;background: #fbaf00;border-radius: 0px;font-weight: normal;border-top-left-radius: 108px;border-top-right-radius: 108px;border-bottom-right-radius: 108px;border-bottom-left-radius: 108px;border-color: #fbaf00;border-bottom-color: #fbaf00;">Book a session</button>
+                            <div class="dropdown-menu" style="width: 132px;min-width: 132px;border-radius: 0px;">
+                                <a class="dropdown-item" onClick="bookSession(); return false;"  href="#" style="width: 132px;font-size: 14px;border-radius: 0px;">30 minutes</a>
+                                <!-- <a class="dropdown-item" href="#" style="width: 132px;font-size: 14px;border-radius: 0px;">60 minutes</a>-->
+                            </div> 
+                        </div>
+                        {% else %}
+                        <div class="dropdown btn-group" role="group"style="font-family: Barlow, sans-serif;font-size: 14px;background: rgb(234,121,97);border-radius: 0px;border-top-left-radius: 108px;border-top-right-radius: 108px;border-bottom-right-radius: 108px;border-bottom-left-radius: 108px;">
+                            <button class="btn btn-primary dropdown-toggle"  disabled   aria-expanded="false" data-toggle="dropdown" type="button" style="font-size: 14px;font-family: Barlow, sans-serif;width: 175px;background: #fbaf00;border-radius: 0px;font-weight: normal;border-top-left-radius: 108px;border-top-right-radius: 108px;border-bottom-right-radius: 108px;border-bottom-left-radius: 108px;border-color: #fbaf00;border-bottom-color: #fbaf00;">Book a session</button>
+                            <div class="dropdown-menu" style="width: 132px;min-width: 132px;border-radius: 0px;">
+                                <a class="dropdown-item" onClick="bookSession(); return false;"  href="#" style="width: 132px;font-size: 14px;border-radius: 0px;">30 minutes</a>
+                                <!-- <a class="dropdown-item" href="#" style="width: 132px;font-size: 14px;border-radius: 0px;">60 minutes</a></div> -->
+                            </div> 
+                        </div>
+
+                        {% endif%}                      
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <p style="font-family: Barlow, sans-serif;margin-bottom: 15px;text-align: left;margin-left: 35px;font-size: 24px;color: #cbcbcb;margin-top: 0px;">Tutoring:</p>
+                <div name="profile_tutors" id="profile_tutors" >
+                <p style="font-family: Barlow, sans-serif;margin-bottom: 5px;text-align: left;margin-left: 35px;font-size: 18px;color: #505e6c;">Grade 11 Physics</p>
+                <p style="font-family: Barlow, sans-serif;margin-bottom: 5px;text-align: left;margin-left: 35px;font-size: 18px;color: #505e6c;">AP Calculus</p>
+                <p style="font-family: Barlow, sans-serif;margin-bottom: 5px;text-align: left;margin-left: 35px;font-size: 18px;color: #505e6c;">Grade 10 French</p>
+                </div>
+            </div>
+            <div class="col">
+                <p style="font-family: Barlow, sans-serif;margin-bottom: 5px;text-align: left;margin-left: 0px;font-size: 24px;color: #cbcbcb;margin-top: 0px;">About</p>
+                <p  name="profile_aboutme" id="profile_aboutme" style="font-family: Barlow, sans-serif;margin-bottom: 0px;text-align: left;margin-left: 0px;font-size: 18px;color: #505e6c;margin-top: 0px;">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.&nbsp;</p>
+            </div>
+            <p name="slot_hidden" id="slot_hidden" style="display:none;"> 
+            <p name="subjects_hidden" id="subjects_hidden" style="display:none;"> 
+        </div>
+ 
+    </div>
+    <!-- <div class="card" style="border-style: none;border-bottom-style: none;border-radius: 10px;margin-left: 50px;margin-right: 50px;margin-top: 20px;">
+        <div class="card-body" style="height: 150px;border-style: none;border-bottom-style: none;border-left-width: 1.7px;border-left-style: none;border-radius: 70px;">
+            <div class="row" style="margin-left: 14px;margin-top: 20px;">
+                <div class="col-xl-2 offset-xl-0" style="padding-left: 0px;padding-right: 0px;">
+                    <img name="profile_img" id="profile_img" class = "avatar_big" style="margin-left: 26px; " src=""></div>
+                <div class="col" >
+                    <h4 name="profile_name" id="profile_name" style="font-family: Barlow, sans-serif;font-size: 30px;margin-top: 35px;margin-left: 36px;">name </h4>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card" style="border-style: none;border-bottom-style: none;border-radius: 10px;margin-left: 50px;margin-right: 50px;margin-top: 22px;">
+        <div class="card-body" style="border-style: none;border-bottom-style: none;border-left-width: 1.7px;border-left-style: none;border-radius: 10px;">
+            <p name="profile_grade" id="profile_grade" style="font-size: 18px;font-family: Barlow, sans-serif;"></p>
+            <p name="profile_aboutme" id="profile_aboutme" profile_gradestyle="font-size: 18px;font-family: Barlow, sans-serif;">about me</p>
+
+
+            <p name="profile_tutors" id="profile_tutors" style="font-family: Barlow, sans-serif;margin-bottom: 0px;text-align: left;margin-left: 0px;font-size: 18px;color: #505e6c;"> 
+            <p name="slot_hidden" id="slot_hidden" style="display:none;"> 
+            <p name="subjects_hidden" id="subjects_hidden" style="display:none;"> 
+                    
+            </p>
+
+            <p name="profile_tutor_info" id="profile_tutor_info" style="font-size: 18px;font-family: Barlow, sans-serif;"></p> 
+
+
+        </div>
+    </div>
+    <div class="card" style="border-style: none;border-bottom-style: none;border-radius: 10px;margin-left: 50px;margin-right: 50px;margin-top: 22px;">
+        <div name="session_available" id="session_available" class="card-body" style="border-style: none;border-bottom-style: none;border-left-width: 1.7px;border-left-style: none;border-radius: 10px;">
+
+
+        </div>
+    </div>   
+    <div class="mx-auto" style="width: 180px;height: 36px;padding-bottom:90px">
+        {% if not tutor %}
+        <button name="book" id="book" onClick="bookSession(); return false;" class="btn btn-primary" type="submit" style="font-family: Barlow, sans-serif;background: #9ca5ff;border-radius: 40px;border-style: none;border-bottom-color: #9ca5ff;width: 180px;margin-top: 22px;margin-right: 100%;margin-left: 0px;">Book Session</button>
+        {% else %}
+        <button name="book" id="book"  class="btn btn-primary" disabled type="submit" style="font-family: Barlow, sans-serif;background: #9ca5ff;border-radius: 40px;border-style: none;border-bottom-color: #9ca5ff;width: 180px;margin-top: 22px;margin-right: 100%;margin-left: 0px;">Book Session</button>
+        {% endif%}
+
+    </div>
+  -->
+</div>  
+
+<div id = "popupEventBookingView" name="popupEventBookingView" title = "Book Event">
+
+    <button onclick="$('#popupEventBookingView').dialog( 'close' ); "  class="btn btn-primary" type="button" style="padding: 0px;color: rgb(255, 255, 255);background: rgba(0,123,255,0);border-style: none;margin-top: 20px;margin-left: 20px;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" style="font-size: 26px;color: #9ca5ff;">
+        <path d="M16.3394 9.32245C16.7434 8.94589 16.7657 8.31312 16.3891 7.90911C16.0126 7.50509 15.3798 7.48283 14.9758 7.85938L12.0497 10.5866L9.32245 7.66048C8.94589 7.25647 8.31312 7.23421 7.90911 7.61076C7.50509 7.98731 7.48283 8.62008 7.85938 9.0241L10.5866 11.9502L7.66048 14.6775C7.25647 15.054 7.23421 15.6868 7.61076 16.0908C7.98731 16.4948 8.62008 16.5171 9.0241 16.1405L11.9502 13.4133L14.6775 16.3394C15.054 16.7434 15.6868 16.7657 16.0908 16.3891C16.4948 16.0126 16.5171 15.3798 16.1405 14.9758L13.4133 12.0497L16.3394 9.32245Z" fill="currentColor"></path>
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M1 12C1 5.92487 5.92487 1 12 1C18.0751 1 23 5.92487 23 12C23 18.0751 18.0751 23 12 23C5.92487 23 1 18.0751 1 12ZM12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21Z" fill="currentColor"></path>
+        </svg>
+    </button>
+    <h1 name="title_name" id="title_name" style="font-size: 24px;font-family: Barlow, sans-serif;text-align: center;margin-top: 0px;padding-top: 5px;"> Request the Session</h1> 
+
+    <form name="timeSlotRequestForm" id="timeSlotRequestForm" >
+        {% csrf_token %}
+
+        <select name="subject_str" id="subject_str" class="form-control  mx-auto"  style="width: 75%; padding: 11px;margin-left: 10px;margin-top: 10px; font-family: Barlow, sans-serif;padding-top: 0px;">
+            <optgroup label="Select a Subject" name="subject_available_list" id="subject_available_list" >
+            </optgroup>
+
+        </select>
+
+
+        <select name="slot_str" id="slot_str" class="form-control  mx-auto"  style="width: 75%; padding: 11px;margin-left: 10px; margin-top: 10px;  font-family: Barlow, sans-serif;padding-top: 0px;">
+            <optgroup label="Select a Session" name="session_available_list" id="session_available_list" >
+            </optgroup>
+
+        </select>
+        <input name="description" id="description"  placeholder="Details about your session request..." class="form-control mx-auto" type="text" style="width: 75%; margin-left: 20%;font-size: 16px;font-family: Barlow, sans-serif;color: #000000;padding-right: 0px;padding-left: 0px;border-style: none;padding-top: 0px;padding-bottom: 2px;margin-bottom: 20px;" >
+        <input name="othertutor_id" id="othertutor_id"  style="display:none" >
+        
+        <div class="mx-auto" style="width: 80px;height: 36px;padding-bottom:90px">
+            <button onClick="submitSessionRequest(); return false;" class="btn btn-primary" type="submit" style="font-family: Barlow, sans-serif;background: #9ca5ff;border-radius: 40px;border-style: none;border-bottom-color: #9ca5ff;width: 80px;margin-top: 22px;margin-right: 100%;margin-left: 0px;">Request</button>
+        </div>
+    </form>
+
+
+    <!-- <h1 name="title_name" id="title_name" style="font-size: 24px;font-family: Barlow, sans-serif;text-align: center;margin-top: 0px;padding-top: 5px;"> PROFILE</h1> -->
+</div>  
+
+
+{% endblock %}    
+
+{% block myscript %}
+<script type="text/javascript">
+
+$(function() {
+    $( "#popupProfileView" ).dialog({
+                autoOpen: false,
+                modal: true,
+                resizable: false,
+                bgiframe: true,
+                overlay: { opacity: 0.3, background: "white" },
+                autoOpen: false,
+                height: 'auto',
+                width: 'auto',
+                dialogClass: "myDialogClassFrameless",
+            }).dialog("widget").find(".ui-dialog-titlebar").hide();
+    $( "#popupEventBookingView" ).dialog({
+                autoOpen: false,
+                modal: true,
+                resizable: false,
+                bgiframe: true,
+                overlay: { opacity: 0.3, background: "white" },
+                autoOpen: false,
+                height: 'auto',
+                width: '500',
+                dialogClass: "myDialogClassFrameless",
+            }).dialog("widget").find(".ui-dialog-titlebar").hide();
+ });
+
+ function openProfileView(tutor_id){
+
+    $.get('/loadTutorInfo?uid='+tutor_id, function(data) {
+ 
+        handleOneSessionPoll(data,tutor_id)
+    });
+
+ }
+
+ function handleOneSessionPoll(data,tutor_id){
+
+
+
+    if (data=="NO PERMISSION")
+    {
+        alert("Sorry. Your session time is over. Please try to log in again!");
+       
+        //redirect to home
+        window.location.href ='/';
+
+        return;
+    }
+
+    items = data.split('^');
+
+
+    $("#profile_name").text(items[0]);
+    $("#profile_grade").text("Grade: "+items[1]);
+    $("#profile_aboutme").text(items[2]);
+
+    //$("#profile_tutors").text(items[3]);
+   
+    // slots_str = items[4]; // only need if show slots in profile page
+
+    // slots = slots_str.split('|');
+
+    // _size = slots.length;
+
+    // $("#session_available").empty();
+
+    // for (  i = 0; i< _size; i++) {
+
+    //     if(slots[i].length >0){
+    //         slot_text = '<p  style="font-family: Barlow, sans-serif;margin-bottom: 0px;text-align: left;margin-left: 0px;font-size: 18px;color: #505e6c;">'+slots[i]+'</p>';
+
+    //         $("#session_available").append(slot_text);
+    //     }
+
+    // }
+
+
+
+    $("#profile_img").attr("src",items[5]);
+    $("#slot_hidden").text(items[6]);
+    $("#subjects_hidden").text(items[7]);
+
+    subject_str = items[7];
+    slots = subject_str.split('|');
+
+    _size = slots.length;    
+    $("#profile_tutors").empty();
+
+    for (  i = 0; i< _size; i++) {
+
+         if(slots[i].length >0){
+             subjects = slots[i].split('_');
+             slot_text = '<p style="font-family: Barlow, sans-serif;margin-bottom: 5px;text-align: left;margin-left: 35px;font-size: 18px;color: #505e6c;">' +subjects[0]+' ('+subjects[1]+') </p>';
+
+             $("#profile_tutors").append(slot_text);
+         }
+    }
+
+    $("#othertutor_id").val(tutor_id);
+
+    $('#popupProfileView').dialog('open');
+    $('#book_session_button').focus();
+
+
+}
+
+var weekday_names = ["SUN", "MON", "TUE", "WED", "THU","FRI", "SAT"];
+
+function bookSession()
+{
+    {% if tu_user.is_approved  == False %}
+
+    alert("Your student account has not been fully approved. Please give us a few days to process your account.");
+    return;
+    {% endif %}
+
+    $('#popupProfileView').dialog('close');
+    $('#popupEventBookingView').dialog('open');
+    $("#title_name").text("Book Session /w "+$("#profile_name").text());
+    
+    slots_str = $("#slot_hidden").text();
+
+
+    slot_days = slots_str.split('|');
+
+    _size = slot_days.length;
+
+    $("#session_available_list").empty();
+
+
+    for (  i = 0; i< _size; i++) {
+
+        if(slot_days[i].length >0){
+ 
+
+        //console.log(slot_days[i]);
+
+        slot_text = '<option value="'+slot_days[i]+'" selected="">'+' '+slot_days[i] +'</option>';
+
+        $("#session_available_list").append(slot_text);
+
+        }
+    }
+
+
+    subject_str =  $("#subjects_hidden").text();
+
+    //console.log(subject_str);
+
+    subjects = subject_str.split('|');
+
+    _size = subjects.length;
+
+    $("#subject_available_list").empty();
+
+    for (  i = 0; i< _size; i++) {
+        //console.log(subjects[i]);
+
+        if(subjects[i].length >0){
+            subject_infos = subjects[i].split('_');
+            subject = subject_infos[0];
+            subject_grades_str = subject_infos[1];
+            subject_grades = subject_grades_str.split(',');
+
+            _grade_size = subject_grades.length;
+
+            for (  j = 0; j< _grade_size; j++) {
+
+                if(subject_grades[j].length>0){
+
+                    //console.log(subject_grades[j]+ " "+ subject);
+
+                    //console.log(subject_grades[j]);
+
+                    option_str = "Gr "+subject_grades[j]+ " "+ subject;
+ 
+                    slot_text = '<option value="'+option_str+'" selected="">'+subject+' ( Gr '+ subject_grades[j] +' ) </option>';
+
+                    $("#subject_available_list").append(slot_text);
+                }
+            }
+
+
+
+        }
+
+    }
+    
+}
+
+function submitSessionRequest()
+{
+//???
+
+    var formData = $('#timeSlotRequestForm').serialize();
+
+    //console.log(formData);
+
+    $.ajax({
+        url : "submitEventRequest", // the endpoint,commonly same url
+        type : "POST", // http method
+        data : formData, // data sent with the post request
+        // handle a successful response
+        success : function(json) {
+            console.log(json); // another sanity check
+            if (json == "NO PERMISSION")
+            {
+                alert("Sorry. Your session time is over. Please try to log in again!");
+               //redirect to home
+                window.location.href ='/'
+            }
+            else if(json =="NOT FULLY APPROVED")
+            {
+                alert("Your student account has not been fully approved. Please give us a few days to process your account.");
+            }
+            else if (json == "SUCCESS")
+            {
+                alert("Your session request has been submitted successfully. You will be notified once the Tutor accept your session request!");
+                $('#popupEventBookingView').dialog( 'close' );
+            }
+            //close pop up
+            //On success show the data posted to server as a message
+        },
+    });
+
+}
+ </script>
+
+{% endblock %}    

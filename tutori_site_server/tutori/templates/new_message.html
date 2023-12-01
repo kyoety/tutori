@@ -1,0 +1,376 @@
+{% extends 'site_base.html' %}
+{% load static %}
+
+{% block mystyle %}
+<style>
+body {
+    margin: 20px auto;
+    font-family: "Lato";
+    font-weight: 300;
+  }
+   
+  form {
+    padding: 15px 25px;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+  }
+   
+  form label {
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+   
+  input {
+    font-family: "Lato";
+  }
+   
+  a {
+    color: #0000ff;
+    text-decoration: none;
+  }
+   
+  a:hover {
+    text-decoration: underline;
+  }
+   
+  #wrapper,
+  #loginform {
+    margin: 0 auto;
+    padding-bottom: 25px;
+    background: #eee;
+    width: 600px;
+    max-width: 100%;
+    border: 2px solid #212121;
+    border-radius: 4px;
+  }
+   
+  #loginform {
+    padding-top: 18px;
+    text-align: center;
+  }
+   
+  #loginform p {
+    padding: 15px 25px;
+    font-size: 1.4rem;
+    font-weight: bold;
+  }
+   
+  #chatbox {
+    text-align: left;
+    margin: 0 auto;
+    margin-bottom: 25px;
+    padding: 10px;
+    background: #fff;
+    height: 400px;
+    width: 530px;
+    border: 1px solid #a7a7a7;
+    overflow: auto;
+    border-radius: 4px;
+    border-bottom: 4px solid #a7a7a7;
+  }
+   
+  #usermsg {
+    flex: 1;
+    border-radius: 4px;
+    border: 1px solid #ff9800;
+  }
+   
+  #name {
+    border-radius: 4px;
+    border: 1px solid #ff9800;
+    padding: 2px 8px;
+  }
+   
+  #submitmsg,
+  #enter{
+    background: #ff9800;
+    border: 2px solid #e65100;
+    color: white;
+    padding: 4px 10px;
+    font-weight: bold;
+    border-radius: 4px;
+  }
+   
+  .error {
+    color: #ff0000;
+  }
+   
+  #menu {
+    padding: 15px 25px;
+    display: flex;
+  }
+   
+  #menu p.welcome {
+    flex: 1;
+  }
+   
+  a#exit {
+    color: white;
+    background: #c62828;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-weight: bold;
+  }
+   
+  .msgln {
+    margin: 0 0 5px 0;
+  }
+   
+  .msgln span.left-info {
+    color: orangered;
+  }
+   
+  .msgln span.chat-time {
+    color: #666;
+    font-size: 60%;
+    vertical-align: super;
+  }
+   
+  .msgln b.user-name, .msgln b.user-name-left {
+    font-weight: bold;
+    background: #546e7a;
+    color: white;
+    padding: 2px 4px;
+    font-size: 90%;
+    border-radius: 4px;
+    margin: 0 5px 0 0;
+  }
+   
+  .msgln b.user-name-left {
+    background: orangered;
+  }
+
+  .messagetext{
+    color: #808080;
+    font-size: 15px;
+
+  }
+
+  .messagename_other{
+    color: #00008B;
+    font-size: 15px;
+    font-weight: bold;
+
+  }
+
+  .messagename_me{
+    color: #00008B;
+    font-size: 15px;
+    font-weight: bold;
+  }
+
+
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="card mx-auto" style="width: 640px;margin-top: 20px;margin-bottom: 50px;box-shadow: -15px 15px 1px rgb(176,142,50);border-radius: 0px;">
+    <div id="popbox" class="card-body" style="width: 640px;height: 650px;background: #ffffff;">
+
+
+        <div id="menu">
+            <i onClick="window.history.back();"  class="fa fa-chevron-left" style="color: rgb(234,121,97);font-size: 25px; "></i>
+
+            <p class="welcome" style="font-family: Barlow, sans-serif;text-align: center;font-size: 20px;font-weight: bold;margin-left: 0px;margin-top: 0px;color: rgb(244,122,98);width: 250px;">Message with {{other_user.acc_firstname}}<b></b></p>
+        </div>
+
+        <div id="chatbox"></div>
+
+        <form name="message" style="margin-left: 10px;" action="">
+            {% csrf_token %}
+
+            <input name="usermsg" type="text"  id="usermsg" />
+            
+            <input name="submitmsg" class="btn"  type="submit" id="submitmsg" style="font-family: Barlow, sans-serif;background: rgb(244,122,98);border-radius: 0px;font-weight: bold;margin-left: 5px;" value="Send" />
+        </form>
+
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    </div>
+</div>
+
+{% csrf_token %}
+
+<script type="text/javascript">
+
+const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+var isNotFirstLoad = false;
+// jQuery Document
+$(document).ready(function () {
+
+    doPoll();
+    
+ });
+
+//If user submits the form
+$("#submitmsg").click(function (e) {
+
+
+
+    //Prevent default submit. Must for Ajax post.Beginner's pit.
+    e.preventDefault();
+
+    //Prepare csrf token
+    var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+
+    //Collect data from fields
+    var clientmsg = $("#usermsg").val();
+
+    //This is the Ajax post.Observe carefully. It is nothing but details of where_to_post,what_to_post
+    //Send data  
+
+    $.ajax({
+        url : window.location.href, // the endpoint,commonly same url
+        type : "POST", // http method
+        data : { csrfmiddlewaretoken : csrftoken, 
+        "sendMsg" : clientmsg,
+        "conv_id" : "{{conv.id}}"
+    }, // data sent with the post request
+
+    // handle a successful response
+    success : function(json) {
+    console.log(json); // another sanity check
+    doSiniglePoll();
+    //On success show the data posted to server as a message
+    },
+
+
+    });
+
+    $("#usermsg").val("");
+    return false;
+});
+
+
+
+
+
+
+
+var last_msg_id = 0;
+
+var other_name = "{{other_user.acc_firstname}}";
+
+// For every 5 seconds get poll the message for the users. If no messages available, server will return the online users list
+function doPoll() {
+    $.get('/getMessages?conv_id={{conv.id}}&last_msg_id='+last_msg_id, function(data) {
+        handleOnePoll(data)
+        if(!isNotFirstLoad){
+            isNotFirstLoad = true;
+
+            rollToLast();
+
+        }
+        setTimeout(doPoll, 10000);
+    });
+}
+
+function rollToLast(){
+
+    var newscrollHeight = $("#chatbox")[0].scrollHeight - 400; //Scroll height after the request
+    console.log("newscrollHeight="+newscrollHeight);
+    if(newscrollHeight > oldscrollHeight){
+        oldscrollHeight = newscrollHeight;
+        $("#chatbox").animate({ scrollTop: newscrollHeight }, 'normal'); //Autoscroll to bottom of div
+    }  
+}
+
+function handleOnePoll(data){
+
+    messages = data.split('^');
+
+    _size = messages.length;
+
+    for (  i = 0; i< _size; i++) {
+
+        if(messages[i].length >0){
+            items = messages[i].split('|');
+            username = items[0];
+            msg = items[1];
+            time = items[2];
+            id = items[3];
+
+            if( parseInt(id) > last_msg_id){
+                last_msg_id = parseInt(id);
+            }
+            update_chat_message(username, msg, time, id);
+
+        }
+    }
+
+}
+
+function doSiniglePoll() {
+    $.get('/getMessages?conv_id={{conv.id}}&last_msg_id='+last_msg_id, function(data) {
+
+        handleOnePoll(data)
+
+    });
+}
+
+var oldscrollHeight = 0;
+var oldChatTime='';
+var old_name ='';
+	// Open the chat box when someone pings (or) Users want to ping others
+function update_chat_message(username, message, time, id) {
+
+    if( oldChatTime != time ){
+            //add a time line
+        $('#chatbox').append(
+            $('<div>').prop({
+                id: 'innerdiv'+id,
+                innerHTML: '---- '+time+' ----- ',
+                className: ''
+            })
+        );
+
+        
+        oldChatTime = time;
+        old_name = "";
+    }
+
+    if(old_name != username){
+        old_name = username;
+
+        if (username != other_name){
+
+            $('#chatbox').append(
+                $('<div>').prop({
+                id: 'innerdiv'+id,
+                innerHTML: 'me',
+                className: 'messagename_me'
+                })
+            );
+        }
+        else{
+            $('#chatbox').append(
+                $('<div>').prop({
+                id: 'innerdiv'+id,
+                innerHTML: ''+username+':',
+                className: 'messagename_other'
+                })
+            );       
+        }
+    }
+
+    $('#chatbox').append(
+        $('<div>').prop({
+        id: 'innerdiv'+id,
+        innerHTML: message,
+        className: 'messagetext'
+        })
+    );
+
+    //Auto-scroll
+    if(isNotFirstLoad) {          
+        rollToLast();
+    }
+ }
+</script>
+
+
+{% endblock %}    
